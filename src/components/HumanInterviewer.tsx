@@ -116,6 +116,7 @@ export const HumanInterviewer: React.FC<HumanInterviewerProps> = ({
 
           const audio = new Audio(url);
           audio.muted = isMuted;
+          audio.playbackRate = 1.25; // Brisk, crisp human conversational Indian English tempo
           audioRef.current = audio;
           setIsSpeakingAudio(true);
 
@@ -159,7 +160,7 @@ export const HumanInterviewer: React.FC<HumanInterviewerProps> = ({
         .trim();
 
       const utterance = new SpeechSynthesisUtterance(clean);
-      utterance.rate = 1.05;
+      utterance.rate = 1.18; // Crisp, brisk Indian conversational speed
       utterance.pitch = 1.0;
       utterance.lang = 'en-IN';
       utterance.volume = isMuted ? 0 : 1;

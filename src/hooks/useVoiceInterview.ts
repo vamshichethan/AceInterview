@@ -261,8 +261,8 @@ export function useVoiceInterview({
         currentIndex++;
 
         const utterance = new SpeechSynthesisUtterance(chunkText);
-        utterance.rate = 1.14; // Crisp, faster conversational human pace
-        utterance.pitch = 1.02;
+        utterance.rate = 1.18; // Crisp, brisk conversational human pace
+        utterance.pitch = 1.0;
         utterance.lang = 'en-IN';
 
         const voice = getPreferredVoice();

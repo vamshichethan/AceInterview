@@ -72,7 +72,7 @@ async function synthesizeIndianSpeech(text: string): Promise<string> {
 
   // Synthesize chunks in order with authentic Indian English accent (en-IN)
   for (const chunk of chunks) {
-    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en-IN&client=tw-ob&q=${encodeURIComponent(
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=en-IN&client=tw-ob&ttsspeed=1&q=${encodeURIComponent(
       chunk
     )}`;
 
