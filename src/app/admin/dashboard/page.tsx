@@ -495,18 +495,23 @@ export default function AdminDashboardPage() {
                 <tr key={session.interviewId} className="hover:bg-slate-800/40 transition">
                   <td className="py-3 px-4">
                     <div className="flex flex-col">
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <span className="font-semibold text-white">{session.studentName}</span>
                         {session.targetRole && (
                           <span className="px-1.5 py-0.2 rounded bg-cyan-950/60 border border-cyan-500/30 text-[9px] font-mono text-cyan-300 uppercase font-bold">
                             {session.targetRole}
                           </span>
                         )}
+                        {session.studentName.includes('(Super Admin)') && (
+                          <span className="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[9px] font-bold uppercase">
+                            Admin Session
+                          </span>
+                        )}
                       </div>
                       {session.candidateEmail ? (
                         <span className="text-[11px] text-slate-400 font-mono">{session.candidateEmail}</span>
                       ) : (
-                        <span className="text-[10px] text-slate-500">Guest Trial Session</span>
+                        <span className="text-[10px] text-slate-500">Candidate Session</span>
                       )}
                     </div>
                   </td>
@@ -518,20 +523,28 @@ export default function AdminDashboardPage() {
                   </td>
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-2">
-                      <span
-                        className={`inline-block px-2 py-0.5 rounded-full font-bold text-[11px] ${
-                          session.technicalScore >= 8
-                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                            : session.technicalScore >= 6
-                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                            : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                        }`}
-                      >
-                        {session.technicalScore} / 10
-                      </span>
-                      <span className="text-[10px] text-slate-500 font-mono">
-                        Comm: {session.communicationScore}
-                      </span>
+                      {session.technicalScore > 0 ? (
+                        <>
+                          <span
+                            className={`inline-block px-2 py-0.5 rounded-full font-bold text-[11px] ${
+                              session.technicalScore >= 8
+                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                                : session.technicalScore >= 6
+                                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                                : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                            }`}
+                          >
+                            {session.technicalScore} / 10
+                          </span>
+                          <span className="text-[10px] text-slate-500 font-mono">
+                            Comm: {session.communicationScore}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="inline-block px-2 py-0.5 rounded-full font-medium text-[10px] bg-amber-950/70 text-amber-300 border border-amber-500/30 animate-pulse">
+                          {session.status === 'in-progress' ? 'Session In-Progress' : 'Session Recorded'}
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td className="py-3 px-4">
@@ -547,23 +560,36 @@ export default function AdminDashboardPage() {
                   </td>
                   <td className="py-3 px-4 text-right">
                     <div className="inline-flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedInterviewId(session.interviewId)}
-                        className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-semibold text-[11px] px-2.5 py-1 rounded-lg bg-cyan-950/60 border border-cyan-500/30 hover:bg-cyan-900/60 transition cursor-pointer"
-                        title="Quick preview evaluation dossier"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>Inspect</span>
-                      </button>
-                      <Link
-                        href={`/student/report/${session.interviewId}`}
-                        className="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 font-semibold text-[11px] px-1.5 py-1"
-                        title="Open full dossier in new page"
-                      >
-                        <span>Dossier</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </Link>
+                      {session.technicalScore > 0 ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedInterviewId(session.interviewId)}
+                            className="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-semibold text-[11px] px-2.5 py-1 rounded-lg bg-cyan-950/60 border border-cyan-500/30 hover:bg-cyan-900/60 transition cursor-pointer"
+                            title="Quick preview evaluation dossier"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Inspect</span>
+                          </button>
+                          <Link
+                            href={`/student/report/${session.interviewId}`}
+                            className="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 font-semibold text-[11px] px-1.5 py-1"
+                            title="Open full dossier in new page"
+                          >
+                            <span>Dossier</span>
+                            <ArrowUpRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </>
+                      ) : (
+                        <Link
+                          href={`/interview/${session.interviewId}`}
+                          className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-semibold text-[11px] px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/30 hover:bg-emerald-900/60 transition"
+                          title="Continue or review live interview session"
+                        >
+                          <span>Resume</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </Link>
+                      )}
                     </div>
                   </td>
                 </tr>

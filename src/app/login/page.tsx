@@ -225,6 +225,39 @@ function LoginForm() {
                   </>
                 )}
               </button>
+
+              {/* Quick Fill Credentials Helper */}
+              <div className="pt-3 border-t border-slate-800/80 mt-4">
+                <div className="text-[11px] font-semibold text-slate-400 mb-2 flex items-center justify-between">
+                  <span>Quick Test / Admin Logins</span>
+                  <span className="text-[10px] text-indigo-400">1-Click Fill</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail('vamshicodes29@gmail.com');
+                      setPassword('vamshicodes@123');
+                    }}
+                    className="p-2 rounded-lg bg-slate-950/70 border border-slate-800 hover:border-indigo-500/50 text-left text-[10px] transition group"
+                  >
+                    <div className="font-semibold text-white group-hover:text-indigo-300">Vamshi (Super Admin)</div>
+                    <div className="text-slate-500 truncate font-mono">vamshicodes29@gmail.com</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail('candidate@aceinterview.ai');
+                      setPassword('demo123');
+                    }}
+                    className="p-2 rounded-lg bg-slate-950/70 border border-slate-800 hover:border-cyan-500/50 text-left text-[10px] transition group"
+                  >
+                    <div className="font-semibold text-white group-hover:text-cyan-300">Placement Officer</div>
+                    <div className="text-slate-500 truncate font-mono">candidate@aceinterview.ai</div>
+                  </button>
+                </div>
+              </div>
             </form>
           )}
 
