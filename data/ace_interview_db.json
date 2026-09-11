@@ -1,0 +1,2084 @@
+{
+  "students": [
+    [
+      "user-0000-0000-0000-000000000001",
+      {
+        "id": "user-0000-0000-0000-000000000001",
+        "name": "Rahul Verma",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-07T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000002",
+      {
+        "id": "user-0000-0000-0000-000000000002",
+        "name": "Priya Patel",
+        "branch": "Information Technology",
+        "created_at": "2026-09-08T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000003",
+      {
+        "id": "user-0000-0000-0000-000000000003",
+        "name": "Rohan Verma",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-08T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000004",
+      {
+        "id": "user-0000-0000-0000-000000000004",
+        "name": "Ananya Gupta",
+        "branch": "Data Science & AI",
+        "created_at": "2026-09-09T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000005",
+      {
+        "id": "user-0000-0000-0000-000000000005",
+        "name": "Karthik Rao",
+        "branch": "Electronics & Communication",
+        "created_at": "2026-09-10T01:07:58.912Z"
+      }
+    ],
+    [
+      "409bea6d-1156-48e8-93e0-056ad42d6385",
+      {
+        "id": "409bea6d-1156-48e8-93e0-056ad42d6385",
+        "name": "Vikram Seth",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-10T13:14:24.799Z"
+      }
+    ],
+    [
+      "e2443beb-65ae-48c5-b83b-fc74f2b5be8d",
+      {
+        "id": "e2443beb-65ae-48c5-b83b-fc74f2b5be8d",
+        "name": "Priya Patel",
+        "branch": "Information Technology",
+        "created_at": "2026-09-10T13:23:15.170Z"
+      }
+    ],
+    [
+      "bfd19f44-3f88-4965-b1a7-d5abe84528a4",
+      {
+        "id": "bfd19f44-3f88-4965-b1a7-d5abe84528a4",
+        "name": "Tanmay Sharma",
+        "branch": "CSE",
+        "created_at": "2026-09-10T13:26:34.494Z"
+      }
+    ],
+    [
+      "9af3096a-0b53-411c-baef-925eecb7cfe4",
+      {
+        "id": "9af3096a-0b53-411c-baef-925eecb7cfe4",
+        "name": "Priya Patel",
+        "branch": "IT",
+        "created_at": "2026-09-10T13:27:35.846Z"
+      }
+    ],
+    [
+      "b5c26799-0fab-4087-afd0-7d27baf141ed",
+      {
+        "id": "b5c26799-0fab-4087-afd0-7d27baf141ed",
+        "name": "Priya Patel",
+        "branch": "IT",
+        "created_at": "2026-09-10T13:27:38.982Z"
+      }
+    ],
+    [
+      "89cc9df4-0f39-4599-8223-7f2bd7351b90",
+      {
+        "id": "89cc9df4-0f39-4599-8223-7f2bd7351b90",
+        "name": "Priya Patel",
+        "branch": "IT",
+        "created_at": "2026-09-10T13:27:40.322Z"
+      }
+    ],
+    [
+      "e67e6907-fbcc-4e4e-b67f-37791a54f4fe",
+      {
+        "id": "e67e6907-fbcc-4e4e-b67f-37791a54f4fe",
+        "name": "Yashaswini M",
+        "branch": "Data Science & AI",
+        "created_at": "2026-09-10T16:48:59.391Z"
+      }
+    ],
+    [
+      "55dfaaf5-ea13-4351-a97d-192ba1421c02",
+      {
+        "id": "55dfaaf5-ea13-4351-a97d-192ba1421c02",
+        "name": "Bukke Lahari",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-10T18:27:11.109Z"
+      }
+    ],
+    [
+      "9c39e559-7482-4889-b8d0-0c43b7113b88",
+      {
+        "id": "9c39e559-7482-4889-b8d0-0c43b7113b88",
+        "name": "Yashaswini M",
+        "branch": "Data Science & AI",
+        "created_at": "2026-09-10T18:34:53.945Z"
+      }
+    ],
+    [
+      "89c622b3-2ce9-4473-9c37-128733c4baee",
+      {
+        "id": "89c622b3-2ce9-4473-9c37-128733c4baee",
+        "name": "Bukke Lahari",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-10T18:35:40.255Z"
+      }
+    ],
+    [
+      "8fb6836b-f935-4e76-85c0-9842e96ec8a8",
+      {
+        "id": "8fb6836b-f935-4e76-85c0-9842e96ec8a8",
+        "name": "Bukke Lahari",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-10T18:47:12.347Z"
+      }
+    ]
+  ],
+  "interviews": [
+    [
+      "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      {
+        "id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "student_id": "user-0000-0000-0000-000000000001",
+        "user_id": "user-0000-0000-0000-000000000001",
+        "target_role": "sde",
+        "project_title": "Distributed E-Commerce Microservices",
+        "tech_stack": "React, Node.js, PostgreSQL, Redis, Docker",
+        "project_description": "A microservices architecture handling order placement, inventory reservations, and payment processing with high concurrency.",
+        "duration_seconds": 540,
+        "status": "completed",
+        "created_at": "2026-09-07T13:07:58.912Z",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Welcome Rahul. Could you walk me through the high-level architecture of your distributed e-commerce system and how services communicate?"
+          },
+          {
+            "sender": "user",
+            "text": "We used an API gateway with separate auth, inventory, and order services communicating via gRPC and Redis Pub/Sub for notifications."
+          },
+          {
+            "sender": "ai",
+            "text": "Interesting. How do you handle distributed transaction failures between the order service and the payment processor?"
+          },
+          {
+            "sender": "user",
+            "text": "We implemented a basic try-catch rollback in the backend service."
+          },
+          {
+            "sender": "ai",
+            "text": "In a microservices setup, a local try-catch cannot rollback remote database commits. Did you look into the Saga pattern or 2-Phase Commit?"
+          }
+        ]
+      }
+    ],
+    [
+      "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+      {
+        "id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+        "student_id": "user-0000-0000-0000-000000000002",
+        "user_id": "user-0000-0000-0000-000000000002",
+        "target_role": "backend",
+        "project_title": "Real-Time Healthcare Patient Telemetry",
+        "tech_stack": "Next.js, FastAPI, PostgreSQL, WebSockets",
+        "project_description": "Streaming vital patient metrics from IoT ward devices to doctor dashboards with sub-second latency.",
+        "duration_seconds": 610,
+        "status": "completed",
+        "created_at": "2026-09-08T13:07:58.912Z",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Welcome Priya. What made you choose WebSockets over Server-Sent Events for streaming patient telemetry data?"
+          },
+          {
+            "sender": "user",
+            "text": "WebSockets allowed bidirectional heartbeats and alert acknowledgments directly from doctor terminals with lower latency."
+          },
+          {
+            "sender": "ai",
+            "text": "How do you structure your PostgreSQL indexes when queries require filtering the last 10 minutes of heart rates across 500 beds?"
+          }
+        ]
+      }
+    ],
+    [
+      "cccccccc-cccc-cccc-cccc-cccccccccccc",
+      {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "student_id": "user-0000-0000-0000-000000000003",
+        "user_id": "user-0000-0000-0000-000000000003",
+        "target_role": "sde",
+        "project_title": "Algorithmic Crypto Arbitrage Engine",
+        "tech_stack": "Python, Go, Redis, TimescaleDB",
+        "project_description": "Detects cross-exchange price spreads and places low-latency atomic orders.",
+        "duration_seconds": 480,
+        "status": "completed",
+        "created_at": "2026-09-08T13:07:58.912Z",
+        "transcript": []
+      }
+    ],
+    [
+      "dddddddd-dddd-dddd-dddd-dddddddddddd",
+      {
+        "id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+        "student_id": "user-0000-0000-0000-000000000004",
+        "user_id": "user-0000-0000-0000-000000000004",
+        "target_role": "ai_ml",
+        "project_title": "Campus Placement Automation Portal",
+        "tech_stack": "React, Express, MongoDB, AWS S3",
+        "project_description": "Manages student resume verification, company interview scheduling, and placement reporting.",
+        "duration_seconds": 520,
+        "status": "completed",
+        "created_at": "2026-09-09T13:07:58.912Z",
+        "transcript": []
+      }
+    ],
+    [
+      "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+      {
+        "id": "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+        "student_id": "user-0000-0000-0000-000000000005",
+        "user_id": "user-0000-0000-0000-000000000005",
+        "target_role": "fullstack",
+        "project_title": "Smart Agriculture IoT Crop Monitoring",
+        "tech_stack": "Flutter, Node.js, MQTT, InfluxDB",
+        "project_description": "Soil moisture, UV, and temperature sensors reporting field health to farmers via edge computing.",
+        "duration_seconds": 390,
+        "status": "completed",
+        "created_at": "2026-09-10T01:07:58.912Z",
+        "transcript": []
+      }
+    ],
+    [
+      "6299f7c3-d4d2-4df6-ad74-cae86153196a",
+      {
+        "id": "6299f7c3-d4d2-4df6-ad74-cae86153196a",
+        "student_id": "409bea6d-1156-48e8-93e0-056ad42d6385",
+        "user_id": "8de1700e-0671-4b7a-a3b3-9cc3487dd92c",
+        "project_title": "High-Concurrency E-Commerce Microservices",
+        "tech_stack": "Node.js, Redis, PostgreSQL, Docker",
+        "project_description": "Distributed order placement and inventory locking.",
+        "resume_summary": "",
+        "resume_filename": "",
+        "interviewer_persona": "alex",
+        "target_role": "backend",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "How do you handle inventory reservation races in high concurrency?",
+            "timestamp": "2026-09-10T13:14:28.315Z"
+          },
+          {
+            "sender": "user",
+            "text": "We use Redis distributed locks with Redlock algorithm and atomic Lua scripts to decrement stock.",
+            "timestamp": "2026-09-10T13:14:28.316Z"
+          }
+        ],
+        "duration_seconds": 300,
+        "status": "completed",
+        "created_at": "2026-09-10T13:14:27.015Z"
+      }
+    ],
+    [
+      "9cc527ad-a646-4517-984e-e407ba6d91f9",
+      {
+        "id": "9cc527ad-a646-4517-984e-e407ba6d91f9",
+        "student_id": "e2443beb-65ae-48c5-b83b-fc74f2b5be8d",
+        "user_id": "user-0000-0000-0000-000000000002",
+        "project_title": "Distributed Telemetry Pipeline",
+        "tech_stack": "Rust, Kafka, TimescaleDB",
+        "project_description": "",
+        "resume_summary": "",
+        "resume_filename": "",
+        "interviewer_persona": "alex",
+        "target_role": "sde",
+        "transcript": [],
+        "duration_seconds": 0,
+        "status": "in-progress",
+        "created_at": "2026-09-10T13:23:16.876Z"
+      }
+    ],
+    [
+      "a22effc4-e05a-4c18-b7ff-d68a77272ca7",
+      {
+        "id": "a22effc4-e05a-4c18-b7ff-d68a77272ca7",
+        "student_id": "bfd19f44-3f88-4965-b1a7-d5abe84528a4",
+        "user_id": "fb1452fb-cd53-42b0-8818-1161822cb412",
+        "project_title": "Realtime Chat Engine",
+        "tech_stack": "Node, Socket.io, Redis",
+        "project_description": "",
+        "resume_summary": "",
+        "resume_filename": "",
+        "interviewer_persona": "alex",
+        "target_role": "sde",
+        "transcript": [],
+        "duration_seconds": 0,
+        "status": "in-progress",
+        "created_at": "2026-09-10T13:26:35.524Z"
+      }
+    ],
+    [
+      "8feeaf68-f62c-4e3b-b21c-f22f081c46bc",
+      {
+        "id": "8feeaf68-f62c-4e3b-b21c-f22f081c46bc",
+        "student_id": "9af3096a-0b53-411c-baef-925eecb7cfe4",
+        "user_id": "user-0000-0000-0000-000000000002",
+        "project_title": "Project Alpha",
+        "tech_stack": "Node, React",
+        "project_description": "",
+        "resume_summary": "",
+        "resume_filename": "",
+        "interviewer_persona": "alex",
+        "target_role": "sde",
+        "transcript": [],
+        "duration_seconds": 0,
+        "status": "in-progress",
+        "created_at": "2026-09-10T13:27:37.533Z"
+      }
+    ],
+    [
+      "414f299c-e5dd-42bd-8437-a361d7037bb5",
+      {
+        "id": "414f299c-e5dd-42bd-8437-a361d7037bb5",
+        "student_id": "b5c26799-0fab-4087-afd0-7d27baf141ed",
+        "user_id": "user-0000-0000-0000-000000000002",
+        "project_title": "Project Beta",
+        "tech_stack": "Go, Docker",
+        "project_description": "",
+        "resume_summary": "",
+        "resume_filename": "",
+        "interviewer_persona": "alex",
+        "target_role": "sde",
+        "transcript": [],
+        "duration_seconds": 0,
+        "status": "in-progress",
+        "created_at": "2026-09-10T13:27:39.482Z"
+      }
+    ],
+    [
+      "a61dd183-cbcb-450d-a63a-47106ed1febd",
+      {
+        "id": "a61dd183-cbcb-450d-a63a-47106ed1febd",
+        "student_id": "89cc9df4-0f39-4599-8223-7f2bd7351b90",
+        "user_id": "user-0000-0000-0000-000000000002",
+        "project_title": "Project Gamma",
+        "tech_stack": "Rust, AWS",
+        "project_description": "",
+        "resume_summary": "",
+        "resume_filename": "",
+        "interviewer_persona": "alex",
+        "target_role": "sde",
+        "transcript": [],
+        "duration_seconds": 0,
+        "status": "in-progress",
+        "created_at": "2026-09-10T13:27:40.926Z"
+      }
+    ],
+    [
+      "9c3ceb0f-6cd3-432d-98ce-96983bfc3ed6",
+      {
+        "id": "9c3ceb0f-6cd3-432d-98ce-96983bfc3ed6",
+        "student_id": "e67e6907-fbcc-4e4e-b67f-37791a54f4fe",
+        "user_id": "a14a6830-94f8-4032-84f6-857ae7a56674",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker, React, Chrome MV3, Node.js, Express.js, MongoDB, Gemini API, Python, Multi-Agent Systems, LLM (GPT-4), Machine Learning, C, C++, Java, JavaScript, HTML, CSS, SQL, Flask, ChatGPT, Claude AI, Codex, Cursor, Qoder, RAG Pipelines, Knowledge Graphs, Semantic Search & Embeddings, Prompt Engineering, MySQL, DBMS, REST APIs, Git, GitHub",
+        "project_description": "RepoGPT is a full-stack RAG platform that transforms GitHub repositories into searchable knowledge bases for contextual codebase Q&A with file-level citations. It implements repository ingestion, semantic indexing with Qdrant, and a Neo4j knowledge graph connecting files, classes, functions, and dependencies for structural exploration.",
+        "resume_summary": "Yashaswini M is an AI & Machine Learning engineering student with strong experience in building production-grade LLM applications, RAG pipelines, and multi-agent systems. Her work spans vector databases, knowledge graphs, full-stack web applications, and autonomous AI systems.",
+        "resume_filename": "rljit.pdf",
+        "interviewer_persona": "sophia",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker\",\"description\":\"A full-stack RAG platform that ingests GitHub repositories into Qdrant for semantic search and constructs Neo4j knowledge graphs for structural exploration and codebase Q&A.\"},{\"title\":\"CodeBuddy AI – AI DSA Mentor Chrome Extension\",\"techStack\":\"React, Chrome MV3, Node.js, Express.js, MongoDB, Gemini API\",\"description\":\"An AI-powered DSA mentor extension capturing LeetCode problems to provide a 5-level progressive hint engine and mock interview workflows with MongoDB progress tracking.\"},{\"title\":\"SentinelX – Multi-Agent Autonomous Security Operations Center\",\"techStack\":\"Python, Multi-Agent Systems, LLM (GPT-4), Machine Learning, Dashboards\",\"description\":\"A multi-agent autonomous SOC that detects advanced cyber threats via independently reasoning GPT-4 agents, real-time visualization dashboards, and automatic malicious IP blocking.\"}]",
+        "target_role": "ai_ml",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Hi Yashaswini, let me jump straight into RepoGPT. When ingesting a large repository, how do you handle AST-based code chunking to map functions and",
+            "timestamp": "2026-09-10T16:49:10.152Z"
+          },
+          {
+            "sender": "user",
+            "text": "using vector embeddings",
+            "timestamp": "2026-09-10T16:49:40.666Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Vector embeddings give you semantic similarity, but they don't capture deterministic",
+            "timestamp": "2026-09-10T16:49:47.172Z"
+          },
+          {
+            "sender": "user",
+            "text": "let's start with DSA",
+            "timestamp": "2026-09-10T16:50:04.840Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Sure, let's pivot to DSA. Imagine you are",
+            "timestamp": "2026-09-10T16:50:11.186Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you.",
+            "timestamp": "2026-09-10T16:50:27.688Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Let's get right into it. Given a",
+            "timestamp": "2026-09-10T16:50:33.711Z"
+          },
+          {
+            "sender": "user",
+            "text": "[Submitted Code (cpp)]:\n```cpp\n#include <iostream>\n#include <vector>\n#include <unordered_map>\n\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        unordered_map<int, int> numMap;\n        for (int i = 0; i < nums.size(); i++) {\n            int complement = target - nums[i];\n            if (numMap.find(complement) != numMap.end()) {\n                return {numMap[complement], i};\n            }\n            numMap[nums[i]] = i;\n        }\n        return {};\n    }\n};\n\n```",
+            "timestamp": "2026-09-10T16:50:53.109Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Your single-pass hash map approach is clean and correctly runs in average",
+            "timestamp": "2026-09-10T16:51:01.010Z"
+          }
+        ],
+        "duration_seconds": 138,
+        "status": "completed",
+        "created_at": "2026-09-10T16:49:01.683Z"
+      }
+    ],
+    [
+      "53ec68c7-99f2-4c9d-8740-74c4461d06a1",
+      {
+        "id": "53ec68c7-99f2-4c9d-8740-74c4461d06a1",
+        "student_id": "55dfaaf5-ea13-4351-a97d-192ba1421c02",
+        "user_id": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "C, C++, Python, JavaScript, HTML, CSS, MySQL, TensorFlow, Keras, OpenCV, YOLOv5, Tailwind CSS, React, Node.js, Next.js, Express, FastAPI, LangChain, Qdrant, Neo4j, Git, GitHub, VS Code, MySQL Workbench, Wireshark, Mininet, Linux, Gem5, ns3, Azure, Docker, Chrome MV3, MongoDB, Gemini API, JWT Authentication",
+        "project_description": "Built and deployed a full-stack RAG platform that transforms GitHub repositories into searchable knowledge bases for contextual codebase Q&A with file-level citations. Features an ingestion pipeline for repository cloning, code chunking, and semantic indexing in Qdrant, alongside a Neo4j knowledge graph connecting files, classes, and dependencies.",
+        "resume_summary": "Bukke Lahari is a Computer Science Engineering student at NITK Surathkal with research experience in secure NVM architectures and hands-on skills in AI-driven platforms. She has built complex projects spanning Retrieval-Augmented Generation (RAG), graph databases, and Chrome extensions using modern full-stack and AI technologies.",
+        "resume_filename": "sde_resume.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker\",\"description\":\"A full-stack RAG platform that converts GitHub repositories into searchable knowledge bases using Qdrant semantic indexing and a Neo4j structural knowledge graph.\"},{\"title\":\"CodeBuddy AI – AI DSA Mentor Chrome Extension\",\"techStack\":\"React, Chrome MV3, Node.js, Express.js, MongoDB, Gemini API\",\"description\":\"An AI-powered DSA mentor browser extension featuring a 5-level progressive hint engine and MongoDB-backed progress tracking for LeetCode problem solving.\"},{\"title\":\"SQL Murder Mystery Game\",\"techStack\":\"React, Node.js, Express, MySQL, Tailwind CSS, JWT\",\"description\":\"An interactive, gamified learning application featuring 75 crime-mystery challenges designed to teach relational database design and complex MySQL concepts.\"}]",
+        "target_role": "ai_ml",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Alright Bukke, let's dive right in. It's great to have you here. I've had a chance to look over your resume, and your 'RepoGPT' project particularly caught my eye. It sounds like a really interesting application.\n\nCould you start by walking me through the high-level architecture of RepoGPT? Specifically, I'm interested in understanding the flow from when a user inputs a GitHub repository URL to when they can start asking questions and getting answers with file-level citations.",
+            "timestamp": "2026-09-10T18:27:19.401Z"
+          },
+          {
+            "sender": "user",
+            "text": "Let's start from DSA.",
+            "timestamp": "2026-09-10T18:28:10.419Z"
+          },
+          {
+            "sender": "ai",
+            "text": "I appreciate your enthusiasm for DSA, Bukke, and we will definitely get to it. However, I always like to start by understanding your practical engineering experience through your projects, as it gives me a better context for your skills. So, let's stick with the architecture of 'RepoGPT' for a moment. Once we've covered that, we can certainly move on to a DSA problem.\n\nSo, picking up where we left off, could you explain the high-level architecture of 'RepoGPT' and the flow from a user submitting a GitHub URL to getting answers with file-level citations?",
+            "timestamp": "2026-09-10T18:28:10.419Z"
+          }
+        ],
+        "duration_seconds": 0,
+        "status": "in-progress",
+        "created_at": "2026-09-10T18:27:12.643Z"
+      }
+    ],
+    [
+      "f739caf0-0556-4990-833f-b754666fc83d",
+      {
+        "id": "f739caf0-0556-4990-833f-b754666fc83d",
+        "student_id": "9c39e559-7482-4889-b8d0-0c43b7113b88",
+        "user_id": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "Next.js, FastAPI, LangChain, Gemini API, Qdrant, Neo4j, Docker, React, Chrome MV3, Node.js, Express.js, MongoDB, Python, Multi-Agent Systems, GPT-4, Machine Learning, C, C++, Java, JavaScript, HTML, CSS, SQL, Flask, MySQL, REST APIs, Git, GitHub",
+        "project_description": "RepoGPT is a full-stack RAG platform that transforms GitHub repositories into searchable knowledge bases with file-level citations. It features an ingestion pipeline for code chunking and semantic indexing in Qdrant, combined with a Neo4j knowledge graph for structural codebase exploration.",
+        "resume_summary": "Yashaswini M is an AI & Machine Learning student with a 9.06 CGPA and extensive project experience in LLM application development, RAG pipelines, and multi-agent systems. She demonstrates expertise across modern vector databases, knowledge graphs, and full-stack web architectures alongside strong competitive programming habits.",
+        "resume_filename": "rljit.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker\",\"description\":\"A full-stack RAG platform transforming GitHub repositories into searchable knowledge bases using semantic indexing in Qdrant and Neo4j knowledge graphs.\"},{\"title\":\"CodeBuddy AI – AI DSA Mentor Chrome Extension\",\"techStack\":\"React, Chrome MV3, Node.js, Express.js, MongoDB, Gemini API\",\"description\":\"An AI mentor extension providing progressive hint generation and mock-interview workflows while tracking user DSA problem-solving progress.\"},{\"title\":\"SentinelX – Multi-Agent Autonomous Security Operations Center\",\"techStack\":\"Python, Multi-Agent Systems, LLM (GPT-4), Machine Learning, Dashboards\",\"description\":\"An autonomous SOC platform utilizing multi-agent LLM reasoning to detect cyber threats in real-time and automatically block malicious IP addresses.\"}]",
+        "target_role": "ai_ml",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Alright Yashaswini, welcome. It's great to have you here. Let's start by talking about your project, RepoGPT. It sounds like a fascinating platform. Could you walk me through the overall architecture of RepoGPT, from how a user initiates the ingestion of a GitHub repository to how they eventually query it? I'm particularly interested in the flow of data and the roles of the different components you used, such as FastAPI, LangChain, Qdrant, and Neo4j.",
+            "timestamp": "2026-09-10T18:35:00.979Z"
+          }
+        ],
+        "duration_seconds": 0,
+        "status": "in-progress",
+        "created_at": "2026-09-10T18:34:55.975Z"
+      }
+    ],
+    [
+      "b5ffa09e-052e-4efb-a830-9c7ea8d2c5fd",
+      {
+        "id": "b5ffa09e-052e-4efb-a830-9c7ea8d2c5fd",
+        "student_id": "89c622b3-2ce9-4473-9c37-128733c4baee",
+        "user_id": "4bf44e1a-bd24-4ec0-816b-941a890f5beb",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "C, C++, Python, JavaScript, HTML, CSS, MySQL, TensorFlow, Keras, OpenCV, YOLOv5, Tailwind CSS, React, Node.js, Express.js, Next.js, FastAPI, LangChain, Qdrant, Neo4j, Docker, Chrome MV3, MongoDB, Gemini API, Git, GitHub, VS Code, MySQL Workbench, Wireshark, Mininet, Linux, Gem5, ns3, Azure, Deep Learning, Computer Vision, Object Detection, Motion Tracking, OOP, RAG, Knowledge Graphs, JWT Authentication",
+        "project_description": "RepoGPT is a full-stack RAG platform that converts GitHub repositories into searchable knowledge bases for codebase Q&A with file-level citations. It features an ingestion pipeline for source-file filtering, code chunking, and semantic indexing in Qdrant, alongside a Neo4j knowledge graph mapping file, class, function, and API dependencies.",
+        "resume_summary": "Bukke Lahari is a Computer Science Engineering student at NITK Surathkal with research experience in secure NVM hardware architecture and persistent memory. She specializes in full-stack AI development, building applications using modern web frameworks (Next.js, React, Node.js, FastAPI) combined with cutting-edge AI technologies like LangChain, Qdrant, Neo4j, and Gemini.",
+        "resume_filename": "sde_resume.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker\",\"description\":\"Full-stack RAG platform that transforms GitHub repositories into searchable knowledge bases with file-level citations and Neo4j structural knowledge graphs.\"},{\"title\":\"CodeBuddy AI – AI DSA Mentor Chrome Extension\",\"techStack\":\"React, Chrome MV3, Node.js, Express.js, MongoDB, Gemini API\",\"description\":\"AI-powered Chrome extension providing a 5-level progressive hint engine and mock interviews within the LeetCode workflow.\"},{\"title\":\"SQL Murder Mystery Game\",\"techStack\":\"React, Node.js, Express, MySQL, Tailwind CSS\",\"description\":\"Interactive gamified platform for learning MySQL through 75 crime-mystery solving challenges with JWT authentication.\"}]",
+        "target_role": "fullstack",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Alright, Bukke, it's great to have you here. I'm Aarav Sharma. I've had a chance to look over your impressive background, particularly your work on RepoGPT. We'll be diving into a few areas today, including your project experience, some data structures and algorithms, and core computer science fundamentals.\n\nLet's start with RepoGPT. Could you give me a high-level overview of the system's architecture, from a user initiating a query to receiving an answer with citations? I'm particularly interested in how the various components you listed — Next.js, FastAPI, LangChain, Gemini, Qdrant, and Neo4j — interact to deliver that functionality.",
+            "timestamp": "2026-09-10T18:35:49.575Z"
+          }
+        ],
+        "duration_seconds": 8,
+        "status": "completed",
+        "created_at": "2026-09-10T18:35:42.004Z"
+      }
+    ],
+    [
+      "830c1208-6199-478e-8542-8951e4c6dfdd",
+      {
+        "id": "830c1208-6199-478e-8542-8951e4c6dfdd",
+        "student_id": "8fb6836b-f935-4e76-85c0-9842e96ec8a8",
+        "user_id": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "C, C++, Python, JavaScript, HTML, CSS, MySQL, TensorFlow, Keras, OpenCV, YOLOv5, Tailwind CSS, React, Node.js, Next.js, Express, FastAPI, LangChain, Qdrant, Neo4j, Docker, Chrome MV3, MongoDB, Gemini API, JWT, Git, GitHub, VS Code, MySQL Workbench, Wireshark, Mininet, Linux, Gem5, ns3, Azure",
+        "project_description": "RepoGPT is a full-stack Retrieval-Augmented Generation (RAG) platform that converts GitHub repositories into searchable knowledge bases with file-level citations. It includes an ingestion pipeline for repository cloning, code chunking, semantic indexing in Qdrant, and a Neo4j knowledge graph for structural repository exploration.",
+        "resume_summary": "Bukke Lahari is a Computer Science Engineering student at NITK Surathkal with research experience in computer architecture and non-volatile memory frameworks. She possesses strong hands-on expertise in building full-stack web applications, AI-driven developer tools, graph database integrations, and RAG systems.",
+        "resume_filename": "sde_resume.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker\",\"description\":\"A full-stack RAG platform that transforms GitHub repositories into searchable knowledge bases with file-level citations and Neo4j knowledge graphs.\"},{\"title\":\"CodeBuddy AI – AI DSA Mentor Chrome Extension\",\"techStack\":\"React, Chrome MV3, Node.js, Express.js, MongoDB, Gemini API\",\"description\":\"An AI-powered DSA mentor Chrome extension capturing LeetCode context to provide 5-level progressive hints, mock interviews, and personalized progress tracking.\"},{\"title\":\"SQL Murder Mystery Game\",\"techStack\":\"React, Node.js, Express, MySQL, Tailwind CSS, JWT\",\"description\":\"An interactive, gamified web app featuring 75 mysteries to teach MySQL concepts like JOINs and subqueries with progress tracking.\"}]",
+        "target_role": "fullstack",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Hi Bukke, it's great to meet you. I am Aarav Sharma, a Senior Staff Software Engineer and Tech Lead here. I have had a chance to look over your resume, and your work on RepoGPT really stands out. We are looking for a Full Stack Engineer, and your experience seems quite relevant.\n\nLet's start by discussing RepoGPT. Could you give me an overview of its architecture, perhaps walking me through the main components and how they interact, from a user initiating a repository ingestion to finally querying it?",
+            "timestamp": "2026-09-10T18:47:19.887Z"
+          }
+        ],
+        "duration_seconds": 7,
+        "status": "completed",
+        "created_at": "2026-09-10T18:47:13.899Z"
+      }
+    ]
+  ],
+  "feedback": [
+    [
+      "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      {
+        "id": "faaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "interview_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "technical_score": 7,
+        "communication_score": 8,
+        "confidence_score": 7,
+        "overall_verdict": "Hire",
+        "strengths": [
+          "Clear explanation of microservice boundaries and gRPC contracts",
+          "Articulate breakdown of cache invalidation strategy with Redis",
+          "Structured problem-solving mindset when explaining system architecture"
+        ],
+        "improvements": [
+          "Struggled to articulate Saga pattern vs 2-Phase Commit when asked about distributed rollback",
+          "Fumbled when asked how auth JWT tokens are invalidated on immediate logout"
+        ],
+        "practice_plan": [
+          "Review JWT token revocation strategies: Redis token blocklisting vs short TTL refresh tokens",
+          "Study Saga orchestration vs choreography patterns for distributed transaction management",
+          "Prepare a crisp 60-second STAR response describing the hardest bug solved in the order pipeline"
+        ],
+        "topic_tags": [
+          "Distributed Transactions",
+          "Authentication & JWT",
+          "Cache Invalidation"
+        ],
+        "created_at": "2026-09-07T13:07:58.912Z"
+      }
+    ],
+    [
+      "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+      {
+        "id": "fbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+        "interview_id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+        "technical_score": 8,
+        "communication_score": 7,
+        "confidence_score": 8,
+        "overall_verdict": "Strong Hire",
+        "strengths": [
+          "Strong grasp of WebSocket backpressure and connection reconnection strategies",
+          "Good reasoning regarding relational integrity in PostgreSQL for patient vitals"
+        ],
+        "improvements": [
+          "Could not explain composite B-Tree database indexing when queried on timeseries query latency",
+          "Used frequent filler words when describing socket connection drops"
+        ],
+        "practice_plan": [
+          "Deep dive into PostgreSQL EXPLAIN ANALYZE and composite index order (bed_id, recorded_at)",
+          "Practice concise vocal delivery when answering fallback failure scenarios"
+        ],
+        "topic_tags": [
+          "Database Indexing",
+          "Concurrency",
+          "Error Handling"
+        ],
+        "created_at": "2026-09-08T13:07:58.912Z"
+      }
+    ],
+    [
+      "cccccccc-cccc-cccc-cccc-cccccccccccc",
+      {
+        "id": "fccccccc-cccc-cccc-cccc-cccccccccccc",
+        "interview_id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "technical_score": 6,
+        "communication_score": 6,
+        "confidence_score": 5,
+        "overall_verdict": "Borderline",
+        "strengths": [
+          "Good understanding of order book data structures and Go goroutines"
+        ],
+        "improvements": [
+          "Severe gap in thread safety and race conditions under high throughput",
+          "Hesitant when asked to calculate memory footprint of in-memory queues"
+        ],
+        "practice_plan": [
+          "Study Go sync.Mutex vs atomic operations and race detector",
+          "Prepare concrete memory calculation examples for interview questions"
+        ],
+        "topic_tags": [
+          "Concurrency",
+          "System Design",
+          "Memory Management"
+        ],
+        "created_at": "2026-09-08T13:07:58.912Z"
+      }
+    ],
+    [
+      "dddddddd-dddd-dddd-dddd-dddddddddddd",
+      {
+        "id": "fddddddd-dddd-dddd-dddd-dddddddddddd",
+        "interview_id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+        "technical_score": 5,
+        "communication_score": 7,
+        "confidence_score": 6,
+        "overall_verdict": "Borderline",
+        "strengths": [
+          "Pleasant communication pace and structured walk-through of the student workflow"
+        ],
+        "improvements": [
+          "Used textbook answers for MongoDB schema design without justifying why NoSQL was chosen over relational",
+          "Could not explain how S3 presigned URLs prevent unauthorized resume access"
+        ],
+        "practice_plan": [
+          "Study NoSQL vs SQL trade-offs with concrete access pattern analysis",
+          "Implement and explain presigned S3 upload security in a mock repo"
+        ],
+        "topic_tags": [
+          "Database Indexing",
+          "API Security",
+          "System Design"
+        ],
+        "created_at": "2026-09-09T13:07:58.912Z"
+      }
+    ],
+    [
+      "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+      {
+        "id": "feeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+        "interview_id": "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+        "technical_score": 7,
+        "communication_score": 6,
+        "confidence_score": 6,
+        "overall_verdict": "Hire",
+        "strengths": [
+          "Solid understanding of MQTT broker QoS levels and sensor battery constraints"
+        ],
+        "improvements": [
+          "Lacked clarity on time-series database retention policies and aggregation rollups",
+          "Stumbled when asked how sensor payloads are sanitized before ingestion"
+        ],
+        "practice_plan": [
+          "Review InfluxDB continuous queries and downsampling",
+          "Study API input validation and MQTT payload encryption with TLS"
+        ],
+        "topic_tags": [
+          "API Security",
+          "System Design",
+          "Time-series Storage"
+        ],
+        "created_at": "2026-09-10T01:07:58.912Z"
+      }
+    ],
+    [
+      "ac6a05e3-4210-405d-afc6-5dff29bbdbbb",
+      {
+        "id": "375de401-9f3e-4bf1-9e59-09eb3ae6d457",
+        "confidence_score": 5,
+        "overall_verdict": "Borderline",
+        "interview_id": "ac6a05e3-4210-405d-afc6-5dff29bbdbbb",
+        "technical_score": 4,
+        "communication_score": 5,
+        "interview_skills_breakdown": {
+          "technical_depth": 4,
+          "problem_solving": 4,
+          "system_architecture": 5,
+          "communication_clarity": 6,
+          "vocal_confidence": 5
+        },
+        "interview_improvements": [
+          "Failed to detail the Raft state machine transitions (Follower, Candidate, Leader) and the critical role of randomized election timeouts in preventing split votes.",
+          "Omitted the specific mechanism of Log Replication, including how majority quorums (N/2 + 1) guarantee consistency and how uncommitted log entries are handled during failovers.",
+          "Named 'safety guarantees' at a superficial level without defining concrete properties like Election Safety, Leader Append-Only, and Leader Completeness."
+        ],
+        "resume_score": 68,
+        "resume_verdict": "Solid Baseline — Needs Quantification",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 4,
+          "tech_stack_relevance": 7,
+          "project_presentation": 6
+        },
+        "resume_improvements": [
+          "Rewrite full-stack project bullets using Google's XYZ format: 'Engineered a full-stack web application using React, Node.js, and PostgreSQL, reducing end-to-end page load latency by 30% through index optimization and Redis caching.'",
+          "Quantify database and API scale metrics (e.g., 'Designed normalized PostgreSQL schema handling 10k+ daily transactions with sub-50ms query latency').",
+          "Add key backend systems keywords relevant to target roles (e.g., RESTful APIs, Connection Pooling, WebSockets, Docker, CI/CD)."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Entry-Level Full Stack Engineer",
+            "match_percentage": 85,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Demonstrates core proficiency with the standard modern JavaScript web stack (React, Node.js, PostgreSQL).",
+            "ideal_companies": [
+              "Mid-market SaaS startups",
+              "Digital Consultancies",
+              "Fintech Scale-ups"
+            ]
+          },
+          {
+            "role_title": "Junior Backend Engineer",
+            "match_percentage": 78,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Has foundational exposure to Node.js backend services and relational databases, along with conceptual awareness of distributed topics.",
+            "ideal_companies": [
+              "E-commerce Platforms",
+              "Enterprise Software Providers",
+              "Tech Consultancies"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "LinkedIn",
+            "role_title": "Entry-Level Full Stack Engineer — Active Openings",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Entry-Level%20Full%20Stack%20Engineer&f_TPR=r604800&position=1&pageNum=0",
+            "badge_text": "Fast Apply",
+            "match_tag": "96% Profile Match",
+            "description": "Filter verified high-intent tech requisitions posted in the last 7 days."
+          },
+          {
+            "platform": "Wellfound",
+            "role_title": "Entry-Level Full Stack Engineer at High-Growth Startups",
+            "apply_url": "https://wellfound.com/jobs?role=sde",
+            "badge_text": "Direct to Founders",
+            "match_tag": "94% Profile Match",
+            "description": "Explore venture-backed seed to Series B companies hiring with equity."
+          },
+          {
+            "platform": "Indeed",
+            "role_title": "Entry-Level Full Stack Engineer (React)",
+            "apply_url": "https://www.indeed.com/jobs?q=Entry-Level%20Full%20Stack%20Engineer%20React&l=Remote",
+            "badge_text": "Remote & Hybrid",
+            "match_tag": "91% Profile Match",
+            "description": "Access nationwide openings matching your exact verified stack."
+          },
+          {
+            "platform": "Google Careers",
+            "role_title": "Software Engineer / Systems Specialist",
+            "apply_url": "https://www.google.com/about/careers/applications/jobs/results/?q=Entry-Level%20Full%20Stack%20Engineer",
+            "badge_text": "Big Tech / FAANG",
+            "match_tag": "89% Profile Match",
+            "description": "Global engineering openings in Cloud, Core Platforms, and Infrastructure."
+          },
+          {
+            "platform": "Y Combinator",
+            "role_title": "Early Engineer — YC Portfolio",
+            "apply_url": "https://www.workatastartup.com/companies?query=Entry-Level%20Full%20Stack%20Engineer",
+            "badge_text": "YC Verified",
+            "match_tag": "95% Profile Match",
+            "description": "Work at a Startup: apply to fast-growing YC batches directly without recruiters."
+          },
+          {
+            "platform": "Glassdoor",
+            "role_title": "Entry-Level Full Stack Engineer Requisitions",
+            "apply_url": "https://www.glassdoor.com/Job/jobs.htm?sc.keyword=Entry-Level%20Full%20Stack%20Engineer",
+            "badge_text": "Salary Verified",
+            "match_tag": "88% Profile Match",
+            "description": "Compare transparent salary ranges, interview questions, and team reviews."
+          }
+        ],
+        "strengths": [
+          "Accurate high-level comprehension of distributed systems core concepts.",
+          "Concise verbal communication without introducing incorrect facts.",
+          "Relevant full-stack technology stack (React, Node.js, PostgreSQL) aligned with industry demand."
+        ],
+        "improvements": [
+          "Elaborate significantly on technical answers during interviews using multi-layered explanation frameworks.",
+          "Incorporate quantitative metrics and business impact data across all resume project descriptions."
+        ],
+        "practice_plan": [
+          "Study the original Raft whitepaper ('In Search of an Understandable Consensus Algorithm') and practice explaining the step-by-step RPC flows (RequestVote and AppendEntries).",
+          "Adopt the 2-minute response structure for system design questions: High-level overview -> Core mechanisms -> Edge cases & trade-offs.",
+          "Revise all resume project bullet points to explicitly feature tech stack, quantified performance metrics, and architectural decisions.",
+          "Implement a miniature distributed system project (e.g., a replicated key-value store) to bridge theoretical knowledge with practical implementation experience."
+        ],
+        "topic_tags": [
+          "Distributed Systems",
+          "Raft Consensus",
+          "Full Stack Web Development",
+          "System Architecture"
+        ],
+        "created_at": "2026-09-10T13:11:09.866Z"
+      }
+    ],
+    [
+      "6299f7c3-d4d2-4df6-ad74-cae86153196a",
+      {
+        "id": "f291af14-30e0-4335-9f7a-d2e1216f285e",
+        "confidence_score": 7,
+        "overall_verdict": "Borderline",
+        "interview_id": "6299f7c3-d4d2-4df6-ad74-cae86153196a",
+        "technical_score": 6,
+        "communication_score": 6,
+        "interview_skills_breakdown": {
+          "technical_depth": 6,
+          "problem_solving": 6,
+          "system_architecture": 6,
+          "communication_clarity": 7,
+          "vocal_confidence": 7
+        },
+        "interview_improvements": [
+          "Critique on Redlock vs. Lua redundancy: Mentioning both Redlock AND Lua scripts without explaining their relationship creates confusion—if executing an atomic Lua script directly on Redis, an explicit distributed lock wrapper is often redundant overhead.",
+          "Lacked database persistence strategy: Fumbled the end-to-end flow by failing to explain how Redis inventory reservations are eventually synchronized or persisted safely back to PostgreSQL.",
+          "Missing trade-off and edge case analysis: Did not address key distributed system failure modes like lock timeouts, network partitions, split-brain scenarios, or TTL expiration during order processing."
+        ],
+        "resume_score": 74,
+        "resume_verdict": "Solid Baseline — Needs Quantification",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 5,
+          "tech_stack_relevance": 9,
+          "project_presentation": 7
+        },
+        "resume_improvements": [
+          "XYZ Formula Bullet Rewrite: 'Designed an atomic inventory reservation engine using Redis Lua scripts, eliminating race conditions under 5,000+ peak concurrent checkout requests and reducing DB lock contention by 65%.'",
+          "Add Messaging & Async Keywords: Integrate keywords like BullMQ, RabbitMQ, or Kafka to explain how async order processing decouples stock reservation from persistent PostgreSQL updates.",
+          "Quantify Infrastructure Impact: 'Containerized Node.js microservices with Docker, optimizing multi-stage builds to reduce image sizes by 40% and streamline local orchestration via Docker Compose.'"
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Junior Backend Engineer",
+            "match_percentage": 88,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Demonstrates practical exposure to core backend primitives: Node.js, Redis caching, relational databases, and Docker containerization.",
+            "ideal_companies": [
+              "Shopify",
+              "DoorDash",
+              "Swiggy"
+            ]
+          },
+          {
+            "role_title": "Software Engineer - Microservices / Core APIs",
+            "match_percentage": 80,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Hands-on experience with high-concurrency patterns and distributed cache primitives makes them a solid candidate for core product team roles.",
+            "ideal_companies": [
+              "Razorpay",
+              "Stripe",
+              "Deliveroo"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "LinkedIn",
+            "role_title": "Junior Backend Engineer — Active Openings",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Junior%20Backend%20Engineer&f_TPR=r604800&position=1&pageNum=0",
+            "badge_text": "Fast Apply",
+            "match_tag": "96% Profile Match",
+            "description": "Filter verified high-intent tech requisitions posted in the last 7 days."
+          },
+          {
+            "platform": "Wellfound",
+            "role_title": "Junior Backend Engineer at High-Growth Startups",
+            "apply_url": "https://wellfound.com/jobs?role=backend",
+            "badge_text": "Direct to Founders",
+            "match_tag": "94% Profile Match",
+            "description": "Explore venture-backed seed to Series B companies hiring with equity."
+          },
+          {
+            "platform": "Indeed",
+            "role_title": "Junior Backend Engineer (Node.js)",
+            "apply_url": "https://www.indeed.com/jobs?q=Junior%20Backend%20Engineer%20Node.js&l=Remote",
+            "badge_text": "Remote & Hybrid",
+            "match_tag": "91% Profile Match",
+            "description": "Access nationwide openings matching your exact verified stack."
+          },
+          {
+            "platform": "Google Careers",
+            "role_title": "Software Engineer / Systems Specialist",
+            "apply_url": "https://www.google.com/about/careers/applications/jobs/results/?q=Junior%20Backend%20Engineer",
+            "badge_text": "Big Tech / FAANG",
+            "match_tag": "89% Profile Match",
+            "description": "Global engineering openings in Cloud, Core Platforms, and Infrastructure."
+          },
+          {
+            "platform": "Y Combinator",
+            "role_title": "Early Engineer — YC Portfolio",
+            "apply_url": "https://www.workatastartup.com/companies?query=Junior%20Backend%20Engineer",
+            "badge_text": "YC Verified",
+            "match_tag": "95% Profile Match",
+            "description": "Work at a Startup: apply to fast-growing YC batches directly without recruiters."
+          },
+          {
+            "platform": "Glassdoor",
+            "role_title": "Junior Backend Engineer Requisitions",
+            "apply_url": "https://www.glassdoor.com/Job/jobs.htm?sc.keyword=Junior%20Backend%20Engineer",
+            "badge_text": "Salary Verified",
+            "match_tag": "88% Profile Match",
+            "description": "Compare transparent salary ranges, interview questions, and team reviews."
+          }
+        ],
+        "strengths": [
+          "Immediate familiarity with key high-concurrency tooling (Redis Lua scripts, Redlock).",
+          "Relevant target tech stack utilizing Node.js, PostgreSQL, Redis, and Docker.",
+          "Direct and concise initial answering style without hesitation."
+        ],
+        "improvements": [
+          "Deepen technical answers by discussing architecture trade-offs, edge cases, and failure recovery rather than just listing technologies.",
+          "Quantify resume bullet points with concrete metrics (RPS, latency reductions, database contention stats) using the Google XYZ framework."
+        ],
+        "practice_plan": [
+          "Study Redis single-threaded execution mechanics versus distributed locking strategies (Redlock vs. single-node atomic Lua).",
+          "Practice walking through end-to-end request lifecycles (Cache-aside, Write-Behind, CDC, Outbox pattern) for distributed state reconciliation.",
+          "Mock interview drill: Practice proactive deep-dives (e.g., 'I chose Lua over Redlock because X, but the trade-off is Y').",
+          "Revise project resume bullets using precise metrics (QPS, throughput, latency impact)."
+        ],
+        "topic_tags": [
+          "Distributed Systems",
+          "Redis",
+          "Concurrency & Locking",
+          "Node.js Backend"
+        ],
+        "created_at": "2026-09-10T13:14:42.749Z"
+      }
+    ],
+    [
+      "9c3ceb0f-6cd3-432d-98ce-96983bfc3ed6",
+      {
+        "id": "3cb455c4-7ee7-408c-a1c8-3df2e9703a34",
+        "confidence_score": 3,
+        "overall_verdict": "No Hire",
+        "interview_id": "9c3ceb0f-6cd3-432d-98ce-96983bfc3ed6",
+        "technical_score": 3,
+        "communication_score": 2,
+        "interview_skills_breakdown": {
+          "technical_depth": 3,
+          "problem_solving": 5,
+          "system_architecture": 2,
+          "communication_clarity": 2,
+          "vocal_confidence": 3
+        },
+        "interview_improvements": [
+          "Do not interrupt or deflect when an interviewer probes into system architecture; instead of pivoting to DSA, engage directly with the question on AST parsing vs embeddings.",
+          "Clarify the distinction between deterministic structural parsing (using Tree-Sitter or AST to extract function/class hierarchies) and dense vector embeddings used for semantic search.",
+          "When asked a DSA question, state the approach, discuss edge cases, and analyze time/space complexity aloud before pasting completed code."
+        ],
+        "resume_score": 78,
+        "resume_verdict": "Solid Baseline — Needs Quantification",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 6,
+          "tech_stack_relevance": 9,
+          "project_presentation": 8
+        },
+        "resume_improvements": [
+          "Quantify the performance impact of RepoGPT (e.g., 'Engineered AST-based code chunking pipeline combining Qdrant vector search and Neo4j knowledge graphs, reducing codebase query latency by 40%').",
+          "Add explicit metrics to SentinelX regarding threat detection accuracy, agent response latency, and false-positive reduction rate.",
+          "Elaborate on the AST parsing and graph-construction mechanics within RepoGPT to validate the tech stack claims made on the resume."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "AI / ML Applications Engineer",
+            "match_percentage": 85,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Demonstrates practical experience building end-to-end LLM applications, RAG pipelines with Qdrant/Neo4j, and multi-agent workflows.",
+            "ideal_companies": [
+              "Scale AI",
+              "Cohere",
+              "LangChain"
+            ]
+          },
+          {
+            "role_title": "Junior GenAI / Software Engineer",
+            "match_percentage": 80,
+            "seniority": "Entry-Level (0-1 YOE)",
+            "why_fit": "Strong full-stack foundation paired with modern AI stack including FastAPI, Next.js, and Vector DBs.",
+            "ideal_companies": [
+              "Vercel",
+              "Pinecone",
+              "Databricks"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "LinkedIn",
+            "role_title": "AI / ML Applications Engineer (Next.js & FastAPI) — Live Postings",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=AI%20%2F%20ML%20Applications%20Engineer%20Next.js%20FastAPI&sortBy=DD&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "97% Resume Match",
+            "description": "Live requisitions matching Next.js, FastAPI, and LangChain posted within the last 7 days."
+          },
+          {
+            "platform": "Wellfound",
+            "role_title": "Next.js Engineer at High-Growth Startups",
+            "apply_url": "https://wellfound.com/jobs?keyword=Next.js%20AI%20%2F%20ML%20Applications%20Engineer",
+            "badge_text": "Direct to Founders",
+            "match_tag": "95% Resume Match",
+            "description": "Venture-backed seed to Series B scaleups actively hiring engineers with hands-on Next.js project experience with equity."
+          },
+          {
+            "platform": "Indeed",
+            "role_title": "AI / ML Applications Engineer — Next.js (Immediate Hires)",
+            "apply_url": "https://www.indeed.com/jobs?q=AI%20%2F%20ML%20Applications%20Engineer%20FastAPI&fromage=7&sort=date",
+            "badge_text": "Remote & Hybrid",
+            "match_tag": "93% Resume Match",
+            "description": "Real-time openings requiring Next.js and verified production engineering fundamentals."
+          },
+          {
+            "platform": "Google Careers",
+            "role_title": "AI / ML Applications Engineer (Google Jobs Real-Time Index)",
+            "apply_url": "https://www.google.com/search?q=AI%20%2F%20ML%20Applications%20Engineer%20Next.js%20FastAPI%20jobs%20hiring%20now&ibp=htl;jobs",
+            "badge_text": "Real-Time Aggregator",
+            "match_tag": "92% Resume Match",
+            "description": "Live Google Jobs index querying thousands of corporate ATS portals simultaneously for Next.js developers."
+          },
+          {
+            "platform": "Y Combinator",
+            "role_title": "Founding / Early Engineer (Next.js) — YC Portfolio",
+            "apply_url": "https://www.workatastartup.com/companies?query=Next.js%20FastAPI",
+            "badge_text": "YC Verified",
+            "match_tag": "96% Resume Match",
+            "description": "Direct candidate pipeline to YC founders hiring for Next.js and FastAPI expertise without middle recruiters."
+          },
+          {
+            "platform": "Glassdoor",
+            "role_title": "AI / ML Applications Engineer (FastAPI) Salary-Verified Roles",
+            "apply_url": "https://www.glassdoor.com/Job/jobs.htm?sc.keyword=AI%20%2F%20ML%20Applications%20Engineer%20LangChain",
+            "badge_text": "Salary Verified",
+            "match_tag": "89% Resume Match",
+            "description": "Verified corporate job openings with transparent compensation benchmarks and interview reviews for Next.js."
+          }
+        ],
+        "strengths": [
+          "Clean and optimal C++ implementation of the Two Sum problem using a single-pass hash map with O(N) time complexity.",
+          "Strong baseline resume exposure to advanced modern AI architectures including RAG, Knowledge Graphs (Neo4j), Vector DBs (Qdrant), and Multi-Agent Systems.",
+          "Broad full-stack project portfolio spanning Web extensions, microservices, and AI dashboards."
+        ],
+        "weaknesses": [
+          "Conflated semantic vector embeddings with deterministic AST (Abstract Syntax Tree) code parsing when questioned on RepoGPT architecture.",
+          "Abruptly interrupted the interviewer and forced a pivot to DSA rather than addressing technical gaps in system design.",
+          "Failed to explain trade-offs or discuss edge cases prior to providing code for standard DSA problems."
+        ],
+        "submitted_code": {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <vector>\n#include <unordered_map>\n\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        unordered_map<int, int> numMap;\n        for (int i = 0; i < nums.size(); i++) {\n            int complement = target - nums[i];\n            if (numMap.find(complement) != numMap.end()) {\n                return {numMap[complement], i};\n            }\n            numMap[nums[i]] = i;\n        }\n        return {};\n    }\n};"
+        },
+        "improvements": [
+          "Practice deep-dive technical explanations for every system component listed on the resume, specifically AST chunking and graph creation for codebases.",
+          "Develop professional interviewing skills to remain calm under technical pushback and avoid prematurely redirecting the conversation."
+        ],
+        "practice_plan": [
+          "Study AST parsing frameworks (e.g., Tree-Sitter) and how they integrate with Knowledge Graphs for code parsing.",
+          "Revisit system design for Code RAG pipelines: chunking strategies, parent-child relationships, and hybrid search mechanisms.",
+          "Perform mock interviews focusing on active listening, explaining thought processes, and accepting interviewer hints.",
+          "Practice vocalizing space/time complexity trade-offs for array and hash map problems before writing code."
+        ],
+        "topic_tags": [
+          "RAG Architectures",
+          "AST Code Parsing",
+          "LLM Multi-Agent Systems",
+          "Data Structures & Algorithms"
+        ],
+        "created_at": "2026-09-10T16:51:51.321Z"
+      }
+    ],
+    [
+      "b5ffa09e-052e-4efb-a830-9c7ea8d2c5fd",
+      {
+        "id": "67dc3a5f-d8d8-4dc4-8a0e-91438a0c26d2",
+        "confidence_score": 5,
+        "overall_verdict": "Borderline",
+        "interview_id": "b5ffa09e-052e-4efb-a830-9c7ea8d2c5fd",
+        "technical_score": 5,
+        "communication_score": 5,
+        "interview_skills_breakdown": {
+          "technical_depth": 5,
+          "problem_solving": 5,
+          "system_architecture": 5,
+          "communication_clarity": 5,
+          "vocal_confidence": 5
+        },
+        "interview_improvements": [
+          "Cannot provide specific verbal answer critiques as the candidate's response was not provided.",
+          "General advice: When describing system architecture, start with the user's interaction, trace the request through each component, explain the role of each technology, and detail data flow and transformations.",
+          "General advice: Be prepared to discuss trade-offs (e.g., why Qdrant vs. other vector DBs, why Neo4j for knowledge graphs), scalability considerations, and potential failure points."
+        ],
+        "resume_score": 92,
+        "resume_verdict": "ATS Optimized — Tier 1 Product Ready",
+        "resume_rating_breakdown": {
+          "ats_readability": 9,
+          "impact_metrics": 8,
+          "tech_stack_relevance": 10,
+          "project_presentation": 9
+        },
+        "resume_improvements": [
+          "RepoGPT: Quantify impact. Rewrite: 'Engineered RepoGPT, a full-stack RAG platform leveraging Next.js, FastAPI, LangChain, and Gemini, to transform **[X number]** GitHub repositories into searchable knowledge bases, achieving **[Y%]** faster information retrieval with file-level citations and Neo4j-powered structural knowledge graphs.'",
+          "CodeBuddy AI: Add user impact. Rewrite: 'Developed CodeBuddy AI, a Chrome MV3 extension (React, Node.js, MongoDB, Gemini API), integrating a 5-level progressive hint engine and mock interview functionality directly into LeetCode, enhancing problem-solving for **[X number]** users.'",
+          "SQL Murder Mystery Game: Quantify engagement. Rewrite: 'Built SQL Murder Mystery Game (React, Node.js, MySQL), an interactive gamified platform featuring **75** crime-mystery challenges and JWT authentication, improving MySQL proficiency for **[X number]** learners and achieving **[Z%]** completion rate.'",
+          "Consider adding a dedicated 'Skills' section categorized by 'Languages', 'Frameworks', 'Databases', 'AI/ML', 'DevOps', 'Cloud' to further boost ATS matching and readability."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Fullstack AI Engineer",
+            "match_percentage": 95,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Bukke's projects demonstrate strong proficiency across the full stack (Next.js, React, Node.js, FastAPI) combined with cutting-edge AI/ML technologies (LangChain, Gemini, Qdrant, Neo4j, RAG, Deep Learning). This blend is ideal for roles building AI-powered applications end-to-end.",
+            "ideal_companies": [
+              "Google",
+              "Stripe",
+              "Anthropic"
+            ]
+          },
+          {
+            "role_title": "Backend Engineer (AI/ML Focus)",
+            "match_percentage": 90,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "The FastAPI, Node.js, Express.js, Docker, and database (Qdrant, Neo4j, MongoDB, MySQL) experience, coupled with deep understanding of RAG architectures and LLM integration, makes her a strong candidate for backend roles that involve building and scaling AI services.",
+            "ideal_companies": [
+              "Amazon",
+              "Microsoft",
+              "Databricks"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "LinkedIn",
+            "role_title": "Fullstack AI Engineer (C++ & Python) — Live Postings",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Fullstack%20AI%20Engineer%20C%2B%2B%20Python&sortBy=DD&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "97% Resume Match",
+            "description": "Live requisitions matching C++, Python, and JavaScript posted within the last 7 days."
+          },
+          {
+            "platform": "Wellfound",
+            "role_title": "C++ Engineer at High-Growth Startups",
+            "apply_url": "https://wellfound.com/jobs?keyword=C%2B%2B%20Fullstack%20AI%20Engineer",
+            "badge_text": "Direct to Founders",
+            "match_tag": "95% Resume Match",
+            "description": "Venture-backed seed to Series B scaleups actively hiring engineers with hands-on C++ project experience with equity."
+          },
+          {
+            "platform": "Indeed",
+            "role_title": "Fullstack AI Engineer — C++ (Immediate Hires)",
+            "apply_url": "https://www.indeed.com/jobs?q=Fullstack%20AI%20Engineer%20Python&fromage=7&sort=date",
+            "badge_text": "Remote & Hybrid",
+            "match_tag": "93% Resume Match",
+            "description": "Real-time openings requiring C++ and verified production engineering fundamentals."
+          },
+          {
+            "platform": "Google Careers",
+            "role_title": "Fullstack AI Engineer (Google Jobs Real-Time Index)",
+            "apply_url": "https://www.google.com/search?q=Fullstack%20AI%20Engineer%20C%2B%2B%20Python%20jobs%20hiring%20now&ibp=htl;jobs",
+            "badge_text": "Real-Time Aggregator",
+            "match_tag": "92% Resume Match",
+            "description": "Live Google Jobs index querying thousands of corporate ATS portals simultaneously for C++ developers."
+          },
+          {
+            "platform": "Y Combinator",
+            "role_title": "Founding / Early Engineer (C++) — YC Portfolio",
+            "apply_url": "https://www.workatastartup.com/companies?query=C%2B%2B%20Python",
+            "badge_text": "YC Verified",
+            "match_tag": "96% Resume Match",
+            "description": "Direct candidate pipeline to YC founders hiring for C++ and Python expertise without middle recruiters."
+          },
+          {
+            "platform": "Glassdoor",
+            "role_title": "Fullstack AI Engineer (Python) Salary-Verified Roles",
+            "apply_url": "https://www.glassdoor.com/Job/jobs.htm?sc.keyword=Fullstack%20AI%20Engineer%20JavaScript",
+            "badge_text": "Salary Verified",
+            "match_tag": "89% Resume Match",
+            "description": "Verified corporate job openings with transparent compensation benchmarks and interview reviews for C++."
+          }
+        ],
+        "strengths": [
+          "Strong foundational knowledge in modern full-stack development (Next.js, React, Node.js, FastAPI).",
+          "Demonstrated expertise in AI/ML application development, particularly RAG architectures, knowledge graphs (Neo4j), and vector databases (Qdrant).",
+          "Extensive and diverse tech stack proficiency, covering front-end, back-end, databases, AI/ML, DevOps (Docker), and cloud (Azure).",
+          "Experience with complex system integration, as evidenced by RepoGPT's multi-component architecture."
+        ],
+        "weaknesses": [
+          "Cannot assess specific technical gaps or suboptimal solutions without the candidate's interview response.",
+          "Potential for lack of depth in specific component trade-offs or scalability challenges if not addressed in the (missing) architectural overview.",
+          "Quantification of impact and scale in project descriptions on the resume could be improved."
+        ],
+        "improvements": [
+          "Practice articulating complex system architectures clearly and concisely, focusing on data flow, component responsibilities, and key design decisions.",
+          "Prepare to discuss trade-offs for chosen technologies (e.g., why Qdrant over Pinecone/Weaviate, why Neo4j for knowledge graphs vs. relational/document DBs for specific use cases).",
+          "Be ready to delve into scalability, performance optimization, and error handling strategies for distributed systems."
+        ],
+        "practice_plan": [
+          "System Design Practice: Diagram RepoGPT's architecture on a whiteboard, explaining each component's role, APIs, data flow, and potential bottlenecks. Focus on the 'why' behind each choice.",
+          "Behavioral Questions: Prepare STAR method answers for common questions about project challenges, teamwork, and learning new technologies, drawing from RepoGPT and other projects.",
+          "DSA Review: Refresh on common data structures (trees, graphs, hash maps) and algorithms (sorting, searching, dynamic programming) as the interviewer mentioned this area.",
+          "Mock Interviews: Conduct mock interviews focusing on system design and project deep-dives to refine communication and technical articulation."
+        ],
+        "topic_tags": [
+          "Fullstack Development",
+          "AI/ML Engineering",
+          "RAG Architecture",
+          "Knowledge Graphs",
+          "System Design",
+          "Web Development"
+        ],
+        "created_at": "2026-09-10T18:36:11.028Z"
+      }
+    ],
+    [
+      "830c1208-6199-478e-8542-8951e4c6dfdd",
+      {
+        "id": "6d8d4ba3-d72f-4014-a2b3-f2c9566f45c5",
+        "confidence_score": 7,
+        "overall_verdict": "Hire",
+        "interview_id": "830c1208-6199-478e-8542-8951e4c6dfdd",
+        "technical_score": 7,
+        "communication_score": 7,
+        "interview_skills_breakdown": {
+          "technical_depth": 7,
+          "problem_solving": 7,
+          "system_architecture": 8,
+          "communication_clarity": 7,
+          "vocal_confidence": 7
+        },
+        "interview_improvements": [
+          "Given the prompt, the candidate has not yet spoken. However, for an architecture overview, a strong candidate would start with a high-level diagram (even if mental), then dive into data flow (ingestion, processing, storage, retrieval), and finally discuss key technologies and their rationale.",
+          "Anticipate follow-up questions on scalability, error handling, and security. Briefly touch upon these aspects during the initial overview to demonstrate foresight.",
+          "Clearly articulate the 'why' behind technology choices (e.g., 'Neo4j was chosen for its ability to model complex relationships between code entities, enabling more nuanced semantic search than a purely vector-based approach')."
+        ],
+        "resume_score": 78,
+        "resume_verdict": "Solid Baseline — Needs Quantification",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 6,
+          "tech_stack_relevance": 9,
+          "project_presentation": 8
+        },
+        "resume_improvements": [
+          "**Quantify Impact:** For RepoGPT, add metrics like 'Processed X GB of GitHub data from Y repositories' or 'Reduced information retrieval time by Z%'. For CodeBuddy AI, 'Supported X active users' or 'Generated Y progressive hints'.",
+          "**Refine Tech Stack for RepoGPT:** The extensive list (C, C++, OpenCV, YOLOv5, Wireshark, Mininet, Gem5, ns3) for RepoGPT is overwhelming and dilutes focus for a full-stack role. Only list technologies directly relevant to the RAG platform's core functionality. Move networking/architecture tools to a separate 'Skills' section if truly proficient.",
+          "**Use XYZ Formula:** Rewrite project bullets to highlight action, result, and technology. E.g., 'Developed RepoGPT, a full-stack RAG platform leveraging Next.js and FastAPI to transform GitHub repositories into searchable knowledge bases, enabling file-level citations and semantic querying via Neo4j knowledge graphs and Qdrant vector store.'",
+          "**Dedicated Research Section:** Create a separate 'Research Experience' section to highlight work in computer architecture and non-volatile memory frameworks. This is a strong differentiator and should not be buried or confused with full-stack projects."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Full Stack Engineer (AI/ML Focus)",
+            "match_percentage": 92,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Bukke's projects demonstrate strong end-to-end development skills across frontend (React, Next.js), backend (FastAPI, Node.js), and databases, with a significant emphasis on integrating AI/ML (RAG, LLMs, Vector/Graph DBs). This makes her an excellent fit for roles requiring both traditional full-stack capabilities and modern AI integration.",
+            "ideal_companies": [
+              "Google",
+              "Stripe",
+              "Anthropic"
+            ]
+          },
+          {
+            "role_title": "AI/ML Engineer (RAG Systems)",
+            "match_percentage": 88,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Her deep involvement with RepoGPT, utilizing LangChain, Gemini API, Qdrant, and Neo4j for RAG and knowledge graph construction, directly aligns with the requirements for an AI/ML Engineer specializing in information retrieval and LLM-powered applications.",
+            "ideal_companies": [
+              "Hugging Face",
+              "Cohere",
+              "Databricks"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "LinkedIn",
+            "role_title": "Full Stack Engineer (AI/ML Focus) (C++ & Python) — Live Postings",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Full%20Stack%20Engineer%20(AI%2FML%20Focus)%20C%2B%2B%20Python&sortBy=DD&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "97% Resume Match",
+            "description": "Live requisitions matching C++, Python, and JavaScript posted within the last 7 days."
+          },
+          {
+            "platform": "Wellfound",
+            "role_title": "C++ Engineer at High-Growth Startups",
+            "apply_url": "https://wellfound.com/jobs?keyword=C%2B%2B%20Full%20Stack%20Engineer%20(AI%2FML%20Focus)",
+            "badge_text": "Direct to Founders",
+            "match_tag": "95% Resume Match",
+            "description": "Venture-backed seed to Series B scaleups actively hiring engineers with hands-on C++ project experience with equity."
+          },
+          {
+            "platform": "Indeed",
+            "role_title": "Full Stack Engineer (AI/ML Focus) — C++ (Immediate Hires)",
+            "apply_url": "https://www.indeed.com/jobs?q=Full%20Stack%20Engineer%20(AI%2FML%20Focus)%20Python&fromage=7&sort=date",
+            "badge_text": "Remote & Hybrid",
+            "match_tag": "93% Resume Match",
+            "description": "Real-time openings requiring C++ and verified production engineering fundamentals."
+          },
+          {
+            "platform": "Google Careers",
+            "role_title": "Full Stack Engineer (AI/ML Focus) (Google Jobs Real-Time Index)",
+            "apply_url": "https://www.google.com/search?q=Full%20Stack%20Engineer%20(AI%2FML%20Focus)%20C%2B%2B%20Python%20jobs%20hiring%20now&ibp=htl;jobs",
+            "badge_text": "Real-Time Aggregator",
+            "match_tag": "92% Resume Match",
+            "description": "Live Google Jobs index querying thousands of corporate ATS portals simultaneously for C++ developers."
+          },
+          {
+            "platform": "Y Combinator",
+            "role_title": "Founding / Early Engineer (C++) — YC Portfolio",
+            "apply_url": "https://www.workatastartup.com/companies?query=C%2B%2B%20Python",
+            "badge_text": "YC Verified",
+            "match_tag": "96% Resume Match",
+            "description": "Direct candidate pipeline to YC founders hiring for C++ and Python expertise without middle recruiters."
+          },
+          {
+            "platform": "Glassdoor",
+            "role_title": "Full Stack Engineer (AI/ML Focus) (Python) Salary-Verified Roles",
+            "apply_url": "https://www.glassdoor.com/Job/jobs.htm?sc.keyword=Full%20Stack%20Engineer%20(AI%2FML%20Focus)%20JavaScript",
+            "badge_text": "Salary Verified",
+            "match_tag": "89% Resume Match",
+            "description": "Verified corporate job openings with transparent compensation benchmarks and interview reviews for C++."
+          }
+        ],
+        "strengths": [
+          "Proficiency in modern AI/ML stacks, including RAG, LLMs (Gemini), Vector Databases (Qdrant), and Graph Databases (Neo4j).",
+          "Demonstrated ability to build complex, end-to-end full-stack web applications (Next.js, React, FastAPI, Node.js, Express) with robust architectural components.",
+          "Strong foundational understanding of system design principles, evidenced by the multi-component architecture of RepoGPT and CodeBuddy AI.",
+          "Innovative problem-solving and product sense, creating practical AI-driven developer tools and educational platforms."
+        ],
+        "weaknesses": [
+          "Potential for vague explanations of component interactions or lack of depth in specific technology choices during a system design discussion (e.g., 'why Qdrant over other vector DBs?').",
+          "Risk of overlooking edge cases, error handling, or security considerations in complex pipelines like repository ingestion and RAG query processing.",
+          "Difficulty articulating scalability considerations for a growing number of repositories, users, or increasing data volume without prior experience in production systems.",
+          "Resume lacks quantifiable impact metrics, making it harder to assess the scale and success of projects."
+        ],
+        "improvements": [
+          "Develop a structured approach to system design discussions, starting broad and progressively detailing components, data flow, and technology choices with clear justifications.",
+          "Actively seek opportunities to quantify project impact and outcomes on the resume and in interview discussions, using metrics like user engagement, performance improvements, or data processed."
+        ],
+        "practice_plan": [
+          "**System Design Practice:** Regularly practice explaining complex architectures like RepoGPT to peers, focusing on clarity, component interaction, data flow, and trade-offs. Use a whiteboard to sketch diagrams.",
+          "**Behavioral & Technical Deep Dives:** Prepare to discuss specific technical challenges faced in projects, how they were overcome, and the rationale behind key design decisions. Practice articulating the 'why' behind technology choices.",
+          "**Quantification Exercise:** Go through each project on the resume and brainstorm at least 2-3 quantifiable metrics that could be added (e.g., 'processed X commits/files', 'achieved Y% accuracy', 'supported Z concurrent users').",
+          "**Mock Interviews:** Conduct mock system design and behavioral interviews with experienced engineers to get feedback on communication style, technical depth, and confidence."
+        ],
+        "topic_tags": [
+          "Full Stack Development",
+          "RAG Systems",
+          "AI/ML Engineering",
+          "System Design"
+        ],
+        "created_at": "2026-09-10T18:47:54.652Z"
+      }
+    ],
+    [
+      "4414c3fd-1f50-4bfc-9643-cec30eed43fb",
+      {
+        "id": "2470f7bd-2ee5-4955-8ba7-36e42f3ddc03",
+        "confidence_score": 1,
+        "overall_verdict": "No Hire",
+        "interview_id": "4414c3fd-1f50-4bfc-9643-cec30eed43fb",
+        "technical_score": 1,
+        "communication_score": 1,
+        "interview_skills_breakdown": {
+          "technical_depth": 1,
+          "problem_solving": 1,
+          "system_architecture": 1,
+          "communication_clarity": 1,
+          "vocal_confidence": 1
+        },
+        "interview_improvements": [
+          "Candidate was completely silent during the interview session and did not verbally answer technical questions.",
+          "When presented with a problem, speak out loud and explain your algorithmic thought process to the interviewer.",
+          "State your expected time and space complexity (Big-O) before starting implementation.",
+          "Use the live code editor to implement solutions and test with sample inputs."
+        ],
+        "resume_score": 75,
+        "resume_verdict": "Resume Profile Uploaded — Zero Interview Participation",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 7,
+          "tech_stack_relevance": 8,
+          "project_presentation": 7
+        },
+        "resume_improvements": [
+          "Apply Google XYZ formula on resume projects: 'Accomplished [X], as measured by [Y], by doing [Z]'. Example: 'Engineered backend API for E-Commerce Microservice, reducing latency by 30%'.",
+          "Add explicit production competencies (Docker, GitHub Actions, unit testing) to pass corporate ATS screening.",
+          "Quantify scale: include database row counts, active user volumes, or query throughput metrics."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Software Development Engineer (SDE)",
+            "match_percentage": 95,
+            "seniority": "Entry-Level / Associate (0-2 YOE)",
+            "why_fit": "Strong alignment with React, hands-on service development, and practical database schema architecture demonstrated in E-Commerce Microservice.",
+            "ideal_companies": [
+              "Top Tech Product Firms",
+              "High-Growth Fintech Scaleups",
+              "Global SaaS Leaders"
+            ]
+          },
+          {
+            "role_title": "Full Stack Engineer",
+            "match_percentage": 89,
+            "seniority": "Junior to Mid Software Engineer",
+            "why_fit": "Versatile project portfolio with full lifecycle project execution, covering API communication and modular architecture.",
+            "ideal_companies": [
+              "Venture-Backed Startups",
+              "Enterprise Cloud Providers",
+              "Developer Tooling Companies"
+            ]
+          },
+          {
+            "role_title": "Cloud & API Platform Specialist",
+            "match_percentage": 83,
+            "seniority": "Associate Software Engineer",
+            "why_fit": "Solid foundational comprehension of microservice boundaries, authentication patterns, and scalable data persistence.",
+            "ideal_companies": [
+              "E-Commerce Platforms",
+              "Digital Health Systems",
+              "Fintech Infrastructure"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "Google Jobs",
+            "role_title": "Software Development Engineer (React) — Live Aggregate Index",
+            "apply_url": "https://www.google.com/search?q=Software%20Development%20Engineer%20React%20jobs%20India&ibp=htl;jobs",
+            "badge_text": "Live Google Index",
+            "match_tag": "98% Resume Match",
+            "description": "Live Google Jobs aggregator querying thousands of company careers portals, Lever, and Greenhouse simultaneously for React developers in India & remote."
+          },
+          {
+            "platform": "LinkedIn",
+            "role_title": "Software Development Engineer (React & Node.js)",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Software%20Development%20Engineer%20React&location=India&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "96% Resume Match",
+            "description": "Active public LinkedIn requisitions posted within the last 7 days matching your verified skills in React and Node.js."
+          },
+          {
+            "platform": "Naukri",
+            "role_title": "Software Development Engineer Openings on Naukri India",
+            "apply_url": "https://www.naukri.com/software-engineer-jobs?k=React",
+            "badge_text": "Verified Indian Postings",
+            "match_tag": "95% Resume Match",
+            "description": "Direct campus and lateral engineering requisitions across Indian tech unicorns, MNCs, and product firms requiring React."
+          },
+          {
+            "platform": "Foundit",
+            "role_title": "Software Development Engineer Opportunities — React",
+            "apply_url": "https://www.foundit.in/srp/results?query=Software%20Development%20Engineer%20React",
+            "badge_text": "Immediate Hires",
+            "match_tag": "94% Resume Match",
+            "description": "Active engineering openings with verified recruiter contacts on Foundit India (formerly Monster) for React and Node.js."
+          },
+          {
+            "platform": "Internshala",
+            "role_title": "Entry-Level / Fresher Software Development Engineer (React)",
+            "apply_url": "https://internshala.com/jobs/software-development-jobs/",
+            "badge_text": "0-2 YOE Placement",
+            "match_tag": "95% Resume Match",
+            "description": "Tailored college placement and entry-level engineering openings specifically hiring 0-2 YOE freshers with hands-on React projects."
+          },
+          {
+            "platform": "Cutshort",
+            "role_title": "React Engineer at High-Growth Startups",
+            "apply_url": "https://cutshort.io/jobs?search=React",
+            "badge_text": "Direct to Founders",
+            "match_tag": "92% Resume Match",
+            "description": "Fast-growing Indian tech startups and scaleups actively hiring engineers with hands-on React project experience with direct founder chat."
+          }
+        ],
+        "strengths": [
+          "Candidate profile created with E-Commerce Microservice on resume.",
+          "Target role registered: Software Development Engineer."
+        ],
+        "weaknesses": [
+          "Zero verbal communication detected: candidate did not speak or answer technical questions during the session.",
+          "No algorithmic logic, Big-O complexity, or data structures were discussed.",
+          "No working code implementation or test execution was submitted in the live editor."
+        ],
+        "improvements": [
+          "Candidate must speak verbally into the microphone to participate in technical screening.",
+          "Practice verbalizing algorithmic complexity and data structure selection."
+        ],
+        "practice_plan": [
+          "Practice mock interview speaking out loud with standard technical questions.",
+          "Study core DSA patterns: Two Pointers, Sliding Window, Fast/Slow Pointers, Binary Search.",
+          "Practice live coding on scratchpad under time pressure.",
+          "Review Big-O time and space complexity derivation."
+        ],
+        "topic_tags": [
+          "Verbal Communication",
+          "Problem Solving",
+          "Data Structures",
+          "DSA Protocol"
+        ],
+        "created_at": "2026-09-10T18:54:58.858Z"
+      }
+    ],
+    [
+      "1ed0ea91-31e7-4a3d-8557-9a2ff46f6dcc",
+      {
+        "id": "fab7f337-1967-439d-8a92-a1372c3dcfb1",
+        "confidence_score": 8,
+        "overall_verdict": "Hire",
+        "interview_id": "1ed0ea91-31e7-4a3d-8557-9a2ff46f6dcc",
+        "technical_score": 8,
+        "communication_score": 9,
+        "interview_skills_breakdown": {
+          "technical_depth": 8,
+          "problem_solving": 8,
+          "system_architecture": 7,
+          "communication_clarity": 9,
+          "vocal_confidence": 8
+        },
+        "interview_improvements": [
+          "No specific verbal fumbles or incorrect statements were observed during the problem explanation.",
+          "Could briefly mention handling edge cases like empty arrays or arrays with duplicates, though the current code implicitly handles them correctly.",
+          "Ability to handle follow-up questions or discuss alternative solutions/trade-offs was not assessed due to the scope of the problem."
+        ],
+        "resume_score": 85,
+        "resume_verdict": "Solid Baseline — Needs Quantification",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 7,
+          "tech_stack_relevance": 9,
+          "project_presentation": 8
+        },
+        "resume_improvements": [
+          "Quantify achievements in the E-Commerce Microservice project (e.g., 'Improved API response time by X%', 'Handled Y concurrent users', 'Processed Z transactions per minute').",
+          "Detail specific features implemented and their impact (e.g., 'Developed secure payment gateway integration reducing transaction failures by X%', 'Implemented product search with Y ms latency').",
+          "Highlight contributions to scalability, reliability, or performance aspects of the microservice architecture, citing specific technologies or patterns used."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Software Development Engineer I (Backend)",
+            "match_percentage": 90,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Demonstrated strong foundational algorithm and data structure skills, coupled with practical experience in a relevant backend tech stack (Python, FastAPI, PostgreSQL) through the E-Commerce Microservice project.",
+            "ideal_companies": [
+              "Amazon",
+              "Stripe",
+              "Shopify"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "Google Jobs",
+            "role_title": "Software Development Engineer I (Python) — Live Aggregate Index",
+            "apply_url": "https://www.google.com/search?q=Software%20Development%20Engineer%20I%20Python%20jobs%20India&ibp=htl;jobs",
+            "badge_text": "Live Google Index",
+            "match_tag": "98% Resume Match",
+            "description": "Live Google Jobs aggregator querying thousands of company careers portals, Lever, and Greenhouse simultaneously for Python developers in India & remote."
+          },
+          {
+            "platform": "LinkedIn",
+            "role_title": "Software Development Engineer I (Python & FastAPI)",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Software%20Development%20Engineer%20I%20Python&location=India&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "96% Resume Match",
+            "description": "Active public LinkedIn requisitions posted within the last 7 days matching your verified skills in Python and FastAPI."
+          },
+          {
+            "platform": "Naukri",
+            "role_title": "Software Development Engineer I Openings on Naukri India",
+            "apply_url": "https://www.naukri.com/software-engineer-jobs?k=Python",
+            "badge_text": "Verified Indian Postings",
+            "match_tag": "95% Resume Match",
+            "description": "Direct campus and lateral engineering requisitions across Indian tech unicorns, MNCs, and product firms requiring Python."
+          },
+          {
+            "platform": "Foundit",
+            "role_title": "Software Development Engineer I Opportunities — Python",
+            "apply_url": "https://www.foundit.in/srp/results?query=Software%20Development%20Engineer%20I%20Python",
+            "badge_text": "Immediate Hires",
+            "match_tag": "94% Resume Match",
+            "description": "Active engineering openings with verified recruiter contacts on Foundit India (formerly Monster) for Python and FastAPI."
+          },
+          {
+            "platform": "Internshala",
+            "role_title": "Entry-Level / Fresher Software Development Engineer I (Python)",
+            "apply_url": "https://internshala.com/jobs/software-development-jobs/",
+            "badge_text": "0-2 YOE Placement",
+            "match_tag": "95% Resume Match",
+            "description": "Tailored college placement and entry-level engineering openings specifically hiring 0-2 YOE freshers with hands-on Python projects."
+          },
+          {
+            "platform": "Cutshort",
+            "role_title": "Python Engineer at High-Growth Startups",
+            "apply_url": "https://cutshort.io/jobs?search=Python",
+            "badge_text": "Direct to Founders",
+            "match_tag": "92% Resume Match",
+            "description": "Fast-growing Indian tech startups and scaleups actively hiring engineers with hands-on Python project experience with direct founder chat."
+          }
+        ],
+        "strengths": [
+          "Strong grasp of fundamental algorithms and data structures (Hash Maps).",
+          "Ability to articulate optimal time and space complexity clearly.",
+          "Produces clean, concise, and correct code for well-defined problems."
+        ],
+        "weaknesses": [
+          "Scope of problem-solving demonstrated was limited to a foundational LeetCode Easy problem; ability to tackle more complex problems is not yet fully assessed.",
+          "Experience with debugging complex issues, performance optimization, or handling ambiguous problem statements was not demonstrated.",
+          "Ability to contribute to or understand complex system design or architectural trade-offs was not assessed in this interview."
+        ],
+        "submitted_code": {
+          "language": "python",
+          "code": "def two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        diff = target - num\n        if diff in seen:\n            return [seen[diff], i]\n        seen[num] = i\n    return []",
+          "output": "Test 1: nums=[2,7,11,15], target=9 -> [0, 1] PASS"
+        },
+        "improvements": [
+          "Practice more complex data structure and algorithm problems (e.g., LeetCode Medium/Hard) to broaden problem-solving repertoire.",
+          "Gain exposure to system design principles, distributed systems concepts, and common architectural patterns relevant to microservices."
+        ],
+        "practice_plan": [
+          "Solve 2-3 LeetCode Medium problems per week, focusing on dynamic programming, graphs, and tree traversals.",
+          "Read 'Designing Data-Intensive Applications' or similar resources to build system design knowledge.",
+          "Expand the E-Commerce project by adding new features, implementing caching, or exploring containerization (Docker/Kubernetes).",
+          "Participate in mock system design interviews to practice articulating architectural decisions and trade-offs."
+        ],
+        "topic_tags": [
+          "Algorithms",
+          "Data Structures",
+          "Hash Map",
+          "Time Complexity",
+          "Space Complexity"
+        ],
+        "created_at": "2026-09-10T18:55:21.355Z"
+      }
+    ]
+  ],
+  "users": [
+    [
+      "admin-0000-0000-0000-000000000001",
+      {
+        "id": "admin-0000-0000-0000-000000000001",
+        "name": "Platform Administrator",
+        "email": "admin@aceinterview.ai",
+        "password": "admin123",
+        "role": "admin",
+        "subscription_status": "active",
+        "subscription_expires_at": "2027-09-10T13:07:58.912Z",
+        "interviews_conducted_count": 0,
+        "can_access_dashboard": true,
+        "created_at": "2026-08-11T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000001",
+      {
+        "id": "user-0000-0000-0000-000000000001",
+        "name": "Rahul Verma",
+        "email": "candidate@aceinterview.ai",
+        "password": "demo123",
+        "role": "college_admin",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": true,
+        "created_at": "2026-09-07T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000002",
+      {
+        "id": "user-0000-0000-0000-000000000002",
+        "name": "Priya Patel",
+        "email": "priya.patel@aceinterview.ai",
+        "password": "demo123",
+        "role": "user",
+        "subscription_status": "active",
+        "subscription_expires_at": "2026-10-05T13:07:58.912Z",
+        "interviews_conducted_count": 6,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-08T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000003",
+      {
+        "id": "user-0000-0000-0000-000000000003",
+        "name": "Rohan Verma",
+        "email": "rohan.verma@aceinterview.ai",
+        "password": "demo123",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-08T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000004",
+      {
+        "id": "user-0000-0000-0000-000000000004",
+        "name": "Ananya Gupta",
+        "email": "ananya.gupta@aceinterview.ai",
+        "password": "demo123",
+        "role": "user",
+        "subscription_status": "active",
+        "subscription_expires_at": "2026-09-30T13:07:58.912Z",
+        "interviews_conducted_count": 2,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-09T13:07:58.912Z"
+      }
+    ],
+    [
+      "user-0000-0000-0000-000000000005",
+      {
+        "id": "user-0000-0000-0000-000000000005",
+        "name": "Karthik Rao",
+        "email": "karthik.rao@aceinterview.ai",
+        "password": "demo123",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-10T01:07:58.912Z"
+      }
+    ],
+    [
+      "8de1700e-0671-4b7a-a3b3-9cc3487dd92c",
+      {
+        "id": "8de1700e-0671-4b7a-a3b3-9cc3487dd92c",
+        "name": "Vikram Seth",
+        "email": "vikram_1789046064764@example.com",
+        "password": "password123",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-10T13:14:24.792Z"
+      }
+    ],
+    [
+      "fb1452fb-cd53-42b0-8818-1161822cb412",
+      {
+        "id": "fb1452fb-cd53-42b0-8818-1161822cb412",
+        "name": "Tanmay Sharma",
+        "email": "trial_user_1789046794488@startup.com",
+        "password": "password123",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-10T13:26:34.491Z"
+      }
+    ],
+    [
+      "5603e713-7068-495a-80ca-a7d3992c9a31",
+      {
+        "id": "5603e713-7068-495a-80ca-a7d3992c9a31",
+        "name": "Test User",
+        "email": "testnewuser@example.com",
+        "password": "mypassword123",
+        "role": "college_admin",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 0,
+        "can_access_dashboard": true,
+        "created_at": "2026-09-10T17:44:32.040Z"
+      }
+    ],
+    [
+      "26c490e2-ac08-424a-803c-61285bc400c4",
+      {
+        "id": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "name": "Vamshi (Admin)",
+        "email": "vamshicodes29@gmail.com",
+        "password": "vamshicodes@123",
+        "role": "admin",
+        "subscription_status": "active",
+        "interviews_conducted_count": 3,
+        "can_access_dashboard": true,
+        "created_at": "2026-09-10T17:53:26.072Z",
+        "subscription_expires_at": "2036-09-07T18:46:20.856Z"
+      }
+    ],
+    [
+      "4bf44e1a-bd24-4ec0-816b-941a890f5beb",
+      {
+        "id": "4bf44e1a-bd24-4ec0-816b-941a890f5beb",
+        "name": "rancho",
+        "email": "ranchovamshi@gmail.com",
+        "password": "password",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-10T18:13:34.145Z"
+      }
+    ],
+    [
+      "f60aa514-8dc0-4d88-a0f4-3e0dfa817745",
+      {
+        "id": "f60aa514-8dc0-4d88-a0f4-3e0dfa817745",
+        "name": "vamshichethanam",
+        "email": "vamshichethanam@gmail.com",
+        "password": "Vamshi@123",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 0,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-10T18:14:17.413Z"
+      }
+    ]
+  ],
+  "sessions": [
+    [
+      "vantage_token_8482aa92-0e71-4caf-b268-0cafd4b4dc27",
+      {
+        "userId": "user-0000-0000-0000-000000000001",
+        "expiresAt": 1791637700123
+      }
+    ],
+    [
+      "vantage_token_23829bcd-60a1-40b1-b087-aa19ba92c657",
+      {
+        "userId": "admin-0000-0000-0000-000000000001",
+        "expiresAt": 1791637708501
+      }
+    ],
+    [
+      "vantage_token_7ef92e2a-8193-4b81-8a57-cf29f4b185b6",
+      {
+        "userId": "admin-0000-0000-0000-000000000001",
+        "expiresAt": 1791637825380
+      }
+    ],
+    [
+      "vantage_token_d49066e0-e0ab-4aa4-b85c-c86356d9f765",
+      {
+        "userId": "admin-0000-0000-0000-000000000001",
+        "expiresAt": 1791637841477
+      }
+    ],
+    [
+      "vantage_token_5917f1a2-cbcf-4a55-87c4-313da864edcc",
+      {
+        "userId": "user-0000-0000-0000-000000000001",
+        "expiresAt": 1791637856615
+      }
+    ],
+    [
+      "vantage_token_55cfba56-1a45-4654-90ea-4f3c1a38d042",
+      {
+        "userId": "8de1700e-0671-4b7a-a3b3-9cc3487dd92c",
+        "expiresAt": 1791638064792
+      }
+    ],
+    [
+      "vantage_token_7800ecab-045d-4be4-ab4b-ae5a92066616",
+      {
+        "userId": "user-0000-0000-0000-000000000001",
+        "expiresAt": 1791638586232
+      }
+    ],
+    [
+      "vantage_token_91e60129-682a-4ee1-a01d-3ac20052fb57",
+      {
+        "userId": "user-0000-0000-0000-000000000002",
+        "expiresAt": 1791638595161
+      }
+    ],
+    [
+      "vantage_token_740cdf4d-b5d3-4740-9089-4e6193a2b651",
+      {
+        "userId": "fb1452fb-cd53-42b0-8818-1161822cb412",
+        "expiresAt": 1791638794491
+      }
+    ],
+    [
+      "vantage_token_5cec6476-09ee-467f-a7a3-0336bd9a72a3",
+      {
+        "userId": "user-0000-0000-0000-000000000002",
+        "expiresAt": 1791638855840
+      }
+    ],
+    [
+      "vantage_token_e7818adf-28ba-4c2c-99a8-4a690251943d",
+      {
+        "userId": "a14a6830-94f8-4032-84f6-857ae7a56674",
+        "expiresAt": 1791650906292
+      }
+    ],
+    [
+      "vantage_token_98846dfa-382d-4137-a64f-ad0b4df96aab",
+      {
+        "userId": "a14a6830-94f8-4032-84f6-857ae7a56674",
+        "expiresAt": 1791654004121
+      }
+    ],
+    [
+      "vantage_token_1bff6838-360a-4563-9d0a-538465405d8a",
+      {
+        "userId": "5603e713-7068-495a-80ca-a7d3992c9a31",
+        "expiresAt": 1791654272040
+      }
+    ],
+    [
+      "vantage_token_1dcbfcd8-71ec-4daa-9f1d-c633156c2687",
+      {
+        "userId": "a14a6830-94f8-4032-84f6-857ae7a56674",
+        "expiresAt": 1791654280184
+      }
+    ],
+    [
+      "vantage_token_abd4dd7c-22da-4dec-9b97-b22331c0ca08",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791654806072
+      }
+    ],
+    [
+      "vantage_token_58cc53ab-6c05-4fb9-94c1-489c168f3526",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791655284875
+      }
+    ],
+    [
+      "vantage_token_51381d9d-64f9-4982-bc1b-96e32169763d",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791655601300
+      }
+    ],
+    [
+      "vantage_token_e9e07539-ac21-4074-88ca-7c9ebb7c08d3",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791655814347
+      }
+    ],
+    [
+      "vantage_token_750ae554-b699-4803-8fa4-6fcacfe93eb1",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791655886974
+      }
+    ],
+    [
+      "vantage_token_182d7213-d18b-40b7-90bf-5343560e567f",
+      {
+        "userId": "4bf44e1a-bd24-4ec0-816b-941a890f5beb",
+        "expiresAt": 1791656014146
+      }
+    ],
+    [
+      "vantage_token_7ba1c20e-4d8c-4fc2-9b6a-dd5b4f89ecc6",
+      {
+        "userId": "f60aa514-8dc0-4d88-a0f4-3e0dfa817745",
+        "expiresAt": 1791656057414
+      }
+    ],
+    [
+      "vantage_token_99250e76-0ae0-4045-9ee5-63394cf485d1",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791656096258
+      }
+    ],
+    [
+      "vantage_token_99a56183-6582-4508-a6dd-27a370f9baad",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791656585464
+      }
+    ],
+    [
+      "vantage_token_8a45c490-9962-459f-aaba-915829e6ec06",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791656613665
+      }
+    ],
+    [
+      "vantage_token_95220c88-6bca-4ac0-914c-5597ce011b17",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791656618760
+      }
+    ],
+    [
+      "vantage_token_9c164f22-64ff-436e-af80-31fd154857b2",
+      {
+        "userId": "4bf44e1a-bd24-4ec0-816b-941a890f5beb",
+        "expiresAt": 1791656693010
+      }
+    ],
+    [
+      "vantage_token_8416086d-31fd-4db5-b5b9-eba49679927c",
+      {
+        "userId": "f60aa514-8dc0-4d88-a0f4-3e0dfa817745",
+        "expiresAt": 1791656750707
+      }
+    ],
+    [
+      "vantage_token_1bea40d9-29fb-47e6-8516-3d7b07fcf161",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791656780834
+      }
+    ],
+    [
+      "vantage_token_75ffab16-02a5-4ce1-87aa-a8e17966efc2",
+      {
+        "userId": "4bf44e1a-bd24-4ec0-816b-941a890f5beb",
+        "expiresAt": 1791657309444
+      }
+    ],
+    [
+      "vantage_token_2891143d-5ffb-4160-b6be-f213c199473a",
+      {
+        "userId": "26c490e2-ac08-424a-803c-61285bc400c4",
+        "expiresAt": 1791657980857
+      }
+    ]
+  ],
+  "payments": [
+    [
+      "upi_pmt_b7a93e90",
+      {
+        "id": "upi_pmt_b7a93e90",
+        "user_id": "a14a6830-94f8-4032-84f6-857ae7a56674",
+        "amount": 99,
+        "currency": "INR",
+        "payment_method": "UPI (vamshi@upi) - UTR: 123456789012",
+        "status": "completed",
+        "transaction_id": "123456789012",
+        "created_at": "2026-09-10T17:40:29.311Z"
+      }
+    ]
+  ],
+  "savedAt": "2026-09-10T18:55:22.035Z"
+}
