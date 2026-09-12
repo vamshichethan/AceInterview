@@ -34,6 +34,10 @@ export default function JobsPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [selectedNewsTag, setSelectedNewsTag] = useState<string>('all');
 
+  const [selectedCompanyType, setSelectedCompanyType] = useState<string>('all');
+  const [selectedHiringStatus, setSelectedHiringStatus] = useState<string>('all');
+  const [freshersWelcomeOnly, setFreshersWelcomeOnly] = useState<boolean>(false);
+
   const [news, setNews] = useState<JobNewsItem[]>(INITIAL_JOB_NEWS);
   const [companies, setCompanies] = useState<CompanyProfile[]>(INITIAL_COMPANIES);
   const [jobs, setJobs] = useState<LiveJobPosting[]>(INITIAL_LIVE_JOBS);
@@ -110,6 +114,12 @@ export default function JobsPage() {
     return companies.filter((comp) => {
       if (selectedTrack !== 'all' && !comp.targetTracks.includes(selectedTrack as TargetRole)) return false;
       if (selectedExperience === 'freshers' && !comp.freshersWelcome) return false;
+      if (freshersWelcomeOnly && !comp.freshersWelcome) return false;
+      if (selectedHiringStatus === 'actively_hiring' && comp.hiringStatus !== 'Actively Hiring') return false;
+      if (selectedHiringStatus === 'selective' && comp.hiringStatus !== 'Selective Hires') return false;
+      if (selectedCompanyType === 'startup' && comp.size !== 'Startup' && comp.size !== 'Growth Scaleup') return false;
+      if (selectedCompanyType === 'mnc' && comp.size !== 'MNC / Enterprise') return false;
+      if (selectedCompanyType === 'unicorn' && comp.size !== 'Unicorn') return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesName = comp.name.toLowerCase().includes(q);
@@ -119,7 +129,7 @@ export default function JobsPage() {
       }
       return true;
     });
-  }, [companies, selectedTrack, selectedExperience, searchQuery]);
+  }, [companies, selectedTrack, selectedExperience, freshersWelcomeOnly, selectedHiringStatus, selectedCompanyType, searchQuery]);
 
   return (
     <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-10">
@@ -378,14 +388,55 @@ export default function JobsPage() {
               </select>
             )}
 
+            {/* Company Filters (Only for companies tab) */}
+            {activeTab === 'companies' && (
+              <>
+                <select
+                  value={selectedHiringStatus}
+                  onChange={(e) => setSelectedHiringStatus(e.target.value)}
+                  className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+                >
+                  <option value="all">All Hiring Statuses</option>
+                  <option value="actively_hiring">Actively Hiring Only</option>
+                  <option value="selective">Selective Hires</option>
+                </select>
+
+                <select
+                  value={selectedCompanyType}
+                  onChange={(e) => setSelectedCompanyType(e.target.value)}
+                  className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+                >
+                  <option value="all">All Company Sizes</option>
+                  <option value="startup">Startups &amp; Scaleups</option>
+                  <option value="mnc">MNC / Enterprise</option>
+                  <option value="unicorn">Unicorns</option>
+                </select>
+
+                <button
+                  type="button"
+                  onClick={() => setFreshersWelcomeOnly(!freshersWelcomeOnly)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${
+                    freshersWelcomeOnly
+                      ? 'bg-cyan-950/70 border-cyan-500/50 text-cyan-300'
+                      : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {freshersWelcomeOnly ? '✓ Freshers Welcome' : 'Freshers Welcome Only'}
+                </button>
+              </>
+            )}
+
             {/* Reset Filters button */}
-            {(selectedTrack !== 'all' || selectedExperience !== 'all' || selectedPlatform !== 'all' || selectedNewsTag !== 'all' || searchQuery) && (
+            {(selectedTrack !== 'all' || selectedExperience !== 'all' || selectedPlatform !== 'all' || selectedNewsTag !== 'all' || selectedCompanyType !== 'all' || selectedHiringStatus !== 'all' || freshersWelcomeOnly || searchQuery) && (
               <button
                 onClick={() => {
                   setSelectedTrack('all');
                   setSelectedExperience('all');
                   setSelectedPlatform('all');
                   setSelectedNewsTag('all');
+                  setSelectedCompanyType('all');
+                  setSelectedHiringStatus('all');
+                  setFreshersWelcomeOnly(false);
                   setSearchQuery('');
                 }}
                 className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold px-2 py-1"
@@ -564,17 +615,31 @@ export default function JobsPage() {
                         </span>
                       </div>
 
-                      <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
-                        {item.headline}
-                      </h3>
-
-                      <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-400">
-                        <span className="font-semibold text-slate-300">{item.companyName}</span>
-                        <span>&bull;</span>
-                        <span className="italic text-slate-400">{item.source}</span>
+                      <div className="flex items-start gap-3.5 mb-2.5">
+                        {item.companyLogo ? (
+                          <img
+                            src={item.companyLogo}
+                            alt={item.companyName}
+                            className="w-10 h-10 rounded-xl object-cover border border-slate-800 shrink-0 bg-slate-950 mt-0.5"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                            {item.companyName.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                            {item.headline}
+                          </h3>
+                          <div className="flex items-center gap-2 mt-1 text-xs text-slate-400 flex-wrap">
+                            <span className="font-semibold text-slate-300">{item.companyName}</span>
+                            <span>&bull;</span>
+                            <span className="italic text-slate-400">{item.source}</span>
+                          </div>
+                        </div>
                       </div>
 
-                      <p className="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
                         {item.summary}
                       </p>
                     </div>
@@ -643,11 +708,26 @@ export default function JobsPage() {
                         )}
                       </div>
 
-                      <h3 className="text-lg font-black text-white group-hover:text-indigo-300 transition-colors">
-                        {comp.name}
-                      </h3>
-                      <div className="text-xs text-indigo-400 font-medium mt-0.5">
-                        {comp.sector} &bull; <span className="text-slate-400">{comp.size}</span>
+                      <div className="flex items-start gap-3.5 mb-2.5">
+                        {comp.logo ? (
+                          <img
+                            src={comp.logo}
+                            alt={comp.name}
+                            className="w-12 h-12 rounded-2xl object-cover border border-slate-800 shrink-0 bg-slate-950"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-black text-sm shrink-0">
+                            {comp.name.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-black text-white group-hover:text-indigo-300 transition-colors truncate">
+                            {comp.name}
+                          </h3>
+                          <div className="text-xs text-indigo-400 font-medium mt-0.5">
+                            {comp.sector} &bull; <span className="text-slate-400">{comp.size}</span>
+                          </div>
+                        </div>
                       </div>
 
                       <p className="text-xs text-slate-400 mt-2.5 leading-relaxed line-clamp-3">
