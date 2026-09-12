@@ -207,6 +207,7 @@ export default function InterviewRoomPage() {
     projectTitle: interview?.project_title,
     techStack: interview?.tech_stack,
     projectDescription: interview?.project_description,
+    persona,
     onError: useCallback((err: string) => setErrorMessage(err), []),
   });
 

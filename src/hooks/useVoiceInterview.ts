@@ -14,6 +14,7 @@ interface UseVoiceInterviewOptions {
   onUserMessage?: (message: string) => void;
   onError?: (error: string) => void;
   useExternalTTS?: boolean;
+  persona?: 'alex' | 'sophia';
 }
 
 interface IWindow extends Window {
@@ -31,6 +32,7 @@ export function useVoiceInterview({
   onUserMessage,
   onError,
   useExternalTTS = true,
+  persona = 'alex',
 }: UseVoiceInterviewOptions) {
   const [voiceState, setVoiceState] = useState<VoiceState>('idle');
   const [transcript, setTranscript] = useState<ChatMessage[]>([]);
@@ -165,24 +167,88 @@ export function useVoiceInterview({
     setIsAudioDetected(false);
   };
 
-  // Helper to pick best natural Indian English voice
+  // Helper to pick best natural Indian English voice (Male for Aarav, Female for Priya)
   const getPreferredVoice = (): SpeechSynthesisVoice | null => {
     if (typeof window === 'undefined' || !window.speechSynthesis) return null;
     const voices = window.speechSynthesis.getVoices();
     if (!voices || voices.length === 0) return null;
 
-    // Prioritize natural Indian English voices
-    return (
-      voices.find((v) => v.lang === 'en-IN' && (v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Neural'))) ||
-      voices.find((v) => v.name.toLowerCase().includes('india') && v.name.toLowerCase().includes('google')) ||
-      voices.find((v) => v.lang === 'en-IN' || v.lang === 'en_IN') ||
-      voices.find((v) => v.name.includes('Rishi') || v.name.includes('Veena') || v.name.includes('Kavya') || v.name.includes('Heera')) ||
-      voices.find((v) => v.name.includes('Natural') && v.lang.startsWith('en')) ||
-      voices.find((v) => v.name.includes('Google US English')) ||
-      voices.find((v) => v.lang.startsWith('en')) ||
-      voices[0] ||
-      null
-    );
+    const isMaleAarav = persona === 'alex';
+
+    if (isMaleAarav) {
+      // Prioritize male Indian English voices
+      return (
+        voices.find(
+          (v) =>
+            (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+            (v.name.includes('Rishi') ||
+              v.name.includes('Prabhat') ||
+              v.name.toLowerCase().includes('male') ||
+              v.name.includes('Standard-B') ||
+              v.name.includes('Wavenet-B') ||
+              v.name.includes('Standard-C'))
+        ) ||
+        voices.find((v) => v.name.includes('Rishi') || v.name.includes('Prabhat')) ||
+        voices.find(
+          (v) =>
+            (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+            !v.name.includes('Veena') &&
+            !v.name.includes('Kavya') &&
+            !v.name.includes('Heera') &&
+            !v.name.includes('Neerja') &&
+            !v.name.toLowerCase().includes('female')
+        ) ||
+        voices.find(
+          (v) =>
+            v.lang.startsWith('en') &&
+            (v.name.toLowerCase().includes('male') ||
+              v.name.includes('David') ||
+              v.name.includes('Daniel') ||
+              v.name.includes('Guy'))
+        ) ||
+        voices[0] ||
+        null
+      );
+    } else {
+      // Prioritize female Indian English voices
+      return (
+        voices.find(
+          (v) =>
+            (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+            (v.name.includes('Veena') ||
+              v.name.includes('Kavya') ||
+              v.name.includes('Heera') ||
+              v.name.includes('Neerja') ||
+              v.name.toLowerCase().includes('female') ||
+              v.name.includes('Standard-A') ||
+              v.name.includes('Wavenet-A') ||
+              v.name.includes('Standard-D'))
+        ) ||
+        voices.find(
+          (v) =>
+            v.name.includes('Veena') ||
+            v.name.includes('Kavya') ||
+            v.name.includes('Neerja') ||
+            v.name.includes('Heera')
+        ) ||
+        voices.find(
+          (v) =>
+            (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+            !v.name.includes('Rishi') &&
+            !v.name.includes('Prabhat')
+        ) ||
+        voices.find(
+          (v) =>
+            v.lang.startsWith('en') &&
+            (v.name.toLowerCase().includes('female') ||
+              v.name.includes('Zira') ||
+              v.name.includes('Samantha') ||
+              v.name.includes('Jenny'))
+        ) ||
+        voices[0] ||
+        null
+      );
+    }
   };
 
   // ── Speech Synthesis: Rock-solid, Anti-Stuck ─────────────────────────────
@@ -260,9 +326,11 @@ export function useVoiceInterview({
         const chunkText = sentences[currentIndex];
         currentIndex++;
 
+        const isMaleAarav = persona === 'alex';
         const utterance = new SpeechSynthesisUtterance(chunkText);
-        utterance.rate = 1.18; // Crisp, brisk conversational human pace
-        utterance.pitch = 1.0;
+        // Aarav (Male Indian): pitch 0.88; Priya (Female Indian): pitch 1.18
+        utterance.rate = isMaleAarav ? 1.15 : 1.18;
+        utterance.pitch = isMaleAarav ? 0.88 : 1.18;
         utterance.lang = 'en-IN';
 
         const voice = getPreferredVoice();

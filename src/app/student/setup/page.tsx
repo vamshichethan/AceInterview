@@ -511,7 +511,7 @@ export default function StudentSetupPage() {
             onClick={() => setInterviewerPersona('alex')}
             className={`p-3.5 rounded-2xl border flex items-center gap-3 cursor-pointer transition-all ${
               interviewerPersona === 'alex'
-                ? 'bg-slate-900 border-cyan-500/70 shadow-lg'
+                ? 'bg-slate-900 border-cyan-500/70 shadow-lg ring-1 ring-cyan-500/50'
                 : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
             }`}
           >
@@ -521,9 +521,11 @@ export default function StudentSetupPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-white">Aarav Sharma</span>
-                <span className="text-[10px] text-cyan-400 font-mono">Staff Lead</span>
+                <span className="text-[10px] text-cyan-300 font-mono px-1.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/40 font-semibold">
+                  Male Indian Voice 👨‍💼
+                </span>
               </div>
-              <p className="text-[11px] text-slate-400 truncate mt-0.5">Algorithms, Concurrency &amp; Indexing</p>
+              <p className="text-[11px] text-slate-400 truncate mt-0.5">Staff Lead • Algorithms &amp; Architecture</p>
             </div>
           </div>
 
@@ -531,7 +533,7 @@ export default function StudentSetupPage() {
             onClick={() => setInterviewerPersona('sophia')}
             className={`p-3.5 rounded-2xl border flex items-center gap-3 cursor-pointer transition-all ${
               interviewerPersona === 'sophia'
-                ? 'bg-slate-900 border-indigo-500/70 shadow-lg'
+                ? 'bg-slate-900 border-indigo-500/70 shadow-lg ring-1 ring-indigo-500/50'
                 : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
             }`}
           >
@@ -541,9 +543,11 @@ export default function StudentSetupPage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-white">Priya Patel</span>
-                <span className="text-[10px] text-indigo-400 font-mono">Principal Architect</span>
+                <span className="text-[10px] text-indigo-300 font-mono px-1.5 py-0.5 rounded bg-indigo-950/80 border border-indigo-500/40 font-semibold">
+                  Female Indian Voice 👩‍💼
+                </span>
               </div>
-              <p className="text-[11px] text-slate-400 truncate mt-0.5">Distributed Scale &amp; Systems Recovery</p>
+              <p className="text-[11px] text-slate-400 truncate mt-0.5">Principal Architect • Systems &amp; Distributed Scale</p>
             </div>
           </div>
         </div>

@@ -160,32 +160,87 @@ export const HumanInterviewer: React.FC<HumanInterviewerProps> = ({
         .trim();
 
       const utterance = new SpeechSynthesisUtterance(clean);
-      utterance.rate = 1.18; // Crisp, brisk Indian conversational speed
-      utterance.pitch = 1.0;
+      const isMaleAarav = persona === 'alex';
+
+      // Authentic Indian English speed & vocal pitch:
+      // Aarav = deeper masculine Indian pitch (0.88), brisk tempo (1.16)
+      // Priya = clear feminine Indian pitch (1.18), natural tempo (1.18)
+      utterance.rate = isMaleAarav ? 1.16 : 1.18;
+      utterance.pitch = isMaleAarav ? 0.88 : 1.18;
       utterance.lang = 'en-IN';
       utterance.volume = isMuted ? 0 : 1;
 
       const voices = window.speechSynthesis.getVoices();
-      // Prioritize authentic Indian English voices (en-IN)
-      const preferred =
-        voices.find(
-          (v) =>
-            v.lang === 'en-IN' &&
-            (v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Neural'))
-        ) ||
-        voices.find((v) => v.lang === 'en-IN' || v.lang === 'en_IN') ||
-        voices.find(
-          (v) =>
-            v.name.toLowerCase().includes('india') && v.name.toLowerCase().includes('google')
-        ) ||
-        voices.find(
-          (v) =>
-            v.name.includes('Rishi') ||
-            v.name.includes('Veena') ||
-            v.name.includes('Kavya') ||
-            v.name.includes('Heera')
-        ) ||
-        voices.find((v) => v.lang.startsWith('en'));
+      let preferred: SpeechSynthesisVoice | undefined;
+
+      if (isMaleAarav) {
+        // Priority 1: Dedicated Male Indian English voices (macOS Rishi, Edge Prabhat, Google en-IN-Standard-B/Wavenet-B)
+        preferred =
+          voices.find(
+            (v) =>
+              (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+              (v.name.includes('Rishi') ||
+                v.name.includes('Prabhat') ||
+                v.name.toLowerCase().includes('male') ||
+                v.name.includes('Standard-B') ||
+                v.name.includes('Wavenet-B') ||
+                v.name.includes('Standard-C'))
+          ) ||
+          voices.find((v) => v.name.includes('Rishi') || v.name.includes('Prabhat')) ||
+          voices.find(
+            (v) =>
+              (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+              !v.name.includes('Veena') &&
+              !v.name.includes('Kavya') &&
+              !v.name.includes('Heera') &&
+              !v.name.includes('Neerja') &&
+              !v.name.toLowerCase().includes('female')
+          ) ||
+          voices.find(
+            (v) =>
+              v.lang.startsWith('en') &&
+              (v.name.toLowerCase().includes('male') ||
+                v.name.includes('David') ||
+                v.name.includes('Daniel') ||
+                v.name.includes('Guy'))
+          );
+      } else {
+        // Priority 2: Dedicated Female Indian English voices (macOS Veena/Kavya/Heera, Edge Neerja, Google en-IN-Standard-A/D)
+        preferred =
+          voices.find(
+            (v) =>
+              (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+              (v.name.includes('Veena') ||
+                v.name.includes('Kavya') ||
+                v.name.includes('Heera') ||
+                v.name.includes('Neerja') ||
+                v.name.toLowerCase().includes('female') ||
+                v.name.includes('Standard-A') ||
+                v.name.includes('Wavenet-A') ||
+                v.name.includes('Standard-D'))
+          ) ||
+          voices.find(
+            (v) =>
+              v.name.includes('Veena') ||
+              v.name.includes('Kavya') ||
+              v.name.includes('Neerja') ||
+              v.name.includes('Heera')
+          ) ||
+          voices.find(
+            (v) =>
+              (v.lang === 'en-IN' || v.lang === 'en_IN') &&
+              !v.name.includes('Rishi') &&
+              !v.name.includes('Prabhat')
+          ) ||
+          voices.find(
+            (v) =>
+              v.lang.startsWith('en') &&
+              (v.name.toLowerCase().includes('female') ||
+                v.name.includes('Zira') ||
+                v.name.includes('Samantha') ||
+                v.name.includes('Jenny'))
+          );
+      }
 
       if (preferred) {
         utterance.voice = preferred;
