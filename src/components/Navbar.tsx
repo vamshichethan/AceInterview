@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, Mic, BarChart3, ArrowRight, Shield, Zap, LogOut, User as UserIcon } from 'lucide-react';
+import { Sparkles, Mic, BarChart3, ArrowRight, Shield, Zap, LogOut, User as UserIcon, BookOpen, Briefcase } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const Navbar: React.FC = () => {
@@ -12,6 +12,8 @@ export const Navbar: React.FC = () => {
 
   const isStudent = pathname.startsWith('/student');
   const isAdmin = pathname.startsWith('/admin');
+  const isLearn = pathname.startsWith('/learn');
+  const isJobs = pathname.startsWith('/jobs');
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl transition-all">
@@ -38,6 +40,30 @@ export const Navbar: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/jobs"
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+              isJobs
+                ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30'
+                : 'text-slate-300 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Briefcase className="w-3.5 h-3.5 text-amber-400" />
+            <span>Jobs &amp; News</span>
+          </Link>
+
+          <Link
+            href="/learn"
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${
+              isLearn
+                ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/30'
+                : 'text-slate-300 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5 text-teal-400" />
+            <span>Learning Hub</span>
+          </Link>
+
           <Link
             href="/student/setup"
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${

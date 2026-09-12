@@ -37,6 +37,7 @@ export interface User {
   name: string;
   email: string;
   password?: string;
+  plain_password?: string;
   role: 'user' | 'admin' | 'college_admin';
   subscription_status: 'free_trial' | 'active' | 'expired';
   subscription_expires_at?: string;
@@ -203,4 +204,62 @@ export interface DepartmentMetrics {
     status: string;
   }[];
 }
+
+// ── JOB MODULE INTERFACES ──
+export interface JobNewsItem {
+  id: string;
+  headline: string;
+  companyName: string;
+  companyLogo?: string;
+  date: string;
+  source: string;
+  summary: string;
+  tag: 'Hiring' | 'Layoff' | 'Funding' | 'Campus Drive';
+  track: TargetRole | 'all';
+  experienceLevel: 'freshers' | 'experienced' | 'all';
+  linkUrl?: string;
+  isNewThisWeek?: boolean;
+}
+
+export interface CompanyProfile {
+  id: string;
+  name: string;
+  logo?: string;
+  sector: string;
+  size: 'Startup' | 'Growth Scaleup' | 'MNC / Enterprise' | 'Unicorn';
+  hiringStatus: 'Actively Hiring' | 'Selective Hires' | 'Hiring Freeze';
+  freshersWelcome: boolean;
+  targetTracks: TargetRole[];
+  careersUrl: string;
+  location: string;
+  description: string;
+  openPositionsCount?: number;
+}
+
+export interface LiveJobPosting {
+  id: string;
+  roleTitle: string;
+  companyName: string;
+  companyLogo?: string;
+  location: string;
+  experienceLevel: 'Freshers (0-1 YOE)' | 'Associate (1-3 YOE)' | 'Mid-Senior (3+ YOE)';
+  targetTrack: TargetRole;
+  platform:
+    | 'LinkedIn'
+    | 'Naukri'
+    | 'Indeed'
+    | 'Wellfound'
+    | 'Internshala'
+    | 'Google Careers'
+    | 'Y Combinator'
+    | 'Cutshort'
+    | 'Foundit';
+  applyUrl: string;
+  postedDate: string;
+  isNewThisWeek: boolean;
+  tags: string[];
+  salaryOrStipend?: string;
+  batchOrEligibility?: string;
+}
+
 

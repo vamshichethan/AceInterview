@@ -20,6 +20,7 @@ import {
   Award,
   ChevronRight,
   TrendingUp,
+  BookOpen,
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -174,6 +175,62 @@ export default function HomePage() {
             <div className="mt-4 pt-3 border-t border-slate-800/80 text-[11px] font-semibold text-emerald-400">
               Live Verified Requisitions &rarr;
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── LEARNING MODULE SHOWCASE ── */}
+      <div className="w-full rounded-3xl bg-gradient-to-br from-indigo-950/50 via-slate-900 to-slate-950 border border-indigo-500/30 p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="space-y-4 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>New: Structured Engineering Curriculum</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+              Curated Roadmaps for Every Tech Track.
+            </h2>
+            <p className="text-sm text-slate-300 leading-relaxed">
+              Ordered beginner-to-advanced roadmaps, verified free &amp; paid resources (Striver, NeetCode, ByteByteGo, Andrew Ng, fast.ai, roadmap.sh), quantifiable resume guides, and behavioral STAR frameworks.
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                <span className="text-xs font-bold text-white block">SDE / Full-Stack</span>
+                <span className="text-[11px] text-slate-400">DSA &amp; CS Core</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                <span className="text-xs font-bold text-white block">Frontend</span>
+                <span className="text-[11px] text-slate-400">React &amp; Browser</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                <span className="text-xs font-bold text-white block">Backend</span>
+                <span className="text-[11px] text-slate-400">APIs &amp; Distributed</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                <span className="text-xs font-bold text-white block">AI / ML &amp; DevOps</span>
+                <span className="text-[11px] text-slate-400">K8s, Models &amp; CI/CD</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full lg:w-auto shrink-0">
+            <Link
+              href="/learn"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all hover:scale-[1.02] text-center"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Explore Learning Module</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/student/setup"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-sm transition-all text-center"
+            >
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span>Take Mock Assessment</span>
+            </Link>
           </div>
         </div>
       </div>

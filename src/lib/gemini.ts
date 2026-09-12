@@ -705,6 +705,158 @@ export function generateSuitableJobLinks(
   ];
 }
 
+// Real-world technical keywords dictionary across core domains
+const TECHNICAL_KEYWORD_REGEX =
+  /\b(?:time complexity|space complexity|big-?o|o\(n\)|o\(1\)|o\(log n\)|o\(n\^2\)|algorithm|array|string|hash\s*map|hash\s*table|hashmap|hashtable|tree|binary search|bst|graph|stack|queue|heap|priority queue|trie|recursion|recursive|dynamic programming|memoization|dp|two pointer|two pointers|sliding window|bfs|dfs|breadth first|depth first|sorting|quicksort|mergesort|edge case|base case|index|indexing|b-?tree|acid|transaction|isolation level|primary key|foreign key|join|normalization|deadlock|locking|optimistic|pessimistic|sharding|replication|cache|redis|sql|nosql|postgres|postgresql|mongodb|rest|api|http|status code|endpoint|crud|jwt|token|auth|oauth|microservice|pubsub|kafka|rabbitmq|process|thread|multithreading|concurrency|race condition|mutex|semaphore|virtual memory|paging|tcp|udp|dns|load balancer|latency|throughput|socket|websocket|dom|virtual dom|component|props|state|hook|useeffect|usestate|usememo|usecallback|redux|render|typescript|interface|async|await|promise|closure|event loop|docker|kubernetes|ci\/cd|pipeline)\b/gi;
+
+const REFUSAL_PATTERNS = [
+  /\b(?:don'?t know|do not know|dont know|dunno)\b/i,
+  /\b(?:no idea|no clue|not sure|not certain)\b/i,
+  /\b(?:can'?t (?:say|answer|explain|remember|recall)|cannot (?:say|answer|explain|remember|recall))\b/i,
+  /\b(?:skip(?: this)?|pass(?: this)?|next question|another question|ask something else)\b/i,
+  /\b(?:haven'?t (?:studied|prepared|learned|revised|done)|have not (?:studied|prepared|learned|revised|done))\b/i,
+  /\b(?:forgot(?:ten)?|don'?t remember|not aware|no knowledge)\b/i,
+  /\b(?:sorry sir|sorry mam|sorry|i am not sure)\b/i,
+  /\b(?:idk|cant say|dont have idea)\b/i,
+];
+
+const FILLER_ONLY_PATTERNS = [
+  /^(?:hi|hello|hey|good (?:morning|afternoon|evening)|how are you)[\s.!?,]*$/i,
+  /^(?:yes|yeah|yep|ok|okay|sure|fine|yes sir|no sir|yes ma'am|thank you|thanks)[\s.!?,]*$/i,
+  /^(?:i am ready|ready|can you hear me|am i audible|cool|understood|alright|proceed)[\s.!?,]*$/i,
+];
+
+interface CandidateAuditResult {
+  totalQuestions: number;
+  totalCandidateTurns: number;
+  candidateSpokenWords: number;
+  substantiveTechnicalTurns: number;
+  refusalOrSkipCount: number;
+  fillerOnlyCount: number;
+  technicalKeywordsCount: number;
+  technicalKeywordsFound: string[];
+  hasSubmittedCode: boolean;
+  codeLines: number;
+  codeExecuted: boolean;
+  isZeroParticipation: boolean;
+  isNoAnswerSession: boolean;
+  isMinimalParticipation: boolean;
+}
+
+function auditCandidateSession(
+  transcript: ChatMessage[],
+  submittedCodeData?: { code: string; language: string; output?: string }
+): CandidateAuditResult {
+  let totalQuestions = 0;
+  for (const msg of transcript) {
+    if (msg.sender === 'ai') {
+      const t = msg.text.trim();
+      if (
+        t.includes('?') ||
+        /(?:explain|how would you|write|implement|walk me through|what is|tell me about|how do you|can you design|solve|calculate)/i.test(t)
+      ) {
+        totalQuestions++;
+      }
+    }
+  }
+
+  const userMessages = transcript.filter((m) => m.sender === 'user');
+  let candidateSpokenWords = 0;
+  let substantiveTechnicalTurns = 0;
+  let refusalOrSkipCount = 0;
+  let fillerOnlyCount = 0;
+  const techKeywordsFoundSet = new Set<string>();
+
+  for (const m of userMessages) {
+    const raw = m.text || '';
+    const hasCodeInMsg = raw.includes('```') || raw.includes('[Submitted Code');
+    const nonCode = raw
+      .replace(/\[Submitted Code[\s\S]*?```/g, '')
+      .replace(/\[Test (?:Sandbox )?Output\]:[\s\S]*/g, '')
+      .replace(/```[\s\S]*?```/g, '')
+      .trim();
+
+    const words = nonCode.split(/\s+/).filter(Boolean);
+    const wordCount = words.length;
+    candidateSpokenWords += wordCount;
+
+    // Check for domain technical keywords
+    const matches = nonCode.match(TECHNICAL_KEYWORD_REGEX);
+    const kwCount = matches ? matches.length : 0;
+    if (matches) {
+      matches.forEach((kw) => techKeywordsFoundSet.add(kw.toLowerCase()));
+    }
+
+    // Check for refusal / non-answer patterns
+    const isRefusal = REFUSAL_PATTERNS.some((pat) => pat.test(nonCode));
+    const isFiller = FILLER_ONLY_PATTERNS.some((pat) => pat.test(nonCode));
+
+    if (isFiller && !hasCodeInMsg) {
+      fillerOnlyCount++;
+      continue;
+    }
+
+    if (isRefusal && !hasCodeInMsg) {
+      // If candidate stated a refusal ("I don't know", "skip", "haven't prepared"),
+      // merely echoing the topic keyword (e.g. "I don't know database indexing") is NOT a substantive answer.
+      if (wordCount < 25 || kwCount < 3) {
+        refusalOrSkipCount++;
+        continue;
+      }
+    }
+
+    if (hasCodeInMsg || kwCount >= 1 || (wordCount >= 12 && !isRefusal)) {
+      substantiveTechnicalTurns++;
+    } else if (isRefusal) {
+      refusalOrSkipCount++;
+    }
+  }
+
+  const hasSubmittedCode =
+    !!submittedCodeData &&
+    submittedCodeData.code.trim().length > 15 &&
+    !submittedCodeData.code.includes('// Write your solution here') &&
+    submittedCodeData.code.trim() !== 'console.log("hello");';
+
+  const codeLines = submittedCodeData
+    ? submittedCodeData.code.split('\n').filter((l) => l.trim().length > 0).length
+    : 0;
+  const codeExecuted = !!submittedCodeData?.output && submittedCodeData.output.trim().length > 0;
+
+  // Zero participation: no user messages, or fewer than 5 spoken words and no code
+  const isZeroParticipation = userMessages.length === 0 || (candidateSpokenWords < 5 && !hasSubmittedCode);
+
+  // No answer session: Candidate was active but answered 0 questions substantively (said only "hi", "ok", "i don't know", "skip")
+  const isNoAnswerSession =
+    !isZeroParticipation &&
+    substantiveTechnicalTurns === 0 &&
+    !hasSubmittedCode;
+
+  // Minimal participation: only 1 superficial technical turn or high refusal rate (>= 2 refusals) and no code
+  const isMinimalParticipation =
+    !isZeroParticipation &&
+    !isNoAnswerSession &&
+    ((substantiveTechnicalTurns <= 1 && !hasSubmittedCode) ||
+      (refusalOrSkipCount >= 2 && substantiveTechnicalTurns <= 1 && !hasSubmittedCode));
+
+  return {
+    totalQuestions: Math.max(1, totalQuestions),
+    totalCandidateTurns: userMessages.length,
+    candidateSpokenWords,
+    substantiveTechnicalTurns,
+    refusalOrSkipCount,
+    fillerOnlyCount,
+    technicalKeywordsCount: techKeywordsFoundSet.size,
+    technicalKeywordsFound: Array.from(techKeywordsFoundSet),
+    hasSubmittedCode,
+    codeLines,
+    codeExecuted,
+    isZeroParticipation,
+    isNoAnswerSession,
+    isMinimalParticipation,
+  };
+}
+
 export async function evaluateInterview(
   projectTitle: string,
   techStack: string,
@@ -735,20 +887,8 @@ export async function evaluateInterview(
     }
   }
 
-  // Analyze candidate verbal and code participation
-  const userMessages = transcript.filter((m) => m.sender === 'user');
-  const candidateSpokenWords = userMessages.reduce((sum, m) => {
-    const nonCode = m.text
-      .replace(/\[Submitted Code[\s\S]*?```/g, '')
-      .replace(/\[Test (?:Sandbox )?Output\]:[\s\S]*/g, '')
-      .replace(/```[\s\S]*?```/g, '')
-      .trim();
-    return sum + (nonCode ? nonCode.split(/\s+/).filter(Boolean).length : 0);
-  }, 0);
-
-  const hasSubmittedCode = !!submittedCodeData && submittedCodeData.code.trim().length > 15;
-  const isZeroParticipation = userMessages.length === 0 || (candidateSpokenWords < 5 && !hasSubmittedCode);
-  const isMinimalParticipation = !isZeroParticipation && candidateSpokenWords < 20 && !hasSubmittedCode;
+  // Run rigorous candidate participation and technical substance audit
+  const audit = auditCandidateSession(transcript, submittedCodeData);
 
   // Default fallback career fit roles
   const defaultBestFitRoles: BestFitRole[] = [
@@ -793,8 +933,10 @@ export async function evaluateInterview(
     },
   ];
 
-  // ZERO PARTICIPATION: Candidate was silent, said nothing, or left without speaking
-  if (isZeroParticipation) {
+  // REAL-WORLD CASE 1: ZERO PARTICIPATION OR COMPLETELY UNANSWERED INTERVIEW
+  // If candidate was silent, said nothing, or answered with only non-answers / "I don't know" / "skip":
+  // In real tech hiring bar: SCORE MUST BE 1/10 ("No Hire"). Never award 5!
+  if (audit.isZeroParticipation || audit.isNoAnswerSession) {
     const verifiedJobLinks = generateSuitableJobLinks(
       targetRole,
       techStack,
@@ -805,24 +947,24 @@ export async function evaluateInterview(
 
     return {
       technical_score: 1,
-      communication_score: 1,
+      communication_score: audit.candidateSpokenWords > 25 ? 2 : 1,
       confidence_score: 1,
       overall_verdict: 'No Hire',
       interview_skills_breakdown: {
         technical_depth: 1,
         problem_solving: 1,
         system_architecture: 1,
-        communication_clarity: 1,
+        communication_clarity: audit.candidateSpokenWords > 25 ? 2 : 1,
         vocal_confidence: 1,
       },
       interview_improvements: [
-        'Candidate was completely silent during the interview session and did not verbally answer technical questions.',
-        'When presented with a problem, speak out loud and explain your algorithmic thought process to the interviewer.',
-        'State your expected time and space complexity (Big-O) before starting implementation.',
-        'Use the live code editor to implement solutions and test with sample inputs.',
+        'Candidate did not answer technical questions asked by the interviewer (skipped questions or responded with "I don\'t know" / filler).',
+        'When presented with a coding problem, outline your algorithmic thought process out loud to the interviewer rather than passing.',
+        'State your expected time and space complexity (Big-O) before attempting implementation.',
+        'Use the live code editor to implement solutions and run test cases to demonstrate programming fluency.',
       ],
       resume_score: 75,
-      resume_verdict: 'Resume Profile Uploaded — Zero Interview Participation',
+      resume_verdict: 'Resume Profile Uploaded — Interview Hiring Bar Unmet (1/10)',
       resume_rating_breakdown: {
         ats_readability: 8,
         impact_metrics: 7,
@@ -837,17 +979,17 @@ export async function evaluateInterview(
       best_fit_roles: defaultBestFitRoles,
       suitable_job_links: verifiedJobLinks,
       strengths: [
-        `Candidate profile created with ${projectTitle} on resume.`,
-        `Target role registered: ${getRoleDisplayName(targetRole)}.`,
+        `Candidate profile registered for ${targetRole.toUpperCase()} track.`,
+        `Project portfolio in scope: ${projectTitle} (${techStack}).`,
       ],
       weaknesses: [
-        'Zero verbal communication detected: candidate did not speak or answer technical questions during the session.',
-        'No algorithmic logic, Big-O complexity, or data structures were discussed.',
-        'No working code implementation or test execution was submitted in the live editor.',
+        'Unanswered technical interview: candidate failed to provide substantive answers to technical questions.',
+        'Multiple prompts skipped or answered with "I don\'t know" / non-answers without attempting problem-solving.',
+        'No working code implementation or test execution was submitted in the live code editor.',
       ],
       improvements: [
-        'Candidate must speak verbally into the microphone to participate in technical screening.',
-        'Practice verbalizing algorithmic complexity and data structure selection.',
+        'Candidate must verbally answer technical questions and explain algorithmic steps rather than skipping.',
+        'Must implement and test code in the live editor to demonstrate basic programming proficiency.',
       ],
       practice_plan: [
         'Practice mock interview speaking out loud with standard technical questions.',
@@ -860,8 +1002,8 @@ export async function evaluateInterview(
     };
   }
 
-  // MINIMAL PARTICIPATION: Candidate only spoke 1-2 words ('hi', 'ok') without real technical dialogue
-  if (isMinimalParticipation) {
+  // REAL-WORLD CASE 2: MINIMAL PARTICIPATION (Only 1 superficial answer or high refusal rate and no code)
+  if (audit.isMinimalParticipation) {
     const verifiedJobLinks = generateSuitableJobLinks(
       targetRole,
       techStack,
@@ -883,13 +1025,13 @@ export async function evaluateInterview(
         vocal_confidence: 2,
       },
       interview_improvements: [
-        'Candidate provided only 1-2 brief words without explaining the algorithmic logic or addressing technical questions.',
-        'Explain your thought process in complete sentences rather than one-word responses.',
+        'Candidate provided only 1 superficial answer and skipped or refused the remaining technical prompts.',
+        'Explain your thought process in complete sentences and reason through trade-offs rather than giving one-sentence replies.',
         'State the time and space complexity (Big-O) of your proposed approach.',
         'Switch to the live editor and implement your solution once verified.',
       ],
       resume_score: 78,
-      resume_verdict: 'Resume Profile Uploaded — Minimal Technical Dialogue',
+      resume_verdict: 'Resume Profile Uploaded — Hiring Bar Unmet (2/10)',
       resume_rating_breakdown: {
         ats_readability: 8,
         impact_metrics: 7,
@@ -908,7 +1050,7 @@ export async function evaluateInterview(
         `Initial verbal connection established with interviewer.`,
       ],
       weaknesses: [
-        'Extremely minimal verbal communication: candidate provided brief phrases without technical depth.',
+        'Extremely minimal technical dialogue: candidate skipped multiple questions or answered superficially without depth.',
         'Did not explain algorithm, data structures, or time/space complexity.',
         'Did not implement code or validate test cases in the live editor.',
       ],
@@ -950,13 +1092,30 @@ ${allProjectsSummary}
 Candidate Interview Dialogue:
 ${transcriptText}
 
+=== CANDIDATE PARTICIPATION AUDIT (OBJECTIVE GROUND TRUTH) ===
+- Total Questions Asked by Interviewer: ${audit.totalQuestions}
+- Meaningful Technical Answers by Candidate: ${audit.substantiveTechnicalTurns}
+- Questions Skipped / "I Don't Know" / Refusals: ${audit.refusalOrSkipCount}
+- Code Submitted in Live IDE: ${audit.hasSubmittedCode ? `YES (${audit.codeLines} lines, test sandbox ran: ${audit.codeExecuted})` : 'NO CODE SUBMITTED'}
+- Technical Keywords Used: ${audit.technicalKeywordsCount} (${audit.technicalKeywordsFound.slice(0, 8).join(', ') || 'None'})
+- Candidate Spoken Words: ${audit.candidateSpokenWords}
+
 CRITICAL SCORING PRINCIPLES (STRICT CALIBRATED HIRING COMMITTEE BAR):
-- GRADE WITH ABSOLUTE TECHNICAL HONESTY. DO NOT INFLATE SCORES.
-- If the candidate gave incorrect or surface-level answers: score 2-4 / 10 ("No Hire").
-- If the candidate gave partially correct answers with missing edge cases or suboptimal O(N^2): score 5-6 / 10 ("Borderline").
-- If the candidate gave solid, correct answers with optimal Big-O and clean code: score 7-8 / 10 ("Hire").
-- If the candidate was exceptional with optimal complexity, clean code, and edge case coverage: score 9-10 / 10 ("Strong Hire").
-- NEVER default to 7. Base all scores strictly on what the candidate actually demonstrated.
+- GRADE WITH ABSOLUTE UNCOMPROMISING TECHNICAL REALISM. DO NOT BE POLITE. DO NOT INFLATE SCORES.
+- UNANSWERED / SKIPPED / REFUSAL QUESTIONS:
+  If candidate skipped questions, said "I don't know", gave only pleasantries ("hi", "ok", "yes sir"), or had 0 substantive technical solutions:
+  YOU MUST RETURN technical_score = 1 or 2, and overall_verdict = "No Hire".
+  UNDER NO CIRCUMSTANCES AWARD 5 TO AN UNANSWERED QUESTION OR PASSIVE CANDIDATE. 5 IS A BRUTE-FORCE PASSING SCORE, NEVER A NON-ANSWER SCORE!
+- NO CODE SUBMISSION:
+  If candidate did not write or submit working code in the Live IDE for a technical engineering role:
+  technical_score CANNOT EXCEED 4. overall_verdict MUST BE "No Hire". Verbal hand-waving without code is an automatic failure.
+- BRUTE-FORCE / PARTIAL SOLUTIONS (Score 5-6 / 10, "Borderline"):
+  Only award 5 or 6 if the candidate actually wrote working brute-force code (O(N^2)) or answered core technical questions with minor gaps in edge cases or memory scale.
+- OPTIMAL SOLUTIONS (Score 7-8 / 10, "Hire"):
+  Candidate explained optimal algorithmic complexity (O(N) or O(log N)), justified data structures, and submitted clean code that ran tests.
+- EXCEPTIONAL MASTERY (Score 9-10 / 10, "Strong Hire"):
+  Top 5% candidate with instant optimal pattern recognition, deep database indexing/concurrency knowledge, and production-grade code.
+- NEVER default to 5 or 7. Base all scores strictly on what the candidate actually demonstrated in the transcript.
 
 Output ONLY valid JSON matching this schema:
 {
@@ -1057,25 +1216,67 @@ Output ONLY valid JSON matching this schema:
 
       const parsed = JSON.parse(rawJson);
 
-      const techScore =
+      let techScore =
         typeof parsed.technical_score === 'number'
           ? Math.min(10, Math.max(1, Math.round(parsed.technical_score)))
-          : Math.min(10, Math.max(1, Number(parsed.technical_score) || (candidateSpokenWords < 50 ? 3 : 5)));
+          : 1;
 
-      const commScore =
+      let commScore =
         typeof parsed.communication_score === 'number'
           ? Math.min(10, Math.max(1, Math.round(parsed.communication_score)))
-          : Math.min(10, Math.max(1, Number(parsed.communication_score) || (candidateSpokenWords < 50 ? 3 : 5)));
+          : audit.candidateSpokenWords > 40 ? 5 : 2;
 
-      const confScore =
+      let confScore =
         typeof parsed.confidence_score === 'number'
           ? Math.min(10, Math.max(1, Math.round(parsed.confidence_score)))
-          : Math.min(10, Math.max(1, Number(parsed.confidence_score) || (candidateSpokenWords < 50 ? 3 : 5)));
+          : Math.round((techScore + commScore) / 2);
+
+      let overallVerdict: 'Strong Hire' | 'Hire' | 'Borderline' | 'No Hire' =
+        ['Strong Hire', 'Hire', 'Borderline', 'No Hire'].includes(parsed.overall_verdict)
+          ? parsed.overall_verdict
+          : 'No Hire';
+
+      // =========================================================================
+      // REAL-WORLD HIRING COMMITTEE SAFETY CLAMPS (FAANG CALIBRATED)
+      // =========================================================================
+      // Clamp 1: Zero substantive answers or pure non-answers/refusals
+      if (audit.substantiveTechnicalTurns === 0 && !audit.hasSubmittedCode) {
+        techScore = 1;
+        commScore = Math.min(commScore, audit.candidateSpokenWords > 30 ? 2 : 1);
+        confScore = 1;
+        overallVerdict = 'No Hire';
+      }
+      // Clamp 2: Only 1 superficial technical answer and no code submitted
+      else if (audit.substantiveTechnicalTurns <= 1 && !audit.hasSubmittedCode) {
+        techScore = Math.min(techScore, 2);
+        commScore = Math.min(commScore, 3);
+        confScore = Math.min(confScore, 2);
+        overallVerdict = 'No Hire';
+      }
+      // Clamp 3: More refusals/skips than answers and no code
+      else if (audit.refusalOrSkipCount >= audit.substantiveTechnicalTurns && !audit.hasSubmittedCode) {
+        techScore = Math.min(techScore, 3);
+        overallVerdict = 'No Hire';
+      }
+      // Clamp 4: No code submitted in live IDE for technical engineering role
+      else if (!audit.hasSubmittedCode) {
+        techScore = Math.min(techScore, 4);
+        if (techScore <= 4) overallVerdict = 'No Hire';
+      }
+
+      // Ensure verdict strictly matches final calibrated score
+      if (techScore <= 4) {
+        overallVerdict = 'No Hire';
+      } else if (techScore <= 6 && (overallVerdict === 'Hire' || overallVerdict === 'Strong Hire')) {
+        overallVerdict = 'Borderline';
+      } else if (techScore >= 8 && overallVerdict === 'No Hire') {
+        overallVerdict = 'Hire';
+      }
 
       const interviewBreakdown: InterviewSkillsBreakdown = {
-        technical_depth: Math.min(10, Math.max(1, Number(parsed.interview_skills_breakdown?.technical_depth) || techScore)),
-        problem_solving: Math.min(10, Math.max(1, Number(parsed.interview_skills_breakdown?.problem_solving) || techScore)),
-        system_architecture: Math.min(10, Math.max(1, Number(parsed.interview_skills_breakdown?.system_architecture) || techScore)),
+        technical_depth: Math.min(techScore, Math.max(1, Number(parsed.interview_skills_breakdown?.technical_depth) || techScore)),
+        problem_solving: Math.min(techScore + 1, Math.max(1, Number(parsed.interview_skills_breakdown?.problem_solving) || techScore)),
+        system_architecture: Math.min(techScore, Math.max(1, Number(parsed.interview_skills_breakdown?.system_architecture) || techScore)),
         communication_clarity: Math.min(10, Math.max(1, Number(parsed.interview_skills_breakdown?.communication_clarity) || commScore)),
         vocal_confidence: Math.min(10, Math.max(1, Number(parsed.interview_skills_breakdown?.vocal_confidence) || confScore)),
       };
@@ -1116,11 +1317,11 @@ Output ONLY valid JSON matching this schema:
         parsed.suitable_job_links
       );
 
-      const strengths = Array.isArray(parsed.strengths) && parsed.strengths.length > 0
+      let strengths = Array.isArray(parsed.strengths) && parsed.strengths.length > 0
         ? parsed.strengths
         : ['Clear articulation of project structure and dependencies.'];
 
-      const weaknesses = Array.isArray(parsed.weaknesses) && parsed.weaknesses.length > 0
+      let weaknesses = Array.isArray(parsed.weaknesses) && parsed.weaknesses.length > 0
         ? parsed.weaknesses
         : [
             'Superficial coverage of edge cases and boundary conditions under deep questioning.',
@@ -1128,9 +1329,30 @@ Output ONLY valid JSON matching this schema:
             'Lacked explicit locking mechanisms or rollback patterns when probed on concurrency conflicts.',
           ];
 
-      const overallVerdict = ['Strong Hire', 'Hire', 'Borderline', 'No Hire'].includes(parsed.overall_verdict)
-        ? parsed.overall_verdict
-        : techScore >= 8 ? 'Strong Hire' : techScore >= 6 ? 'Hire' : techScore >= 5 ? 'Borderline' : 'No Hire';
+      if (audit.substantiveTechnicalTurns === 0 || techScore <= 2) {
+        weaknesses = [
+          'Candidate did not answer the technical questions asked by the interviewer (skipped questions or indicated "I don\'t know").',
+          'Did not articulate algorithmic thought process, time/space complexity, or data structures.',
+          'No working code implementation or test execution was provided in the live editor.',
+          ...weaknesses.filter((w: string) => !w.toLowerCase().includes('clear articulation')),
+        ];
+      }
+
+      let interviewImprovements = Array.isArray(parsed.interview_improvements) && parsed.interview_improvements.length > 0
+        ? parsed.interview_improvements
+        : [
+            `When probed on edge cases and failure modes, elaborate on specific rollback strategies rather than staying theoretical.`,
+            `State time and space complexity upfront before walking through your algorithmic reasoning.`,
+            `Under follow-up challenges, articulate the trade-offs of your chosen architecture against alternatives.`,
+          ];
+
+      if (techScore <= 2) {
+        interviewImprovements = [
+          'When asked technical questions, walk the interviewer through your thought process rather than saying "I don\'t know" or skipping.',
+          'Switch to the live code editor and implement solutions rather than leaving the coding exercise unattempted.',
+          'State Big-O time and space complexity upfront before explaining your logic.',
+        ];
+      }
 
       return {
         technical_score: techScore,
@@ -1138,13 +1360,7 @@ Output ONLY valid JSON matching this schema:
         confidence_score: confScore,
         overall_verdict: overallVerdict,
         interview_skills_breakdown: interviewBreakdown,
-        interview_improvements: Array.isArray(parsed.interview_improvements) && parsed.interview_improvements.length > 0
-          ? parsed.interview_improvements
-          : [
-              `When probed on edge cases and failure modes, elaborate on specific rollback strategies rather than staying theoretical.`,
-              `State time and space complexity upfront before walking through your algorithmic reasoning.`,
-              `Under follow-up challenges, articulate the trade-offs of your chosen architecture against alternatives.`,
-            ],
+        interview_improvements: interviewImprovements,
 
         resume_score: calculatedResumeScore,
         resume_verdict:
@@ -1178,25 +1394,58 @@ Output ONLY valid JSON matching this schema:
     }
   }
 
-  // Fallback evaluation based on exact transcript and project analysis
-  const techScore = hasSubmittedCode && candidateSpokenWords > 80 ? 7 : candidateSpokenWords > 60 ? 5 : candidateSpokenWords > 25 ? 3 : 2;
-  const commScore = candidateSpokenWords > 80 ? 7 : candidateSpokenWords > 40 ? 5 : 3;
-  const confScore = Math.round((techScore + commScore) / 2);
+  // Fallback evaluation based on exact audit and candidate participation
+  let fallbackTechScore = 1;
+  let fallbackCommScore = 1;
+  let fallbackConfScore = 1;
+  let fallbackVerdict: 'Strong Hire' | 'Hire' | 'Borderline' | 'No Hire' = 'No Hire';
+
+  if (audit.isZeroParticipation || audit.isNoAnswerSession) {
+    fallbackTechScore = 1;
+    fallbackCommScore = 1;
+    fallbackConfScore = 1;
+    fallbackVerdict = 'No Hire';
+  } else if (audit.isMinimalParticipation) {
+    fallbackTechScore = 2;
+    fallbackCommScore = 2;
+    fallbackConfScore = 2;
+    fallbackVerdict = 'No Hire';
+  } else if (!audit.hasSubmittedCode) {
+    fallbackTechScore = audit.substantiveTechnicalTurns >= 3 ? 4 : 3;
+    fallbackCommScore = audit.candidateSpokenWords > 60 ? 5 : 3;
+    fallbackConfScore = 3;
+    fallbackVerdict = 'No Hire';
+  } else if (audit.hasSubmittedCode && audit.substantiveTechnicalTurns >= 3 && audit.candidateSpokenWords > 80) {
+    fallbackTechScore = 7;
+    fallbackCommScore = 7;
+    fallbackConfScore = 7;
+    fallbackVerdict = 'Hire';
+  } else if (audit.hasSubmittedCode && audit.substantiveTechnicalTurns >= 1) {
+    fallbackTechScore = 5;
+    fallbackCommScore = 5;
+    fallbackConfScore = 5;
+    fallbackVerdict = 'Borderline';
+  } else {
+    fallbackTechScore = 3;
+    fallbackCommScore = 3;
+    fallbackConfScore = 3;
+    fallbackVerdict = 'No Hire';
+  }
 
   const primaryTech = techStack.split(',')[0]?.trim() || 'TypeScript';
   const roleTitle = defaultBestFitRoles[0].role_title;
 
   return {
-    technical_score: techScore,
-    communication_score: commScore,
-    confidence_score: confScore,
-    overall_verdict: techScore >= 8 ? 'Hire' : techScore >= 6 ? 'Borderline' : 'No Hire',
+    technical_score: fallbackTechScore,
+    communication_score: fallbackCommScore,
+    confidence_score: fallbackConfScore,
+    overall_verdict: fallbackVerdict,
     interview_skills_breakdown: {
-      technical_depth: techScore,
-      problem_solving: Math.min(10, techScore + 1),
-      system_architecture: techScore,
-      communication_clarity: commScore,
-      vocal_confidence: confScore,
+      technical_depth: fallbackTechScore,
+      problem_solving: Math.min(10, fallbackTechScore + 1),
+      system_architecture: fallbackTechScore,
+      communication_clarity: fallbackCommScore,
+      vocal_confidence: fallbackConfScore,
     },
     interview_improvements: [
       `When asked about concurrency and write conflicts in ${techStack}, state specific locking mechanisms (e.g. optimistic locking via version columns) rather than general assertions.`,

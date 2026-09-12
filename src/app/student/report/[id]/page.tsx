@@ -73,10 +73,12 @@ export default function StudentReportPage() {
       }
 
       try {
+        let fetchedReport: FeedbackReport | null = null;
         const res = await fetch(`/api/report/${interviewId}`);
         if (res.ok) {
           const data = await res.json();
           if (data?.report) {
+            fetchedReport = data.report;
             setReport(data.report);
             if (typeof window !== 'undefined') {
               try {
@@ -91,6 +93,7 @@ export default function StudentReportPage() {
             if (cached) {
               const parsed = JSON.parse(cached);
               if (parsed) {
+                fetchedReport = parsed;
                 setReport(parsed);
                 setLoading(false);
                 return;
@@ -100,14 +103,18 @@ export default function StudentReportPage() {
           throw new Error('Feedback report not found');
         }
 
-        // Celebration confetti
-        try {
-          confetti({
-            particleCount: 60,
-            spread: 70,
-            origin: { y: 0.6 },
-          });
-        } catch (_) {}
+        // Celebration confetti — only for passing hiring bar (Hire / Strong Hire or score >= 7)
+        const finalScore = fetchedReport?.technical_score ?? 0;
+        const finalVerdict = fetchedReport?.overall_verdict;
+        if (finalVerdict === 'Strong Hire' || finalVerdict === 'Hire' || finalScore >= 7) {
+          try {
+            confetti({
+              particleCount: 60,
+              spread: 70,
+              origin: { y: 0.6 },
+            });
+          } catch (_) {}
+        }
       } catch (err) {
         console.error('Error fetching report:', err);
       } finally {
@@ -557,11 +564,41 @@ export default function StudentReportPage() {
                 <span className="text-xl font-bold text-slate-500">/ 10</span>
                 <div className="ml-auto text-right">
                   <span className="text-xs text-slate-400 block font-medium">Hiring Committee Bar</span>
-                  <span className="text-sm font-bold text-indigo-300">
-                    {verdict === 'Strong Hire' || verdict === 'Hire' ? 'Target Reached' : 'Further Prep Needed'}
+                  <span
+                    className={`text-sm font-bold ${
+                      verdict === 'Strong Hire' || verdict === 'Hire'
+                        ? 'text-emerald-400'
+                        : techScore <= 2
+                        ? 'text-rose-400'
+                        : techScore <= 4
+                        ? 'text-red-400'
+                        : 'text-amber-400'
+                    }`}
+                  >
+                    {verdict === 'Strong Hire' || verdict === 'Hire'
+                      ? 'Target Reached'
+                      : techScore <= 2
+                      ? 'Non-Answer / Bar Unmet'
+                      : techScore <= 4
+                      ? 'Hiring Bar Not Met'
+                      : 'Borderline — Needs Polish'}
                   </span>
                 </div>
               </div>
+
+              {/* Real-world hiring bar notice for failed/unanswered sessions */}
+              {techScore <= 4 && (
+                <div className="my-3 p-3 rounded-2xl bg-rose-950/40 border border-rose-800/40 text-[11px] text-rose-300 flex items-start gap-2.5">
+                  <AlertTriangle className="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-white">FAANG Hiring Bar Calibrated:</span>{' '}
+                    {techScore <= 2
+                      ? 'Questions were skipped or left unanswered without live code implementation.'
+                      : 'Technical screening requires live code implementation and accurate algorithmic Big-O analysis to pass.'}{' '}
+                    Review your diagnostic gaps below before re-interviewing.
+                  </div>
+                </div>
+              )}
 
               {/* 5-Factor Breakdown Meters */}
               <div className="space-y-3 mt-5">

@@ -12,7 +12,11 @@ import {
   InterviewSkillsBreakdown,
   BestFitRole,
   SuitableJobLink,
+  JobNewsItem,
+  CompanyProfile,
+  LiveJobPosting,
 } from './types';
+import { INITIAL_JOB_NEWS, INITIAL_COMPANIES, INITIAL_LIVE_JOBS } from './jobs-seed';
 import { supabase, supabaseAdmin, isSupabaseConfigured } from './supabase';
 
 const BUNDLED_DB_PATH = path.join(process.cwd(), 'data', 'ace_interview_db.json');
@@ -48,6 +52,9 @@ const usersStore: Map<string, User> = new Map();
 const sessionsStore: Map<string, { userId: string; expiresAt: number }> = new Map();
 const paymentsStore: Map<string, SubscriptionPayment> = new Map();
 const otpStore: Map<string, { otp: string; expiresAt: number; purpose: string }> = new Map();
+const jobNewsStore: Map<string, JobNewsItem> = new Map();
+const companiesStore: Map<string, CompanyProfile> = new Map();
+const liveJobsStore: Map<string, LiveJobPosting> = new Map();
 
 export const ADMIN_EMAILS = [
   'vamshicodes29@gmail.com',
@@ -69,6 +76,9 @@ function serializeDb() {
     users: Array.from(usersStore.entries()),
     sessions: Array.from(sessionsStore.entries()),
     payments: Array.from(paymentsStore.entries()),
+    jobNews: Array.from(jobNewsStore.entries()),
+    companies: Array.from(companiesStore.entries()),
+    liveJobs: Array.from(liveJobsStore.entries()),
     savedAt: new Date().toISOString(),
   };
 }
@@ -91,6 +101,15 @@ function hydrateStoresFromParsed(parsed: any) {
   }
   if (parsed.payments && Array.isArray(parsed.payments)) {
     for (const [k, v] of parsed.payments) paymentsStore.set(k, v);
+  }
+  if (parsed.jobNews && Array.isArray(parsed.jobNews)) {
+    for (const [k, v] of parsed.jobNews) jobNewsStore.set(k, v);
+  }
+  if (parsed.companies && Array.isArray(parsed.companies)) {
+    for (const [k, v] of parsed.companies) companiesStore.set(k, v);
+  }
+  if (parsed.liveJobs && Array.isArray(parsed.liveJobs)) {
+    for (const [k, v] of parsed.liveJobs) liveJobsStore.set(k, v);
   }
 }
 
@@ -232,6 +251,17 @@ const initSeedData = () => {
       can_access_dashboard: true,
       created_at: new Date().toISOString(),
     });
+  }
+
+  // Seed Job & Hiring Intelligence modules if empty
+  if (jobNewsStore.size === 0) {
+    INITIAL_JOB_NEWS.forEach((n) => jobNewsStore.set(n.id, n));
+  }
+  if (companiesStore.size === 0) {
+    INITIAL_COMPANIES.forEach((c) => companiesStore.set(c.id, c));
+  }
+  if (liveJobsStore.size === 0) {
+    INITIAL_LIVE_JOBS.forEach((j) => liveJobsStore.set(j.id, j));
   }
 
   if (loaded && usersStore.size > 1) return;
@@ -1204,4 +1234,154 @@ function sanitizeUser(u: User): User {
   const { password, ...safeUser } = u;
   return safeUser as User;
 }
+
+// ── JOB MODULE CRUD & QUERY HELPERS ──
+
+export async function getJobNews(filters?: {
+  track?: string;
+  experienceLevel?: string;
+  tag?: string;
+}): Promise<JobNewsItem[]> {
+  initSeedData();
+  await syncFromCloud();
+  let items = Array.from(jobNewsStore.values());
+  if (filters?.track && filters.track !== 'all') {
+    items = items.filter((n) => n.track === 'all' || n.track === filters.track);
+  }
+  if (filters?.experienceLevel && filters.experienceLevel !== 'all') {
+    items = items.filter((n) => n.experienceLevel === 'all' || n.experienceLevel === filters.experienceLevel);
+  }
+  if (filters?.tag && filters.tag !== 'all') {
+    items = items.filter((n) => n.tag === filters.tag);
+  }
+  return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export async function getCompanies(filters?: {
+  sector?: string;
+  size?: string;
+  hiringStatus?: string;
+  freshersWelcome?: boolean;
+  search?: string;
+}): Promise<CompanyProfile[]> {
+  initSeedData();
+  await syncFromCloud();
+  let items = Array.from(companiesStore.values());
+  if (filters?.sector && filters.sector !== 'all') {
+    items = items.filter((c) => c.sector.toLowerCase().includes(filters.sector!.toLowerCase()));
+  }
+  if (filters?.size && filters.size !== 'all') {
+    items = items.filter((c) => c.size === filters.size);
+  }
+  if (filters?.hiringStatus && filters.hiringStatus !== 'all') {
+    items = items.filter((c) => c.hiringStatus === filters.hiringStatus);
+  }
+  if (filters?.freshersWelcome !== undefined) {
+    items = items.filter((c) => c.freshersWelcome === filters.freshersWelcome);
+  }
+  if (filters?.search) {
+    const q = filters.search.toLowerCase();
+    items = items.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.description.toLowerCase().includes(q) || c.sector.toLowerCase().includes(q)
+    );
+  }
+  return items;
+}
+
+export async function getLiveJobs(filters?: {
+  track?: string;
+  experienceLevel?: string;
+  platform?: string;
+  isNewThisWeek?: boolean;
+  search?: string;
+}): Promise<LiveJobPosting[]> {
+  initSeedData();
+  await syncFromCloud();
+  let items = Array.from(liveJobsStore.values());
+  if (filters?.track && filters.track !== 'all') {
+    items = items.filter((j) => j.targetTrack === filters.track);
+  }
+  if (filters?.experienceLevel && filters.experienceLevel !== 'all') {
+    items = items.filter((j) => j.experienceLevel.toLowerCase().includes(filters.experienceLevel!.toLowerCase()));
+  }
+  if (filters?.platform && filters.platform !== 'all') {
+    items = items.filter((j) => j.platform.toLowerCase() === filters.platform!.toLowerCase());
+  }
+  if (filters?.isNewThisWeek !== undefined) {
+    items = items.filter((j) => j.isNewThisWeek === filters.isNewThisWeek);
+  }
+  if (filters?.search) {
+    const q = filters.search.toLowerCase();
+    items = items.filter(
+      (j) =>
+        j.roleTitle.toLowerCase().includes(q) ||
+        j.companyName.toLowerCase().includes(q) ||
+        j.tags.some((t) => t.toLowerCase().includes(q)) ||
+        j.location.toLowerCase().includes(q)
+    );
+  }
+  return items.sort((a, b) => new Date(b.postedDate).getTime() - new Date(a.postedDate).getTime());
+}
+
+export async function createJobNewsItem(item: Omit<JobNewsItem, 'id'>): Promise<JobNewsItem> {
+  initSeedData();
+  const id = `news-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+  const newItem: JobNewsItem = { ...item, id };
+  jobNewsStore.set(id, newItem);
+  persistDbToDisk();
+  syncToCloud();
+  return newItem;
+}
+
+export async function deleteJobNewsItem(id: string): Promise<boolean> {
+  initSeedData();
+  const existed = jobNewsStore.delete(id);
+  if (existed) {
+    persistDbToDisk();
+    syncToCloud();
+  }
+  return existed;
+}
+
+export async function createCompanyProfile(item: Omit<CompanyProfile, 'id'>): Promise<CompanyProfile> {
+  initSeedData();
+  const id = `comp-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+  const newComp: CompanyProfile = { ...item, id };
+  companiesStore.set(id, newComp);
+  persistDbToDisk();
+  syncToCloud();
+  return newComp;
+}
+
+export async function updateCompanyProfile(id: string, updates: Partial<CompanyProfile>): Promise<CompanyProfile | null> {
+  initSeedData();
+  const comp = companiesStore.get(id);
+  if (!comp) return null;
+  const updated = { ...comp, ...updates };
+  companiesStore.set(id, updated);
+  persistDbToDisk();
+  syncToCloud();
+  return updated;
+}
+
+export async function createLiveJobPosting(item: Omit<LiveJobPosting, 'id'>): Promise<LiveJobPosting> {
+  initSeedData();
+  const id = `job-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+  const newJob: LiveJobPosting = { ...item, id };
+  liveJobsStore.set(id, newJob);
+  persistDbToDisk();
+  syncToCloud();
+  return newJob;
+}
+
+export async function deleteLiveJobPosting(id: string): Promise<boolean> {
+  initSeedData();
+  const existed = liveJobsStore.delete(id);
+  if (existed) {
+    persistDbToDisk();
+    syncToCloud();
+  }
+  return existed;
+}
+
 
