@@ -33,6 +33,11 @@ import {
   Building2,
   Newspaper,
   ChevronRight,
+  CreditCard,
+  Check,
+  Copy,
+  XCircle,
+  AlertTriangle,
 } from 'lucide-react';
 import {
   BarChart,
@@ -43,7 +48,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
-import { DepartmentMetrics, User, LiveJobPosting, JobNewsItem } from '@/lib/types';
+import { DepartmentMetrics, User, LiveJobPosting, JobNewsItem, SubscriptionPayment } from '@/lib/types';
 import { useAuth } from '@/context/AuthContext';
 import { CandidateDossierModal } from '@/components/CandidateDossierModal';
 
@@ -58,7 +63,57 @@ export default function AdminDashboardPage() {
   const [selectedInterviewId, setSelectedInterviewId] = useState<string | null>(null);
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<'analytics' | 'users' | 'jobs'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'users' | 'jobs' | 'payments'>('analytics');
+
+  // Payments & UTR Verification State
+  const [paymentsList, setPaymentsList] = useState<SubscriptionPayment[]>([]);
+  const [paymentsLoading, setPaymentsLoading] = useState(false);
+  const [paymentSearchQuery, setPaymentSearchQuery] = useState('');
+  const [copiedUtr, setCopiedUtr] = useState<string | null>(null);
+  const [paymentActionLoading, setPaymentActionLoading] = useState<string | null>(null);
+
+  const fetchPayments = async () => {
+    setPaymentsLoading(true);
+    try {
+      const res = await fetch('/api/admin/payments');
+      if (res.ok) {
+        const data = await res.json();
+        setPaymentsList(data.payments || []);
+      }
+    } catch (e) {
+      console.error('Failed to load payments:', e);
+    } finally {
+      setPaymentsLoading(false);
+    }
+  };
+
+  const handlePaymentAction = async (paymentId: string, action: 'verify' | 'reject') => {
+    setPaymentActionLoading(paymentId);
+    try {
+      const res = await fetch('/api/admin/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId, action }),
+      });
+      if (res.ok) {
+        await fetchPayments();
+        await fetchUsers();
+      } else {
+        const err = await res.json();
+        alert(err.error || 'Failed to update payment status');
+      }
+    } catch (e) {
+      console.error('Failed to update payment:', e);
+    } finally {
+      setPaymentActionLoading(null);
+    }
+  };
+
+  const copyToClipboard = (utr: string) => {
+    navigator.clipboard.writeText(utr);
+    setCopiedUtr(utr);
+    setTimeout(() => setCopiedUtr(null), 2000);
+  };
 
   // User Accounts & Power Delegation State
   const [users, setUsers] = useState<User[]>([]);
@@ -299,6 +354,7 @@ export default function AdminDashboardPage() {
       fetchMetrics();
       fetchUsers();
       fetchJobsData();
+      fetchPayments();
     } else {
       setLoading(false);
     }
@@ -531,6 +587,18 @@ export default function AdminDashboardPage() {
         >
           <Briefcase className="w-4 h-4" />
           <span>Job &amp; News Manager ({jobsList.length} Jobs &bull; {newsList.length} News)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('payments')}
+          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+            activeTab === 'payments'
+              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25 border border-emerald-500'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
+          }`}
+        >
+          <CreditCard className="w-4 h-4" />
+          <span>UPI Payments &amp; UTR ({paymentsList.length})</span>
         </button>
       </div>
 
@@ -1564,7 +1632,279 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {/* Quick Dossier Inspection Modal */}
+      {/* TAB 4: UPI PAYMENTS & UTR VERIFICATION */}
+      {activeTab === 'payments' && (
+        <div className="space-y-6 animate-fadeIn">
+          {/* Top Explanation & Live Sync Banner */}
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900 to-indigo-950/30 border border-emerald-500/30 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0 text-emerald-400 mt-0.5">
+                <CreditCard className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  UPI Payments &amp; 12-Digit UTR Verification
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
+                    Live PhonePe Ledger
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                  When candidates scan your PhonePe QR and submit their 12-digit UPI reference number, it appears in this ledger.
+                  Compare the 12-digit UTR with your <strong>PhonePe App &rarr; History</strong>. If ₹99 was received with that UTR, click <strong>Verify</strong>. If no money was received or the UTR is fake, click <strong>Reject (Revoke Pro)</strong>.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={fetchPayments}
+              disabled={paymentsLoading}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition cursor-pointer shrink-0 border border-slate-700"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${paymentsLoading ? 'animate-spin' : ''}`} />
+              <span>Refresh Ledger</span>
+            </button>
+          </div>
+
+          {/* KPI Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <div className="text-slate-400 text-xs font-medium mb-1">Total Revenue</div>
+              <div className="text-2xl font-bold text-emerald-400">
+                ₹{paymentsList.reduce((acc, p) => (p.status !== 'rejected' ? acc + (p.amount || 99) : acc), 0)}
+              </div>
+              <div className="text-[11px] text-slate-500 mt-1">Direct to your bank account</div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <div className="text-slate-400 text-xs font-medium mb-1">Total Submissions</div>
+              <div className="text-2xl font-bold text-white">{paymentsList.length}</div>
+              <div className="text-[11px] text-slate-500 mt-1">All UTR entries submitted</div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <div className="text-slate-400 text-xs font-medium mb-1">Verified Genuine</div>
+              <div className="text-2xl font-bold text-indigo-400">
+                {paymentsList.filter((p) => p.status === 'verified' || p.status === 'completed').length}
+              </div>
+              <div className="text-[11px] text-indigo-400/80 mt-1">Confirmed Pro accounts</div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+              <div className="text-slate-400 text-xs font-medium mb-1">Pending Review</div>
+              <div className="text-2xl font-bold text-amber-400">
+                {paymentsList.filter((p) => p.status === 'pending').length}
+              </div>
+              <div className="text-[11px] text-amber-400/80 mt-1">Check against PhonePe</div>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="flex items-center gap-3 bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-2.5">
+            <Search className="w-4 h-4 text-slate-400 shrink-0" />
+            <input
+              type="text"
+              placeholder="Search by 12-digit UTR, candidate name, or email..."
+              value={paymentSearchQuery}
+              onChange={(e) => setPaymentSearchQuery(e.target.value)}
+              className="bg-transparent text-white text-xs w-full focus:outline-none placeholder-slate-500"
+            />
+            {paymentSearchQuery && (
+              <button
+                onClick={() => setPaymentSearchQuery('')}
+                className="text-xs text-slate-500 hover:text-white"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          {/* Payments Roster Table */}
+          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+            <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                  Submitted UPI Transactions
+                  <span className="text-xs text-slate-400 font-normal">
+                    ({paymentsList.filter((p) => {
+                      if (!paymentSearchQuery) return true;
+                      const q = paymentSearchQuery.toLowerCase();
+                      return (
+                        p.transaction_id?.toLowerCase().includes(q) ||
+                        p.user_email?.toLowerCase().includes(q) ||
+                        p.user_name?.toLowerCase().includes(q)
+                      );
+                    }).length} results)
+                  </span>
+                </h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  Click the copy icon next to any UTR to quickly paste and search in your banking app.
+                </p>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-slate-950/60 text-slate-400 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-800">
+                  <tr>
+                    <th className="py-3 px-4">Candidate</th>
+                    <th className="py-3 px-4">12-Digit UTR Number</th>
+                    <th className="py-3 px-4">Amount</th>
+                    <th className="py-3 px-4">Date &amp; Time</th>
+                    <th className="py-3 px-4">Verification Status</th>
+                    <th className="py-3 px-4 text-right">Admin Verification Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {paymentsList
+                    .filter((p) => {
+                      if (!paymentSearchQuery) return true;
+                      const q = paymentSearchQuery.toLowerCase();
+                      return (
+                        p.transaction_id?.toLowerCase().includes(q) ||
+                        p.user_email?.toLowerCase().includes(q) ||
+                        p.user_name?.toLowerCase().includes(q)
+                      );
+                    })
+                    .map((pmt) => {
+                      const isVerified = pmt.status === 'verified' || pmt.status === 'completed';
+                      const isRejected = pmt.status === 'rejected';
+                      const isPending = pmt.status === 'pending';
+
+                      return (
+                        <tr
+                          key={pmt.id}
+                          className="hover:bg-slate-800/40 transition"
+                        >
+                          {/* Candidate Info */}
+                          <td className="py-3.5 px-4">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-bold flex items-center justify-center text-xs shrink-0">
+                                {(pmt.user_name || pmt.user_email || 'U').charAt(0).toUpperCase()}
+                              </div>
+                              <div>
+                                <div className="font-semibold text-white">
+                                  {pmt.user_name || 'Candidate'}
+                                </div>
+                                <div className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
+                                  <Mail className="w-3 h-3 text-slate-500" />
+                                  <span>{pmt.user_email || 'No email'}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* UTR Number with 1-click Copy */}
+                          <td className="py-3.5 px-4">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-xs font-bold text-amber-300 bg-amber-950/40 border border-amber-500/30 px-2.5 py-1 rounded-lg tracking-wider">
+                                {pmt.transaction_id}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => copyToClipboard(pmt.transaction_id)}
+                                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+                                title="Copy UTR to clipboard"
+                              >
+                                {copiedUtr === pmt.transaction_id ? (
+                                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                ) : (
+                                  <Copy className="w-3.5 h-3.5" />
+                                )}
+                              </button>
+                            </div>
+                            <div className="text-[10px] text-slate-500 mt-1">
+                              {pmt.payment_method}
+                            </div>
+                          </td>
+
+                          {/* Amount */}
+                          <td className="py-3.5 px-4">
+                            <div className="inline-flex items-center gap-1 font-bold text-emerald-400 bg-emerald-950/30 border border-emerald-500/20 px-2 py-0.5 rounded-lg text-xs">
+                              ₹{pmt.amount || 99}
+                            </div>
+                          </td>
+
+                          {/* Date & Time */}
+                          <td className="py-3.5 px-4 text-slate-400 text-[11px] whitespace-nowrap">
+                            <div className="flex items-center gap-1.5">
+                              <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                              <span>{new Date(pmt.created_at).toLocaleString()}</span>
+                            </div>
+                          </td>
+
+                          {/* Status Badge */}
+                          <td className="py-3.5 px-4">
+                            {isVerified && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                                <CheckCircle className="w-3 h-3" />
+                                Verified &amp; Pro Active
+                              </span>
+                            )}
+                            {isPending && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30 animate-pulse">
+                                <AlertTriangle className="w-3 h-3" />
+                                Pending Check
+                              </span>
+                            )}
+                            {isRejected && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+                                <XCircle className="w-3 h-3" />
+                                Fake / Rejected
+                              </span>
+                            )}
+                          </td>
+
+                          {/* Actions */}
+                          <td className="py-3.5 px-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              {pmt.status !== 'verified' && (
+                                <button
+                                  type="button"
+                                  onClick={() => handlePaymentAction(pmt.id, 'verify')}
+                                  disabled={paymentActionLoading === pmt.id}
+                                  className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30 border border-emerald-500/40 transition cursor-pointer flex items-center gap-1"
+                                  title="Matches PhonePe receipt - Confirm Pro"
+                                >
+                                  <Check className="w-3 h-3" />
+                                  <span>Verify</span>
+                                </button>
+                              )}
+
+                              {pmt.status !== 'rejected' && (
+                                <button
+                                  type="button"
+                                  onClick={() => handlePaymentAction(pmt.id, 'reject')}
+                                  disabled={paymentActionLoading === pmt.id}
+                                  className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-rose-600/20 text-rose-300 hover:bg-rose-600/30 border border-rose-500/40 transition cursor-pointer flex items-center gap-1"
+                                  title="No money received or fake UTR - Revoke Pro"
+                                >
+                                  <XCircle className="w-3 h-3" />
+                                  <span>Reject / Fake</span>
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+
+                  {paymentsList.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="py-12 text-center text-slate-500">
+                        <CreditCard className="w-10 h-10 mx-auto mb-3 text-slate-600" />
+                        <div className="text-sm font-semibold text-slate-400">No UPI payments submitted yet</div>
+                        <div className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                          When candidates scan your PhonePe QR code and enter their 12-digit UTR, their records will appear here for you to verify against your PhonePe app.
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
       <CandidateDossierModal
         interviewId={selectedInterviewId}
         onClose={() => setSelectedInterviewId(null)}

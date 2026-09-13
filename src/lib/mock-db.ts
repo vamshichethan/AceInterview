@@ -1048,24 +1048,73 @@ export async function recordUpiPayment(
   const payment: SubscriptionPayment = {
     id: `upi_pmt_${crypto.randomUUID().slice(0, 8)}`,
     user_id: userId,
+    user_name: user.name,
+    user_email: user.email,
     amount,
     currency: 'INR',
     payment_method: `UPI QR Scan - UTR: ${utrNumber}`,
-    status: 'completed',
+    status: 'pending',
     transaction_id: utrNumber,
     created_at: new Date().toISOString(),
   };
 
   paymentsStore.set(payment.id, payment);
 
-  // Activate 30-day Pro subscription
+  // Activate 30-day Pro subscription immediately
   const expiresAt = new Date(Date.now() + 30 * 86400000).toISOString();
   user.subscription_status = 'active';
   user.subscription_expires_at = expiresAt;
   usersStore.set(userId, user);
 
+  await syncToCloud();
   persistDbToDisk(true);
   return { success: true, payment, user: sanitizeUser(user) };
+}
+
+export async function getAllPayments(): Promise<SubscriptionPayment[]> {
+  initSeedData();
+  await syncFromCloud(true);
+  const list = Array.from(paymentsStore.values()).sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
+  return list.map((p) => {
+    const user = usersStore.get(p.user_id);
+    return {
+      ...p,
+      user_name: p.user_name || user?.name || 'Unknown User',
+      user_email: p.user_email || user?.email || 'unknown@domain.com',
+    };
+  });
+}
+
+export async function updatePaymentStatus(
+  paymentId: string,
+  status: 'verified' | 'rejected' | 'completed'
+): Promise<SubscriptionPayment | null> {
+  initSeedData();
+  await syncFromCloud(true);
+  const payment = paymentsStore.get(paymentId);
+  if (!payment) return null;
+
+  payment.status = status;
+  payment.verified_at = new Date().toISOString();
+  paymentsStore.set(paymentId, payment);
+
+  const user = usersStore.get(payment.user_id);
+  if (user) {
+    if (status === 'verified' || status === 'completed') {
+      const expiresAt = new Date(Date.now() + 30 * 86400000).toISOString();
+      user.subscription_status = 'active';
+      user.subscription_expires_at = expiresAt;
+    } else if (status === 'rejected') {
+      user.subscription_status = 'expired';
+    }
+    usersStore.set(user.id, user);
+  }
+
+  await syncToCloud();
+  persistDbToDisk(true);
+  return payment;
 }
 
 export async function updateUser(

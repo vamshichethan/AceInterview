@@ -49,12 +49,16 @@ export interface User {
 export interface SubscriptionPayment {
   id: string;
   user_id: string;
+  user_name?: string;
+  user_email?: string;
   amount: number;
   currency: string;
   payment_method: string;
-  status: 'completed' | 'pending' | 'failed';
+  status: 'completed' | 'pending' | 'failed' | 'verified' | 'rejected';
   transaction_id: string;
   created_at: string;
+  verified_at?: string;
+  verified_by?: string;
 }
 
 export interface Interview {
