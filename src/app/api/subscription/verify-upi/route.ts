@@ -4,7 +4,7 @@ import { getUserByToken, getUserById, recordUpiPayment } from '@/lib/mock-db';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { utr, upiId = '7975883646@ybl', amount = 99, userId: bodyUserId } = body;
+    const { utr, upiId = 'Official UPI QR', amount = 99, userId: bodyUserId } = body;
 
     if (!utr || String(utr).trim().length < 6) {
       return NextResponse.json(

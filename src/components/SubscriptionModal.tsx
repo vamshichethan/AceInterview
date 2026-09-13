@@ -34,13 +34,9 @@ export function SubscriptionModal() {
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [copiedUpi, setCopiedUpi] = useState(false);
   const [utrNumber, setUtrNumber] = useState('');
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
-  const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || '7975883646@ybl';
-  const UPI_NAME = 'Vamshi Chethan A M';
-  const upiDeepLink = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&am=99&cu=INR&tn=AceInterview%20Pro`;
   const qrCodeUrl = '/images/phonepe-qr.jpg';
 
   useEffect(() => {
@@ -50,12 +46,6 @@ export function SubscriptionModal() {
   }, [isSubscriptionModalOpen]);
 
   if (!isSubscriptionModalOpen) return null;
-
-  const handleCopyUpi = () => {
-    navigator.clipboard.writeText(UPI_ID);
-    setCopiedUpi(true);
-    setTimeout(() => setCopiedUpi(false), 2000);
-  };
 
   const handleUpiVerification = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +63,7 @@ export function SubscriptionModal() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           utr: utrNumber.trim(),
-          upiId: UPI_ID,
+          upiId: 'Official PhonePe QR',
           amount: 99,
           userId: user?.id,
         }),
@@ -245,19 +235,19 @@ export function SubscriptionModal() {
                 <button
                   type="button"
                   onClick={() => { setPaymentTab('upi_qr'); setError(null); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition ${
                     paymentTab === 'upi_qr'
                       ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   <QrCode className="w-4 h-4" />
-                  <span>Direct UPI Scanner & ID (Instant)</span>
+                  <span>Official UPI QR Scanner (Instant)</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => { setPaymentTab('razorpay'); setError(null); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition ${
                     paymentTab === 'razorpay'
                       ? 'bg-indigo-600 text-white shadow'
                       : 'text-slate-400 hover:text-white'
@@ -275,57 +265,53 @@ export function SubscriptionModal() {
               )}
 
               {paymentTab === 'upi_qr' ? (
-                /* ── Tab 1: Direct UPI QR Code & UPI ID ── */
+                /* ── Tab 1: Official UPI QR Scanner ── */
                 <div className="space-y-4">
-                  <div className="p-4 rounded-xl bg-slate-950/80 border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-5">
+                  <div className="p-5 rounded-2xl bg-slate-950/90 border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-6">
                     {/* QR Code Container */}
-                    <div className="flex flex-col items-center bg-black p-2 rounded-xl border-2 border-emerald-500/80 shadow-xl shadow-emerald-500/20">
+                    <div className="flex flex-col items-center bg-black p-3 rounded-2xl border-2 border-emerald-500/80 shadow-2xl shadow-emerald-500/20 shrink-0">
                       <img
                         src="/images/phonepe-qr.jpg"
-                        alt="PhonePe QR Code - Vamshi Chethan A M"
-                        className="w-40 h-auto max-h-56 rounded-lg object-contain"
+                        alt="Official PhonePe / UPI QR Scanner"
+                        className="w-44 h-auto max-h-56 rounded-xl object-contain"
                       />
-                      <span className="text-[10px] font-bold text-emerald-400 mt-1.5 uppercase tracking-wider">
-                        Vamshi Chethan A M (PhonePe)
+                      <span className="text-[10px] font-bold text-emerald-400 mt-2 uppercase tracking-wider flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> Official PhonePe QR
                       </span>
                     </div>
 
-                    {/* Instructions & UPI ID */}
-                    <div className="flex-1 text-center sm:text-left space-y-2">
-                      <div className="text-xs text-emerald-400 font-semibold uppercase tracking-wider">
-                        Step 1: Scan & Pay ₹99 with any UPI App
-                      </div>
-                      <p className="text-xs text-slate-300">
-                        Scan using <strong>PhonePe, Google Pay, Paytm, BHIM, or CRED</strong>. Or send directly to UPI ID:
-                      </p>
-
-                      {/* UPI ID Pill */}
-                      <div className="flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-900 border border-slate-700">
-                        <span className="font-mono text-sm text-cyan-300 font-bold select-all">
-                          {UPI_ID}
+                    {/* Instructions */}
+                    <div className="flex-1 text-center sm:text-left space-y-3">
+                      <div>
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
+                          Step 1: Scan & Pay ₹99
                         </span>
-                        <button
-                          type="button"
-                          onClick={handleCopyUpi}
-                          className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1 transition"
-                        >
-                          {copiedUpi ? (
-                            <>
-                              <Check className="w-3 h-3 text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="w-3 h-3" />
-                              <span>Copy</span>
-                            </>
-                          )}
-                        </button>
+                        <h4 className="text-sm font-bold text-white mt-1.5">
+                          Scan with Any UPI Payment App
+                        </h4>
+                        <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                          Open <strong>PhonePe, Google Pay, Paytm, BHIM, CRED</strong> or your mobile banking app, and scan the QR code to complete the ₹99 payment securely.
+                        </p>
                       </div>
 
-                      <div className="text-[11px] text-slate-400">
-                        Amount: <strong className="text-white">₹99.00</strong> for 30 Days Pro Unlimited
+                      <div className="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-slate-400">Plan Access:</span>
+                          <span className="font-semibold text-emerald-400">30 Days Pro Unlimited</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-slate-400">Total Amount:</span>
+                          <span className="font-bold text-white text-sm">₹99.00</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-800">
+                          <span className="text-slate-400">Payment Security:</span>
+                          <span className="text-[11px] text-cyan-300 font-medium">Encrypted & Direct UPI Verified</span>
+                        </div>
                       </div>
+
+                      <p className="text-[11px] text-slate-400">
+                        ⚡ After paying, enter the 12-digit UTR transaction reference below for instant automated activation.
+                      </p>
                     </div>
                   </div>
 
@@ -336,7 +322,7 @@ export function SubscriptionModal() {
                         <label className="text-xs font-semibold text-slate-200">
                           Step 2: Enter 12-Digit UPI Ref / UTR Number
                         </label>
-                        <span className="text-[11px] text-slate-400">Found in transaction receipt</span>
+                        <span className="text-[11px] text-slate-400">From payment receipt</span>
                       </div>
                       <input
                         type="text"

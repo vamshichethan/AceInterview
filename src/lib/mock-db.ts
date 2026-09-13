@@ -1037,7 +1037,7 @@ export async function recordUpiPayment(
   userId: string,
   utrNumber: string,
   amount: number = 99,
-  upiId: string = '7975883646@ybl'
+  upiId: string = 'Official PhonePe QR'
 ): Promise<{ success: boolean; payment: SubscriptionPayment; user: User }> {
   initSeedData();
   const user = usersStore.get(userId);
@@ -1050,7 +1050,7 @@ export async function recordUpiPayment(
     user_id: userId,
     amount,
     currency: 'INR',
-    payment_method: `UPI (${upiId}) - UTR: ${utrNumber}`,
+    payment_method: `UPI QR Scan - UTR: ${utrNumber}`,
     status: 'completed',
     transaction_id: utrNumber,
     created_at: new Date().toISOString(),
