@@ -77,8 +77,8 @@ export const Navbar: React.FC = () => {
           </Link>
 
 
-          {/* Only show Cohort Analytics if user has permission or is admin */}
-          {canAccessDashboard && (
+          {/* Only show Placement Dashboard strictly to Super Admin vamshicodes29@gmail.com */}
+          {user && user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com' && (
             <Link
               href="/admin/dashboard"
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${

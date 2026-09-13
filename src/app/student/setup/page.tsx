@@ -31,7 +31,23 @@ import {
   Star,
   Zap,
   Lock,
+  TrendingUp,
+  Award,
+  Calendar,
+  ChevronRight,
+  RefreshCw,
+  ExternalLink,
+  History,
 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from 'recharts';
 import { ParsedResume, TargetRole, ProjectEntry, TARGET_ROLE_LABELS } from '@/lib/types';
 import { useAuth } from '@/context/AuthContext';
 
@@ -94,6 +110,40 @@ export default function StudentSetupPage() {
   const [parsedHighlights, setParsedHighlights] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Candidate Interview Journey & Growth Tracking State
+  const [activeTab, setActiveTab] = useState<'setup' | 'growth'>('setup');
+  const [historyList, setHistoryList] = useState<any[]>([]);
+  const [historyStats, setHistoryStats] = useState<any>(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+
+  const fetchInterviewHistory = async () => {
+    if (!user) return;
+    try {
+      setHistoryLoading(true);
+      const params = new URLSearchParams();
+      if (user.id) params.append('userId', user.id);
+      if (user.email) params.append('email', user.email);
+      if (user.name) params.append('name', user.name);
+
+      const res = await fetch(`/api/student/history?${params.toString()}`);
+      if (res.ok) {
+        const data = await res.json();
+        setHistoryList(data.history || []);
+        setHistoryStats(data.stats || null);
+      }
+    } catch (err) {
+      console.warn('Failed to load candidate interview history', err);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchInterviewHistory();
+    }
+  }, [user]);
 
   // Handle Resume File Upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -391,9 +441,47 @@ export default function StudentSetupPage() {
         </div>
       </div>
 
+      {/* Tab Switcher: Setup vs Growth & Journey */}
+      <div className="flex items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => setActiveTab('setup')}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            activeTab === 'setup'
+              ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-lg shadow-indigo-500/25 scale-[1.02]'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+          }`}
+        >
+          <Sparkles className="w-4 h-4 text-cyan-300" />
+          <span>Setup New Interview</span>
+        </button>
 
-      {/* Resume Upload Box */}
-      <div
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab('growth');
+            fetchInterviewHistory();
+          }}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+            activeTab === 'growth'
+              ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 text-white shadow-lg shadow-indigo-500/25 scale-[1.02]'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+          }`}
+        >
+          <TrendingUp className="w-4 h-4 text-emerald-400" />
+          <span>My Growth & History</span>
+          {historyList.length > 0 && (
+            <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono font-bold">
+              {historyList.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {activeTab === 'setup' && (
+        <>
+          {/* Resume Upload Box */}
+          <div
         className="p-6 rounded-2xl bg-slate-900/60 border border-dashed border-slate-700 hover:border-indigo-500/80 transition-all text-center group cursor-pointer backdrop-blur-sm"
         onClick={() => !isParsingResume && fileInputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
@@ -789,6 +877,216 @@ export default function StudentSetupPage() {
           )}
         </div>
       </form>
+    </>
+  )}
+
+  {/* Active Tab: My Growth & Interview Journey */}
+  {activeTab === 'growth' && (
+    <div className="space-y-6">
+      {/* Top Aggregated Metric Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur-xl">
+          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <History className="w-3.5 h-3.5 text-indigo-400" />
+            Interviews Taken
+          </div>
+          <div className="text-2xl font-black text-white">
+            {historyStats?.totalInterviews || 0}
+          </div>
+          <div className="text-[11px] text-slate-500 mt-0.5">Total sessions completed</div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur-xl">
+          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+            Avg Tech Score
+          </div>
+          <div className="text-2xl font-black text-cyan-400">
+            {historyStats?.avgTechScore ? `${historyStats.avgTechScore}/10` : '—'}
+          </div>
+          <div className="text-[11px] text-slate-500 mt-0.5">Coding & System Design</div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur-xl">
+          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <Brain className="w-3.5 h-3.5 text-purple-400" />
+            Communication
+          </div>
+          <div className="text-2xl font-black text-purple-400">
+            {historyStats?.avgCommScore ? `${historyStats.avgCommScore}/10` : '—'}
+          </div>
+          <div className="text-[11px] text-slate-500 mt-0.5">Clarity & Articulation</div>
+        </div>
+
+        <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur-xl">
+          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+            <Award className="w-3.5 h-3.5 text-emerald-400" />
+            Best Score
+          </div>
+          <div className="text-2xl font-black text-emerald-400">
+            {historyStats?.bestScore ? `${historyStats.bestScore}/10` : '—'}
+          </div>
+          <div className="text-[11px] text-slate-500 mt-0.5">Top session achievement</div>
+        </div>
+      </div>
+
+      {/* Visual Growth Trend Chart */}
+      {historyStats?.growthTrend && historyStats.growthTrend.length > 0 && (
+        <div className="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur-xl space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-emerald-400" />
+                Performance Trajectory & Growth Curve
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Progression of your technical competence and overall hireability across assessments.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={fetchInterviewHistory}
+              disabled={historyLoading}
+              className="p-1.5 rounded-lg border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white transition cursor-pointer"
+              title="Refresh interview history"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${historyLoading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+
+          <div className="h-64 w-full pt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={historyStats.growthTrend}>
+                <defs>
+                  <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="techGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                <XAxis dataKey="session" stroke="#64748b" fontSize={11} />
+                <YAxis domain={[0, 10]} stroke="#64748b" fontSize={11} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#0f172a',
+                    border: '1px solid #334155',
+                    borderRadius: '0.75rem',
+                    fontSize: '11px',
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="overall"
+                  name="Overall Score"
+                  stroke="#10b981"
+                  strokeWidth={2.5}
+                  fillOpacity={1}
+                  fill="url(#growthGrad)"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="tech"
+                  name="Technical Score"
+                  stroke="#6366f1"
+                  strokeWidth={2}
+                  fillOpacity={1}
+                  fill="url(#techGrad)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* Previous Interviews Records */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-bold text-white flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-cyan-400" />
+            Previous Interview Dossiers ({historyList.length})
+          </h3>
+        </div>
+
+        {historyList.length === 0 ? (
+          <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center space-y-3">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto">
+              <History className="w-6 h-6" />
+            </div>
+            <h4 className="text-sm font-bold text-white">No Previous Interviews Recorded</h4>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+              Complete your first autonomous AI mock interview now to receive detailed speech feedback, ATS score, and permanent growth tracking.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveTab('setup')}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-xs shadow transition cursor-pointer"
+            >
+              Start First Interview &rarr;
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {historyList.map((item, idx) => (
+              <div
+                key={item.interviewId || idx}
+                className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-950/60 text-indigo-300 border border-indigo-500/30">
+                      {item.targetRole?.toUpperCase() || 'SDE'}
+                    </span>
+                    <span className="text-xs font-bold text-white">
+                      {item.projectTitle || 'General Engineering Assessment'}
+                    </span>
+                    <span className="text-[10px] text-slate-500">
+                      Interviewer: {item.persona === 'sophia' ? 'Priya Patel' : 'Aarav Sharma'}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-slate-400 flex items-center gap-2">
+                    <span>{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recent'}</span>
+                    <span>&bull;</span>
+                    <span className="font-semibold text-slate-300">
+                      Verdict: <span className="text-emerald-400">{item.verdict}</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className="flex items-center gap-2 text-right">
+                    <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                      <div className="text-[10px] text-slate-500 uppercase font-bold">Overall</div>
+                      <div className="text-sm font-black text-emerald-400">{item.overallScore}/10</div>
+                    </div>
+                    <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                      <div className="text-[10px] text-slate-500 uppercase font-bold">Tech</div>
+                      <div className="text-sm font-black text-cyan-400">{item.technicalScore}/10</div>
+                    </div>
+                    <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                      <div className="text-[10px] text-slate-500 uppercase font-bold">Comm</div>
+                      <div className="text-sm font-black text-purple-400">{item.communicationScore}/10</div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/student/report/${item.interviewId}`}
+                    className="px-3.5 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                  >
+                    <span>View Report</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
+  )}
+</div>
   );
 }

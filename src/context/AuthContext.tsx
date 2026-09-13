@@ -38,18 +38,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshUser = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/me');
+      const headers: Record<string, string> = {};
+      if (typeof window !== 'undefined') {
+        const storedToken = localStorage.getItem('vantage_token');
+        if (storedToken) {
+          headers['Authorization'] = `Bearer ${storedToken}`;
+        }
+      }
+
+      const res = await fetch('/api/auth/me', { headers });
       if (res.ok) {
         const data = await res.json();
         setUser(data.user || null);
         setInterviewAccess(data.interviewAccess || null);
-      } else {
+        if (!data.user && typeof window !== 'undefined') {
+          localStorage.removeItem('vantage_token');
+        }
+      } else if (res.status === 401 || res.status === 403) {
         setUser(null);
         setInterviewAccess(null);
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('vantage_token');
+        }
       }
-    } catch {
-      setUser(null);
-      setInterviewAccess(null);
+      // If temporary 5xx error or transient network issue, preserve existing session state
+    } catch (err) {
+      console.warn('Silent refresh user check error:', err);
     } finally {
       setLoading(false);
     }
@@ -87,6 +101,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!res.ok) {
         return { success: false, error: data.error || 'Invalid or expired OTP' };
       }
+      if (data.token && typeof window !== 'undefined') {
+        localStorage.setItem('vantage_token', data.token);
+      }
       setUser(data.user);
       await refreshUser();
       return { success: true, user: data.user };
@@ -105,6 +122,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await res.json();
       if (!res.ok) {
         return { success: false, error: data.error || 'Failed to sign in' };
+      }
+      if (data.token && typeof window !== 'undefined') {
+        localStorage.setItem('vantage_token', data.token);
       }
       setUser(data.user);
       await refreshUser();
@@ -125,6 +145,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!res.ok) {
         return { success: false, error: data.error || 'Failed to register' };
       }
+      if (data.token && typeof window !== 'undefined') {
+        localStorage.setItem('vantage_token', data.token);
+      }
       setUser(data.user);
       await refreshUser();
       return { success: true, user: data.user };
@@ -135,6 +158,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('vantage_token');
+      }
       await fetch('/api/auth/logout', { method: 'POST' });
     } catch (e) {
       console.error('Logout error', e);

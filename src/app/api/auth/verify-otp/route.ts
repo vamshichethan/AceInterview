@@ -20,9 +20,16 @@ export async function POST(req: Request) {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+    const cookieHeader = req.headers.get('cookie') || '';
+    const pendingCookie = cookieHeader
+      .split(';')
+      .find((c) => c.trim().startsWith('vantage_pending_otp='))
+      ?.split('=')[1]
+      ?.trim();
+    const signatureToken = body.signatureToken || pendingCookie;
 
     // 1. Verify OTP
-    const verification = await verifyOtpCode(normalizedEmail, otp);
+    const verification = await verifyOtpCode(normalizedEmail, otp, signatureToken);
     if (!verification.valid) {
       return NextResponse.json(
         { error: verification.reason || 'Invalid or expired OTP.' },
@@ -64,6 +71,7 @@ export async function POST(req: Request) {
       path: '/',
       maxAge: 30 * 86400, // 30 days
     });
+    response.cookies.delete('vantage_pending_otp');
 
     return response;
   } catch (err: any) {

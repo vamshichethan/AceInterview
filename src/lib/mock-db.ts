@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import {
   Student,
   Interview,
@@ -58,14 +59,65 @@ const liveJobsStore: Map<string, LiveJobPosting> = new Map();
 
 export const ADMIN_EMAILS = [
   'vamshicodes29@gmail.com',
-  'admin@aceinterview.ai',
-  'admin@vantage.ai',
 ];
 
 export function isSuperAdminEmail(email?: string): boolean {
   if (!email) return false;
   const normalized = email.toLowerCase().trim();
   return ADMIN_EMAILS.some((adm) => adm.toLowerCase() === normalized);
+}
+
+// ─── Tamper-Proof Cryptographic Session Token System ───
+const SESSION_SECRET = process.env.SUPABASE_SERVICE_ROLE_KEY || 'ace-interview-jwt-secret-key-2026-unbreakable';
+
+export function createSessionToken(userId: string, email: string, role: string): string {
+  const expiresAt = Date.now() + 30 * 86400000; // 30 days
+  const payload = JSON.stringify({ userId, email: email.toLowerCase().trim(), role, expiresAt });
+  const b64 = Buffer.from(payload).toString('base64url');
+  const hmac = crypto.createHmac('sha256', SESSION_SECRET).update(b64).digest('base64url');
+  return `vantage_token_${b64}.${hmac}`;
+}
+
+export function verifySessionToken(token: string): { userId: string; email: string; role: string } | null {
+  try {
+    if (!token || !token.startsWith('vantage_token_')) return null;
+    const body = token.slice('vantage_token_'.length);
+    const dotIndex = body.indexOf('.');
+    if (dotIndex === -1) return null;
+    const b64 = body.slice(0, dotIndex);
+    const sig = body.slice(dotIndex + 1);
+
+    const expected = crypto.createHmac('sha256', SESSION_SECRET).update(b64).digest('base64url');
+    if (sig !== expected) return null;
+
+    const payload = JSON.parse(Buffer.from(b64, 'base64url').toString('utf8'));
+    if (payload.expiresAt && payload.expiresAt < Date.now()) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+export function ensureSuperAdminExists() {
+  const vamshi = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === 'vamshicodes29@gmail.com');
+  if (vamshi) {
+    vamshi.role = 'admin';
+    vamshi.can_access_dashboard = true;
+    vamshi.subscription_status = 'active';
+  } else {
+    usersStore.set('admin-vamshicodes29-super-admin', {
+      id: 'admin-vamshicodes29-super-admin',
+      name: 'Vamshi (Admin)',
+      email: 'vamshicodes29@gmail.com',
+      password: 'vamshicodes@123',
+      role: 'admin',
+      subscription_status: 'active',
+      subscription_expires_at: new Date(Date.now() + 3650 * 86400000).toISOString(),
+      interviews_conducted_count: 0,
+      can_access_dashboard: true,
+      created_at: '2026-09-12T07:31:07.893Z',
+    });
+  }
 }
 
 function serializeDb() {
@@ -115,18 +167,65 @@ function hydrateStoresFromParsed(parsed: any) {
 
 /**
  * Upload the database snapshot to Supabase Cloud Storage (ace_db_sync bucket).
- * Guarantees cross-lambda persistence in serverless environments like Vercel.
+ * Merges any new remote records before uploading so concurrent lambdas never overwrite each other.
  */
 export async function syncToCloud(): Promise<void> {
   if (!isSupabaseConfigured() || !supabaseAdmin) return;
   try {
+    // 1. Download current cloud snapshot and merge to avoid wiping out concurrent entries
+    try {
+      const { data } = await supabaseAdmin.storage
+        .from('ace_db_sync')
+        .download('ace_interview_db.json');
+      if (data) {
+        const text = await data.text();
+        const remote = JSON.parse(text);
+        if (remote.users && Array.isArray(remote.users)) {
+          for (const [k, v] of remote.users) {
+            if (!usersStore.has(k)) {
+              usersStore.set(k, v);
+            }
+          }
+        }
+        if (remote.sessions && Array.isArray(remote.sessions)) {
+          for (const [k, v] of remote.sessions) {
+            if (!sessionsStore.has(k)) {
+              sessionsStore.set(k, v);
+            }
+          }
+        }
+        if (remote.interviews && Array.isArray(remote.interviews)) {
+          for (const [k, v] of remote.interviews) {
+            if (!interviewsStore.has(k)) {
+              interviewsStore.set(k, v);
+            }
+          }
+        }
+        if (remote.feedback && Array.isArray(remote.feedback)) {
+          for (const [k, v] of remote.feedback) {
+            if (!feedbackStore.has(k)) {
+              feedbackStore.set(k, v);
+            }
+          }
+        }
+      }
+    } catch (_) {}
+
+    // Always guarantee Super Admin vamshicodes29@gmail.com is present
+    ensureSuperAdminExists();
+
     const payload = serializeDb();
-    await supabaseAdmin.storage
+    const { error: uploadError } = await supabaseAdmin.storage
       .from('ace_db_sync')
       .upload('ace_interview_db.json', JSON.stringify(payload, null, 2), {
         upsert: true,
         contentType: 'application/json',
       });
+    if (uploadError) {
+      console.error('[Cloud Sync] Upload error to Supabase storage:', uploadError);
+    } else {
+      console.log(`[Cloud Sync] Upload success (${usersStore.size} users, ${interviewsStore.size} interviews)`);
+    }
   } catch (err) {
     console.warn('[Cloud Sync] Upload error (non-fatal):', err);
   }
@@ -152,7 +251,7 @@ export async function syncFromCloud(force: boolean = false): Promise<boolean> {
       .from('ace_db_sync')
       .download('ace_interview_db.json');
     const timeoutPromise = new Promise<{ data: null; error: Error }>((resolve) =>
-      setTimeout(() => resolve({ data: null, error: new Error('Cloud sync timeout') }), 3500)
+      setTimeout(() => resolve({ data: null, error: new Error('Cloud sync timeout') }), 5000)
     );
 
     const { data, error } = (await Promise.race([downloadPromise, timeoutPromise])) as any;
@@ -163,6 +262,7 @@ export async function syncFromCloud(force: boolean = false): Promise<boolean> {
     const text = await data.text();
     const parsed = JSON.parse(text);
     hydrateStoresFromParsed(parsed);
+    ensureSuperAdminExists();
     lastCloudSyncTime = Date.now();
     return true;
   } catch (err) {
@@ -215,7 +315,7 @@ function loadDbFromDisk(): boolean {
     const raw = fs.readFileSync(readPath, 'utf8');
     const parsed = JSON.parse(raw);
     hydrateStoresFromParsed(parsed);
-    console.log(`[DB Persistence] Successfully hydrated database: ${usersStore.size} users, ${interviewsStore.size} interviews.`);
+    ensureSuperAdminExists();
     return true;
   } catch (err) {
     console.warn('[DB Persistence] Failed to load db from disk:', err);
@@ -229,29 +329,8 @@ const initSeedData = () => {
   if (isInitialized) return;
   isInitialized = true;
 
-  const loaded = loadDbFromDisk();
-
-  // Always ensure vamshicodes29@gmail.com has super-admin rights
-  const vamshiCodes = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === 'vamshicodes29@gmail.com');
-  if (vamshiCodes) {
-    vamshiCodes.role = 'admin';
-    vamshiCodes.can_access_dashboard = true;
-    vamshiCodes.subscription_status = 'active';
-    vamshiCodes.subscription_expires_at = new Date(Date.now() + 3650 * 86400000).toISOString();
-  } else {
-    usersStore.set('admin-vamshicodes29-super-admin', {
-      id: 'admin-vamshicodes29-super-admin',
-      name: 'Vamshi (Admin)',
-      email: 'vamshicodes29@gmail.com',
-      password: 'vamshicodes@123',
-      role: 'admin',
-      subscription_status: 'active',
-      subscription_expires_at: new Date(Date.now() + 3650 * 86400000).toISOString(),
-      interviews_conducted_count: 0,
-      can_access_dashboard: true,
-      created_at: new Date().toISOString(),
-    });
-  }
+  loadDbFromDisk();
+  ensureSuperAdminExists();
 
   // Seed Job & Hiring Intelligence modules if empty
   if (jobNewsStore.size === 0) {
@@ -263,326 +342,36 @@ const initSeedData = () => {
   if (liveJobsStore.size === 0) {
     INITIAL_LIVE_JOBS.forEach((j) => liveJobsStore.set(j.id, j));
   }
-
-  if (loaded && usersStore.size > 1) return;
-
-  if (usersStore.size <= 1) {
-    // Seed Platform Administrator
-    usersStore.set('admin-0000-0000-0000-000000000001', {
-      id: 'admin-0000-0000-0000-000000000001',
-      name: 'Platform Administrator',
-      email: 'admin@aceinterview.ai',
-      password: 'admin123',
-      role: 'admin',
-      subscription_status: 'active',
-      subscription_expires_at: new Date(Date.now() + 365 * 86400000).toISOString(),
-      interviews_conducted_count: 0,
-      can_access_dashboard: true,
-      created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
-    });
-
-    // Seed Demo Candidate (Rahul Verma)
-    usersStore.set('user-0000-0000-0000-000000000001', {
-      id: 'user-0000-0000-0000-000000000001',
-      name: 'Rahul Verma',
-      email: 'candidate@aceinterview.ai',
-      password: 'demo123',
-      role: 'user',
-      subscription_status: 'free_trial',
-      interviews_conducted_count: 1, // Already completed 1 free trial interview
-      can_access_dashboard: false,
-      created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-    });
-
-    // Seed Priya Patel (Pro Member)
-    usersStore.set('user-0000-0000-0000-000000000002', {
-      id: 'user-0000-0000-0000-000000000002',
-      name: 'Priya Patel',
-      email: 'priya.patel@aceinterview.ai',
-      password: 'demo123',
-      role: 'user',
-      subscription_status: 'active',
-      subscription_expires_at: new Date(Date.now() + 25 * 86400000).toISOString(),
-      interviews_conducted_count: 2,
-      can_access_dashboard: false,
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    });
-
-    // Seed Rohan Verma (Free Trial)
-    usersStore.set('user-0000-0000-0000-000000000003', {
-      id: 'user-0000-0000-0000-000000000003',
-      name: 'Rohan Verma',
-      email: 'rohan.verma@aceinterview.ai',
-      password: 'demo123',
-      role: 'user',
-      subscription_status: 'free_trial',
-      interviews_conducted_count: 1,
-      can_access_dashboard: false,
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    });
-
-    // Seed Ananya Gupta (Pro Member)
-    usersStore.set('user-0000-0000-0000-000000000004', {
-      id: 'user-0000-0000-0000-000000000004',
-      name: 'Ananya Gupta',
-      email: 'ananya.gupta@aceinterview.ai',
-      password: 'demo123',
-      role: 'user',
-      subscription_status: 'active',
-      subscription_expires_at: new Date(Date.now() + 20 * 86400000).toISOString(),
-      interviews_conducted_count: 2,
-      can_access_dashboard: false,
-      created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
-    });
-
-    // Seed Karthik Rao (Free Trial)
-    usersStore.set('user-0000-0000-0000-000000000005', {
-      id: 'user-0000-0000-0000-000000000005',
-      name: 'Karthik Rao',
-      email: 'karthik.rao@aceinterview.ai',
-      password: 'demo123',
-      role: 'user',
-      subscription_status: 'free_trial',
-      interviews_conducted_count: 1,
-      can_access_dashboard: false,
-      created_at: new Date(Date.now() - 12 * 3600000).toISOString(),
-    });
-  }
-
-  if (studentsStore.size > 0) return;
-
-  const initialStudents: Student[] = [
-    {
-      id: 'user-0000-0000-0000-000000000001',
-      name: 'Rahul Verma',
-      branch: 'Computer Science & Engineering',
-      created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-    },
-    {
-      id: 'user-0000-0000-0000-000000000002',
-      name: 'Priya Patel',
-      branch: 'Information Technology',
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    },
-    {
-      id: 'user-0000-0000-0000-000000000003',
-      name: 'Rohan Verma',
-      branch: 'Computer Science & Engineering',
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    },
-    {
-      id: 'user-0000-0000-0000-000000000004',
-      name: 'Ananya Gupta',
-      branch: 'Data Science & AI',
-      created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
-    },
-    {
-      id: 'user-0000-0000-0000-000000000005',
-      name: 'Karthik Rao',
-      branch: 'Electronics & Communication',
-      created_at: new Date(Date.now() - 12 * 3600000).toISOString(),
-    },
-  ];
-
-  initialStudents.forEach((s) => studentsStore.set(s.id, s));
-
-  const initialInterviews: Interview[] = [
-    {
-      id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      student_id: 'user-0000-0000-0000-000000000001',
-      user_id: 'user-0000-0000-0000-000000000001',
-      target_role: 'sde',
-      project_title: 'Distributed E-Commerce Microservices',
-      tech_stack: 'React, Node.js, PostgreSQL, Redis, Docker',
-      project_description: 'A microservices architecture handling order placement, inventory reservations, and payment processing with high concurrency.',
-      duration_seconds: 540,
-      status: 'completed',
-      created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-      transcript: [
-        { sender: 'ai', text: 'Welcome Rahul. Could you walk me through the high-level architecture of your distributed e-commerce system and how services communicate?' },
-        { sender: 'user', text: 'We used an API gateway with separate auth, inventory, and order services communicating via gRPC and Redis Pub/Sub for notifications.' },
-        { sender: 'ai', text: 'Interesting. How do you handle distributed transaction failures between the order service and the payment processor?' },
-        { sender: 'user', text: 'We implemented a basic try-catch rollback in the backend service.' },
-        { sender: 'ai', text: 'In a microservices setup, a local try-catch cannot rollback remote database commits. Did you look into the Saga pattern or 2-Phase Commit?' },
-      ],
-    },
-    {
-      id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-      student_id: 'user-0000-0000-0000-000000000002',
-      user_id: 'user-0000-0000-0000-000000000002',
-      target_role: 'backend',
-      project_title: 'Real-Time Healthcare Patient Telemetry',
-      tech_stack: 'Next.js, FastAPI, PostgreSQL, WebSockets',
-      project_description: 'Streaming vital patient metrics from IoT ward devices to doctor dashboards with sub-second latency.',
-      duration_seconds: 610,
-      status: 'completed',
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-      transcript: [
-        { sender: 'ai', text: 'Welcome Priya. What made you choose WebSockets over Server-Sent Events for streaming patient telemetry data?' },
-        { sender: 'user', text: 'WebSockets allowed bidirectional heartbeats and alert acknowledgments directly from doctor terminals with lower latency.' },
-        { sender: 'ai', text: 'How do you structure your PostgreSQL indexes when queries require filtering the last 10 minutes of heart rates across 500 beds?' },
-      ],
-    },
-    {
-      id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
-      student_id: 'user-0000-0000-0000-000000000003',
-      user_id: 'user-0000-0000-0000-000000000003',
-      target_role: 'sde',
-      project_title: 'Algorithmic Crypto Arbitrage Engine',
-      tech_stack: 'Python, Go, Redis, TimescaleDB',
-      project_description: 'Detects cross-exchange price spreads and places low-latency atomic orders.',
-      duration_seconds: 480,
-      status: 'completed',
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-      transcript: [],
-    },
-    {
-      id: 'dddddddd-dddd-dddd-dddd-dddddddddddd',
-      student_id: 'user-0000-0000-0000-000000000004',
-      user_id: 'user-0000-0000-0000-000000000004',
-      target_role: 'ai_ml',
-      project_title: 'Campus Placement Automation Portal',
-      tech_stack: 'React, Express, MongoDB, AWS S3',
-      project_description: 'Manages student resume verification, company interview scheduling, and placement reporting.',
-      duration_seconds: 520,
-      status: 'completed',
-      created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
-      transcript: [],
-    },
-    {
-      id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
-      student_id: 'user-0000-0000-0000-000000000005',
-      user_id: 'user-0000-0000-0000-000000000005',
-      target_role: 'fullstack',
-      project_title: 'Smart Agriculture IoT Crop Monitoring',
-      tech_stack: 'Flutter, Node.js, MQTT, InfluxDB',
-      project_description: 'Soil moisture, UV, and temperature sensors reporting field health to farmers via edge computing.',
-      duration_seconds: 390,
-      status: 'completed',
-      created_at: new Date(Date.now() - 12 * 3600000).toISOString(),
-      transcript: [],
-    },
-  ];
-
-  initialInterviews.forEach((i) => interviewsStore.set(i.id, i));
-
-  const initialFeedback: FeedbackReport[] = [
-    {
-      id: 'faaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      interview_id: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      technical_score: 7,
-      communication_score: 8,
-      confidence_score: 7,
-      overall_verdict: 'Hire',
-      strengths: [
-        'Clear explanation of microservice boundaries and gRPC contracts',
-        'Articulate breakdown of cache invalidation strategy with Redis',
-        'Structured problem-solving mindset when explaining system architecture',
-      ],
-      improvements: [
-        'Struggled to articulate Saga pattern vs 2-Phase Commit when asked about distributed rollback',
-        'Fumbled when asked how auth JWT tokens are invalidated on immediate logout',
-      ],
-      practice_plan: [
-        'Review JWT token revocation strategies: Redis token blocklisting vs short TTL refresh tokens',
-        'Study Saga orchestration vs choreography patterns for distributed transaction management',
-        'Prepare a crisp 60-second STAR response describing the hardest bug solved in the order pipeline',
-      ],
-      topic_tags: ['Distributed Transactions', 'Authentication & JWT', 'Cache Invalidation'],
-      created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
-    },
-    {
-      id: 'fbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-      interview_id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-      technical_score: 8,
-      communication_score: 7,
-      confidence_score: 8,
-      overall_verdict: 'Strong Hire',
-      strengths: [
-        'Strong grasp of WebSocket backpressure and connection reconnection strategies',
-        'Good reasoning regarding relational integrity in PostgreSQL for patient vitals',
-      ],
-      improvements: [
-        'Could not explain composite B-Tree database indexing when queried on timeseries query latency',
-        'Used frequent filler words when describing socket connection drops',
-      ],
-      practice_plan: [
-        'Deep dive into PostgreSQL EXPLAIN ANALYZE and composite index order (bed_id, recorded_at)',
-        'Practice concise vocal delivery when answering fallback failure scenarios',
-      ],
-      topic_tags: ['Database Indexing', 'Concurrency', 'Error Handling'],
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    },
-    {
-      id: 'fccccccc-cccc-cccc-cccc-cccccccccccc',
-      interview_id: 'cccccccc-cccc-cccc-cccc-cccccccccccc',
-      technical_score: 6,
-      communication_score: 6,
-      confidence_score: 5,
-      overall_verdict: 'Borderline',
-      strengths: [
-        'Good understanding of order book data structures and Go goroutines',
-      ],
-      improvements: [
-        'Severe gap in thread safety and race conditions under high throughput',
-        'Hesitant when asked to calculate memory footprint of in-memory queues',
-      ],
-      practice_plan: [
-        'Study Go sync.Mutex vs atomic operations and race detector',
-        'Prepare concrete memory calculation examples for interview questions',
-      ],
-      topic_tags: ['Concurrency', 'System Design', 'Memory Management'],
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
-    },
-    {
-      id: 'fddddddd-dddd-dddd-dddd-dddddddddddd',
-      interview_id: 'dddddddd-dddd-dddd-dddd-dddddddddddd',
-      technical_score: 5,
-      communication_score: 7,
-      confidence_score: 6,
-      overall_verdict: 'Borderline',
-      strengths: [
-        'Pleasant communication pace and structured walk-through of the student workflow',
-      ],
-      improvements: [
-        'Used textbook answers for MongoDB schema design without justifying why NoSQL was chosen over relational',
-        'Could not explain how S3 presigned URLs prevent unauthorized resume access',
-      ],
-      practice_plan: [
-        'Study NoSQL vs SQL trade-offs with concrete access pattern analysis',
-        'Implement and explain presigned S3 upload security in a mock repo',
-      ],
-      topic_tags: ['Database Indexing', 'API Security', 'System Design'],
-      created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
-    },
-    {
-      id: 'feeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
-      interview_id: 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
-      technical_score: 7,
-      communication_score: 6,
-      confidence_score: 6,
-      overall_verdict: 'Hire',
-      strengths: [
-        'Solid understanding of MQTT broker QoS levels and sensor battery constraints',
-      ],
-      improvements: [
-        'Lacked clarity on time-series database retention policies and aggregation rollups',
-        'Stumbled when asked how sensor payloads are sanitized before ingestion',
-      ],
-      practice_plan: [
-        'Review InfluxDB continuous queries and downsampling',
-        'Study API input validation and MQTT payload encryption with TLS',
-      ],
-      topic_tags: ['API Security', 'System Design', 'Time-series Storage'],
-      created_at: new Date(Date.now() - 12 * 3600000).toISOString(),
-    },
-  ];
-
-  initialFeedback.forEach((f) => feedbackStore.set(f.interview_id, f));
-  persistDbToDisk(true);
+  // IMPORTANT: Do NOT call persistDbToDisk(true) or syncToCloud() here!
+  // This prevents cold serverless lambdas from overwriting cloud storage upon initial import.
 };
 
-initSeedData();
+export async function resetAllUserData() {
+  studentsStore.clear();
+  interviewsStore.clear();
+  feedbackStore.clear();
+  usersStore.clear();
+  sessionsStore.clear();
+  paymentsStore.clear();
+
+  // Root Super Administrator: vamshicodes29@gmail.com
+  ensureSuperAdminExists();
+
+  // Re-seed jobs and companies if empty
+  if (jobNewsStore.size === 0) {
+    INITIAL_JOB_NEWS.forEach((n) => jobNewsStore.set(n.id, n));
+  }
+  if (companiesStore.size === 0) {
+    INITIAL_COMPANIES.forEach((c) => companiesStore.set(c.id, c));
+  }
+  if (liveJobsStore.size === 0) {
+    INITIAL_LIVE_JOBS.forEach((j) => liveJobsStore.set(j.id, j));
+  }
+
+  persistDbToDisk(true);
+  await syncToCloud();
+  console.log('[DB Reset] Successfully purged all user data. vamshicodes29@gmail.com is initialized as root admin.');
+}
 
 // Student operations
 export async function createStudent(name: string, branch: string): Promise<Student> {
@@ -849,6 +638,74 @@ export async function getDepartmentMetrics(): Promise<DepartmentMetrics> {
   };
 }
 
+export interface CandidateInterviewHistoryItem {
+  interviewId: string;
+  createdAt: string;
+  targetRole: string;
+  persona: 'alex' | 'sophia';
+  projectTitle: string;
+  status: string;
+  technicalScore: number;
+  communicationScore: number;
+  overallScore: number;
+  verdict: string;
+  strengths: string[];
+  improvements: string[];
+}
+
+export async function getUserInterviewHistory(
+  userId?: string,
+  email?: string,
+  name?: string
+): Promise<CandidateInterviewHistoryItem[]> {
+  initSeedData();
+  await syncFromCloud();
+
+  const matchingStudentIds = new Set<string>();
+  if (userId) matchingStudentIds.add(userId);
+
+  for (const s of studentsStore.values()) {
+    if (
+      (userId && s.id === userId) ||
+      (name && s.name?.toLowerCase().trim() === name.toLowerCase().trim())
+    ) {
+      matchingStudentIds.add(s.id);
+    }
+  }
+
+  const results: CandidateInterviewHistoryItem[] = [];
+
+  for (const inv of interviewsStore.values()) {
+    const matchesUser =
+      (userId && inv.user_id === userId) ||
+      (inv.student_id && matchingStudentIds.has(inv.student_id));
+
+    if (matchesUser) {
+      const report = feedbackStore.get(inv.id);
+      const tech = report?.technical_score ?? 0;
+      const comm = report?.communication_score ?? 0;
+      const overall = tech && comm ? Math.round(((tech + comm) / 2) * 10) / 10 : (tech || comm || 0);
+
+      results.push({
+        interviewId: inv.id,
+        createdAt: inv.created_at,
+        targetRole: inv.target_role || 'sde',
+        persona: inv.interviewer_persona || 'alex',
+        projectTitle: inv.project_title || 'General Engineering Assessment',
+        status: inv.status,
+        technicalScore: tech,
+        communicationScore: comm,
+        overallScore: overall,
+        verdict: report?.overall_verdict || (inv.status === 'completed' ? 'Completed' : 'In Progress'),
+        strengths: report?.strengths || [],
+        improvements: report?.improvements || [],
+      });
+    }
+  }
+
+  return results.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // User Authentication, Subscriptions & Permissions
@@ -863,10 +720,17 @@ export async function createUser(
   initSeedData();
   const normalizedEmail = email.toLowerCase().trim();
 
-  // Check in-memory, and if not found, double check cloud before throwing
+  // Always pull latest cloud state before checking duplication or inserting
+  await syncFromCloud(true);
+
   for (const u of usersStore.values()) {
     if (u.email.toLowerCase() === normalizedEmail) {
-      throw new Error('An account with this email already exists.');
+      if (password) {
+        u.password = password;
+        persistDbToDisk(true);
+        await syncToCloud();
+      }
+      return sanitizeUser(u);
     }
   }
 
@@ -881,13 +745,14 @@ export async function createUser(
     subscription_status: isSuperAdmin ? 'active' : 'free_trial',
     subscription_expires_at: isSuperAdmin ? new Date(Date.now() + 365 * 86400000).toISOString() : undefined,
     interviews_conducted_count: 0,
-    can_access_dashboard: isSuperAdmin || role === 'admin' || role === 'college_admin',
+    can_access_dashboard: isSuperAdmin,
     created_at: new Date().toISOString(),
   };
 
   usersStore.set(newUser.id, newUser);
   persistDbToDisk(true);
   await syncToCloud();
+  console.log(`[AUTH] Successfully registered new user: ${normalizedEmail} (Total users: ${usersStore.size})`);
   return sanitizeUser(newUser);
 }
 
@@ -898,43 +763,64 @@ export async function authenticateUser(
   initSeedData();
   const normalizedEmail = email.toLowerCase().trim();
 
+  await syncFromCloud(true);
   let targetUser = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === normalizedEmail);
+
   if (!targetUser) {
-    // If not in current memory, pull latest cloud snapshot (friend may have registered on another serverless lambda)
-    await syncFromCloud(true);
-    targetUser = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === normalizedEmail);
+    return null;
   }
 
-  if (targetUser) {
-    if (password && targetUser.password && targetUser.password !== password) {
-      return null;
-    }
-
-    // Elevate super admin if matches admin list
-    if (isSuperAdminEmail(normalizedEmail)) {
-      targetUser.role = 'admin';
-      targetUser.can_access_dashboard = true;
-      targetUser.subscription_status = 'active';
-      targetUser.subscription_expires_at = new Date(Date.now() + 3650 * 86400000).toISOString();
-    }
-
-    const token = `vantage_token_${crypto.randomUUID()}`;
-    sessionsStore.set(token, {
-      userId: targetUser.id,
-      expiresAt: Date.now() + 30 * 86400000,
-    });
-    persistDbToDisk(true);
-    await syncToCloud();
-    return { user: sanitizeUser(targetUser), token };
+  if (password && targetUser.password && targetUser.password !== password) {
+    return null;
   }
-  return null;
+
+  // Elevate super admin if matches admin list
+  if (isSuperAdminEmail(normalizedEmail)) {
+    targetUser.role = 'admin';
+    targetUser.can_access_dashboard = true;
+    targetUser.subscription_status = 'active';
+    targetUser.subscription_expires_at = new Date(Date.now() + 3650 * 86400000).toISOString();
+  }
+
+  // Generate self-verifying, cryptographically signed token
+  const token = createSessionToken(targetUser.id, targetUser.email, targetUser.role);
+  sessionsStore.set(token, {
+    userId: targetUser.id,
+    expiresAt: Date.now() + 30 * 86400000,
+  });
+  persistDbToDisk(true);
+  await syncToCloud();
+  return { user: sanitizeUser(targetUser), token };
 }
 
 // ─── OTP Verification System ────────────────────────────────────────────────
+export function createOtpSignature(email: string, otp: string, expiresAt: number): string {
+  const payload = `${email.toLowerCase().trim()}:${otp.trim()}:${expiresAt}`;
+  const hmac = crypto.createHmac('sha256', SESSION_SECRET).update(payload).digest('hex');
+  return `${payload}:${hmac}`;
+}
+
+export function verifyOtpSignature(email: string, code: string, signatureToken?: string): boolean {
+  try {
+    if (!signatureToken) return false;
+    const parts = signatureToken.split(':');
+    if (parts.length !== 4) return false;
+    const [sigEmail, sigOtp, sigExpiresAt, sigHmac] = parts;
+    if (sigEmail.toLowerCase().trim() !== email.toLowerCase().trim()) return false;
+    if (sigOtp.trim() !== code.trim()) return false;
+    if (Date.now() > Number(sigExpiresAt)) return false;
+    const payload = `${sigEmail}:${sigOtp}:${sigExpiresAt}`;
+    const expected = crypto.createHmac('sha256', SESSION_SECRET).update(payload).digest('hex');
+    return sigHmac === expected;
+  } catch {
+    return false;
+  }
+}
+
 export async function generateAndSaveOtp(
   email: string,
   purpose: 'login' | 'signup' = 'login'
-): Promise<string> {
+): Promise<{ otp: string; signatureToken: string; expiresAt: number }> {
   initSeedData();
   const normalizedEmail = email.toLowerCase().trim();
   // Generate random 6-digit numeric code
@@ -942,18 +828,27 @@ export async function generateAndSaveOtp(
   const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes validity
 
   otpStore.set(normalizedEmail, { otp, expiresAt, purpose });
+  const signatureToken = createOtpSignature(normalizedEmail, otp, expiresAt);
   console.log(`[AUTH OTP] Generated 6-digit code for ${normalizedEmail} (${purpose}): ${otp}`);
-  return otp;
+  return { otp, signatureToken, expiresAt };
 }
 
 export async function verifyOtpCode(
   email: string,
-  code: string
+  code: string,
+  signatureToken?: string
 ): Promise<{ valid: boolean; reason?: string }> {
   initSeedData();
   const normalizedEmail = email.toLowerCase().trim();
   const trimmedCode = (code || '').trim();
 
+  // 1. Check stateless cryptographic signature first (reliable across multiple serverless lambdas)
+  if (signatureToken && verifyOtpSignature(normalizedEmail, trimmedCode, signatureToken)) {
+    otpStore.delete(normalizedEmail);
+    return { valid: true };
+  }
+
+  // 2. Fallback to in-memory store
   const entry = otpStore.get(normalizedEmail);
   if (!entry) {
     return { valid: false, reason: 'No OTP requested for this email or it has expired. Please tap resend.' };
@@ -975,27 +870,68 @@ export async function verifyOtpCode(
 
 export async function getUserByToken(token: string): Promise<User | null> {
   initSeedData();
-  let session = sessionsStore.get(token);
-  if (!session) {
-    await syncFromCloud();
-    session = sessionsStore.get(token);
+
+  // 1. Verify signed token cryptographically
+  const verified = verifySessionToken(token);
+  let userId = verified?.userId;
+  let userEmail = verified?.email;
+
+  // 2. Fallback to sessionsStore if older token
+  if (!userId) {
+    let session = sessionsStore.get(token);
+    if (!session) {
+      await syncFromCloud(true);
+      session = sessionsStore.get(token);
+    }
+    if (session && session.expiresAt >= Date.now()) {
+      userId = session.userId;
+    }
   }
-  if (!session) {
-    loadDbFromDisk();
-    session = sessionsStore.get(token);
+
+  if (!userId && !userEmail) return null;
+
+  // 3. Find user in memory
+  let user = userId ? usersStore.get(userId) : null;
+  if (!user && userEmail) {
+    user = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === userEmail.toLowerCase());
   }
-  if (!session) return null;
-  if (session.expiresAt < Date.now()) {
-    sessionsStore.delete(token);
-    persistDbToDisk(true);
-    return null;
+
+  // 4. If not found in current memory, sync from cloud
+  if (!user) {
+    await syncFromCloud(true);
+    user = userId ? usersStore.get(userId) : null;
+    if (!user && userEmail) {
+      user = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === userEmail.toLowerCase());
+    }
   }
-  const user = usersStore.get(session.userId);
+
+  // 5. Guarantee super admin privileges
   if (user && isSuperAdminEmail(user.email)) {
     user.role = 'admin';
     user.can_access_dashboard = true;
     user.subscription_status = 'active';
+  } else if (!user && userEmail && isSuperAdminEmail(userEmail)) {
+    ensureSuperAdminExists();
+    user = usersStore.get('admin-vamshicodes29-super-admin') || null;
   }
+
+  // 6. Resilient Serverless Fallback: If user not yet loaded into this lambda container but token is cryptographically verified
+  if (!user && verified) {
+    const isSuperAdmin = isSuperAdminEmail(verified.email);
+    const restoredUser: User = {
+      id: verified.userId || `user-${Date.now()}`,
+      name: verified.email.split('@')[0],
+      email: verified.email,
+      role: isSuperAdmin ? 'admin' : ((verified.role as any) || 'user'),
+      subscription_status: isSuperAdmin ? 'active' : 'free_trial',
+      can_access_dashboard: isSuperAdmin,
+      interviews_conducted_count: 0,
+      created_at: new Date().toISOString(),
+    };
+    usersStore.set(restoredUser.id, restoredUser);
+    return sanitizeUser(restoredUser);
+  }
+
   return user ? sanitizeUser(user) : null;
 }
 
@@ -1003,7 +939,7 @@ export async function getUserById(id: string): Promise<User | null> {
   initSeedData();
   let user = usersStore.get(id);
   if (!user) {
-    await syncFromCloud();
+    await syncFromCloud(true);
     user = usersStore.get(id);
   }
   if (user && isSuperAdminEmail(user.email)) {
@@ -1019,7 +955,7 @@ export async function getUserByEmail(email: string): Promise<User | null> {
   const normalizedEmail = email.toLowerCase().trim();
   let user = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === normalizedEmail);
   if (!user) {
-    await syncFromCloud();
+    await syncFromCloud(true);
     user = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === normalizedEmail);
   }
   if (user) {
@@ -1053,24 +989,27 @@ export async function updateUserPassword(email: string, newPassword: string): Pr
 
 export async function getAllUsers(): Promise<User[]> {
   initSeedData();
-  await syncFromCloud();
+  await syncFromCloud(true);
   return Array.from(usersStore.values()).map(sanitizeUser);
 }
 
 /**
- * Super Admin user inspection: includes raw password/credentials as stored in DB
- * so the super-admin can manage and verify accounts directly.
+ * Super Admin user inspection: returns complete user list with role, access flags,
+ * and plain_password so the platform owner (vamshicodes29@gmail.com) can manage accounts.
  */
 export async function getAllUsersForAdmin(): Promise<User[]> {
   initSeedData();
-  await syncFromCloud();
+  await syncFromCloud(true);
   return Array.from(usersStore.values()).map((u) => {
     if (isSuperAdminEmail(u.email)) {
       u.role = 'admin';
       u.can_access_dashboard = true;
       u.subscription_status = 'active';
     }
-    return { ...u };
+    return {
+      ...u,
+      plain_password: u.password || '••••••••',
+    };
   });
 }
 

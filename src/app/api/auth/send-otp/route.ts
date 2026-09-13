@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       }
     }
 
-    const otp = await generateAndSaveOtp(normalizedEmail, purpose);
+    const { otp, signatureToken } = await generateAndSaveOtp(normalizedEmail, purpose);
 
     let emailDelivered = false;
     let deliveryProvider = '';
@@ -123,30 +123,31 @@ export async function POST(req: Request) {
               </div>
 
               <p style="color: #64748b; font-size: 12px; text-align: center; margin: 0; line-height: 1.5;">
-                If you did not request this security code, please disregard this email. Your account remains completely secure.
+                If you did not request this verification code, you can safely disregard this message.
               </p>
             </div>
           `,
         });
         emailDelivered = true;
-        deliveryProvider = 'SMTP (Nodemailer)';
-        console.log(`[Email] OTP email successfully sent via SMTP to ${normalizedEmail}`);
+        deliveryProvider = 'Nodemailer/SMTP';
+        console.log(`[Email] OTP successfully dispatched via SMTP to ${normalizedEmail}`);
       } catch (smtpErr: any) {
         console.warn('[Email] SMTP delivery failed:', smtpErr?.message || smtpErr);
       }
     }
 
-    // 2. Try Resend if SMTP is not configured or failed
+    // 2. Fallback to Resend API
     if (!emailDelivered && resend) {
       try {
-        const fromAddress = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+        const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
         const resendResult = await resend.emails.send({
-          from: fromAddress,
+          from: fromEmail,
           to: [normalizedEmail],
-          subject: `🔐 Your AceInterview.ai Verification Code: ${otp}`,
+          subject: emailSubject,
           html: `
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0b0f19; color: #f1f5f9; padding: 40px 24px; border-radius: 16px; max-width: 520px; margin: auto; border: 1px solid #1e293b;">
-              <h2 style="color: #6366f1; margin-bottom: 8px;">AceInterview.ai Security Verification</h2>
+            <div style="font-family: sans-serif; background: #0b0f19; color: #f1f5f9; padding: 32px; border-radius: 12px; max-width: 500px; margin: auto;">
+              <h2 style="color: #6366f1;">AceInterview.ai</h2>
+              <p style="color: #cbd5e1; font-size: 16px;">${emailHeader}</p>
               <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px;">Your 6-digit one-time passcode is below:</p>
               <div style="background: rgba(99, 102, 241, 0.12); border: 2px dashed #6366f1; padding: 18px 24px; text-align: center; border-radius: 12px;">
                 <span style="font-size: 38px; font-weight: 800; letter-spacing: 10px; color: #38bdf8; font-family: monospace;">${otp}</span>
@@ -177,11 +178,22 @@ export async function POST(req: Request) {
     console.log(`   Delivered: ${emailDelivered ? `YES (${deliveryProvider})` : 'NO (Email credentials required)'}`);
     console.log(`=======================================================`);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: `A 6-digit verification code has been sent to ${normalizedEmail}. Please check your inbox or spam folder.`,
       emailDelivered,
+      signatureToken,
     });
+
+    response.cookies.set('vantage_pending_otp', signatureToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 10 * 60, // 10 minutes
+    });
+
+    return response;
   } catch (err: any) {
     console.error('Send OTP error:', err);
     return NextResponse.json(

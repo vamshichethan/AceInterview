@@ -28,7 +28,15 @@ export async function POST(req: Request) {
       );
     }
 
-    const isOtpValid = await verifyOtpCode(email, String(otp).trim());
+    const cookieHeader = req.headers.get('cookie') || '';
+    const pendingCookie = cookieHeader
+      .split(';')
+      .find((c) => c.trim().startsWith('vantage_pending_otp='))
+      ?.split('=')[1]
+      ?.trim();
+    const signatureToken = body.signatureToken || pendingCookie;
+
+    const isOtpValid = await verifyOtpCode(email, String(otp).trim(), signatureToken);
     if (!isOtpValid) {
       return NextResponse.json(
         { error: 'Invalid or expired 6-digit verification code. Please request a new OTP.' },
@@ -59,6 +67,7 @@ export async function POST(req: Request) {
       path: '/',
       maxAge: 30 * 86400, // 30 days
     });
+    response.cookies.delete('vantage_pending_otp');
 
     return response;
   } catch (err: any) {

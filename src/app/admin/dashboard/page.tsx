@@ -24,6 +24,7 @@ import {
   Calendar,
   ShieldAlert,
   Eye,
+  EyeOff,
   Briefcase,
   Plus,
   Trash2,
@@ -47,7 +48,9 @@ import { useAuth } from '@/context/AuthContext';
 import { CandidateDossierModal } from '@/components/CandidateDossierModal';
 
 export default function AdminDashboardPage() {
-  const { user, loading: authLoading, canAccessDashboard, logout } = useAuth();
+  const { user, loading: authLoading, logout } = useAuth();
+  // Exclusive Access: ONLY vamshicodes29@gmail.com can access the Placement Dashboard
+  const canAccessDashboard = Boolean(user && user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com');
   const [metrics, setMetrics] = useState<DepartmentMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,6 +65,10 @@ export default function AdminDashboardPage() {
   const [userSearchQuery, setUserSearchQuery] = useState('');
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
+
+  const togglePasswordVisibility = (userId: string) => {
+    setShowPasswords((prev) => ({ ...prev, [userId]: !prev[userId] }));
+  };
 
   // Jobs & News Management State
   const [jobsList, setJobsList] = useState<LiveJobPosting[]>([]);
@@ -93,10 +100,6 @@ export default function AdminDashboardPage() {
   const [newNewsSource, setNewNewsSource] = useState('');
   const [newNewsUrl, setNewNewsUrl] = useState('');
   const [newNewsFreshersOnly, setNewNewsFreshersOnly] = useState(false);
-
-  const togglePasswordVisibility = (userId: string) => {
-    setShowPasswords((prev) => ({ ...prev, [userId]: !prev[userId] }));
-  };
 
   const fetchUsers = async () => {
     try {
@@ -331,7 +334,7 @@ export default function AdminDashboardPage() {
             Sign In to Access Dashboard <ArrowUpRight className="w-4 h-4" />
           </Link>
           <div className="mt-5 pt-4 border-t border-slate-800/80 text-[11px] text-slate-500">
-            Placement Director / Admin: <span className="font-mono text-slate-300">admin@vantage.ai</span> (password: <span className="font-mono text-slate-300">admin123</span>)
+            Platform Super Administrator: <span className="font-mono text-indigo-400">vamshicodes29@gmail.com</span>
           </div>
         </div>
       </div>
@@ -356,7 +359,7 @@ export default function AdminDashboardPage() {
           <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-left text-xs text-slate-400 space-y-2 mb-6">
             <div className="font-semibold text-slate-200">How to get access:</div>
             <p>
-              &bull; The Platform Administrator (<span className="font-mono text-indigo-300">admin@vantage.ai</span>) has the power to grant your account instant 1-click Placement Dashboard access.
+              &bull; The Platform Administrator (<span className="font-mono text-indigo-300">vamshicodes29@gmail.com</span>) has the power to grant your account instant 1-click Placement Dashboard access.
             </p>
             <p>
               &bull; Once granted, you will be able to review candidate evaluations, technical scores, and manage curated job drives.
@@ -878,9 +881,9 @@ export default function AdminDashboardPage() {
                         u.email.toLowerCase().includes(userSearchQuery.toLowerCase())
                     )
                     .map((u) => {
-                      const isSuperAdmin = u.email === 'admin@vantage.ai';
+                      const isSuperAdmin = u.email.toLowerCase().trim() === 'vamshicodes29@gmail.com';
                       const isPro = u.subscription_status === 'active' || u.role === 'admin';
-                      const hasDashboard = Boolean(u.can_access_dashboard || u.role === 'admin');
+                      const hasDashboard = isSuperAdmin;
 
                       return (
                         <tr key={u.id} className="hover:bg-slate-800/40 transition">
@@ -903,20 +906,20 @@ export default function AdminDashboardPage() {
 
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-2 font-mono">
-                              <span className="text-slate-300 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                              <span className="text-slate-300 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800 text-[11px] font-semibold tracking-wider">
                                 {showPasswords[u.id] ? (
-                                  u.plain_password || '(unencrypted default)'
+                                  u.plain_password || u.password || '••••••••'
                                 ) : (
-                                  '&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;'
+                                  '••••••••'
                                 )}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => togglePasswordVisibility(u.id)}
-                                className="text-slate-500 hover:text-slate-300 transition"
-                                title={showPasswords[u.id] ? 'Hide password' : 'Show password'}
+                                className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition cursor-pointer"
+                                title={showPasswords[u.id] ? 'Hide password' : 'View password'}
                               >
-                                <Eye className="w-3.5 h-3.5" />
+                                {showPasswords[u.id] ? <EyeOff className="w-3.5 h-3.5 text-cyan-400" /> : <Eye className="w-3.5 h-3.5" />}
                               </button>
                             </div>
                           </td>
@@ -963,45 +966,34 @@ export default function AdminDashboardPage() {
 
                           <td className="py-3 px-4 text-right">
                             {!isSuperAdmin ? (
-                              <div className="inline-flex items-center gap-1.5">
-                                {/* Toggle Dashboard Power */}
-                                <button
-                                  type="button"
-                                  onClick={() => handleUserAction(u.id, 'toggle_dashboard', !hasDashboard)}
-                                  disabled={actionLoading === `${u.id}_toggle_dashboard`}
-                                  className={`p-1.5 rounded-lg border transition cursor-pointer ${
-                                    hasDashboard
-                                      ? 'text-cyan-400 bg-cyan-950/40 border-cyan-500/30 hover:bg-cyan-900/50'
-                                      : 'text-slate-400 bg-slate-900 border-slate-800 hover:text-white'
-                                  }`}
-                                  title={hasDashboard ? 'Revoke placement dashboard access' : 'Grant placement dashboard access'}
-                                >
-                                  {hasDashboard ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
-                                </button>
-
+                              <div className="inline-flex items-center gap-2">
                                 {/* Grant/Revoke Pro Subscription */}
                                 {!isPro ? (
                                   <button
                                     type="button"
                                     onClick={() => handleUserAction(u.id, 'grant_pro')}
                                     disabled={actionLoading === `${u.id}_grant_pro`}
-                                    className="px-2 py-1 rounded-lg text-[10px] font-bold text-emerald-300 bg-emerald-950/60 border border-emerald-500/30 hover:bg-emerald-900/60 transition cursor-pointer"
-                                    title="Upgrade to Pro unlimited pass"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-emerald-300 bg-emerald-950/70 border border-emerald-500/40 hover:bg-emerald-900/60 transition shadow-sm hover:scale-[1.02] cursor-pointer"
+                                    title="Promote candidate to Pro (Unlimited Interviews)"
                                   >
-                                    Grant Pro
+                                    <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                                    <span>Promote to Pro</span>
                                   </button>
                                 ) : (
-                                  u.role !== 'admin' && (
+                                  <div className="inline-flex items-center gap-1.5">
+                                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-500/20">
+                                      <CheckCircle2 className="w-3 h-3" /> Pro Active
+                                    </span>
                                     <button
                                       type="button"
                                       onClick={() => handleUserAction(u.id, 'revoke_pro')}
                                       disabled={actionLoading === `${u.id}_revoke_pro`}
-                                      className="px-2 py-1 rounded-lg text-[10px] text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-900 transition cursor-pointer"
+                                      className="px-2 py-1 rounded-md text-[10px] text-slate-500 hover:text-rose-400 hover:bg-rose-950/30 transition cursor-pointer"
                                       title="Revoke Pro pass"
                                     >
-                                      Revoke Pro
+                                      Revoke
                                     </button>
-                                  )
+                                  </div>
                                 )}
 
                                 {/* Reset Free Trial */}
@@ -1010,17 +1002,15 @@ export default function AdminDashboardPage() {
                                     type="button"
                                     onClick={() => handleUserAction(u.id, 'reset_trial')}
                                     disabled={actionLoading === `${u.id}_reset_trial`}
-                                    className="p-1 rounded-lg text-slate-400 hover:text-amber-300 hover:bg-slate-800 transition cursor-pointer"
-                                    title="Reset to 1 free interview trial"
+                                    className="p-1.5 rounded-md text-slate-500 hover:text-amber-300 hover:bg-amber-950/30 transition cursor-pointer"
+                                    title="Reset free trial limit"
                                   >
                                     <RefreshCw className="w-3.5 h-3.5" />
                                   </button>
                                 )}
                               </div>
                             ) : (
-                              <span className="text-[10px] text-slate-500 italic">
-                                Admin Delegated
-                              </span>
+                              <span className="text-[11px] text-slate-500 italic">Root Owner</span>
                             )}
                           </td>
                         </tr>

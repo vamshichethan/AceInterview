@@ -22,8 +22,16 @@ export async function POST(req: Request) {
 
     const normalizedEmail = email.toLowerCase().trim();
 
+    const cookieHeader = req.headers.get('cookie') || '';
+    const pendingCookie = cookieHeader
+      .split(';')
+      .find((c) => c.trim().startsWith('vantage_pending_otp='))
+      ?.split('=')[1]
+      ?.trim();
+    const signatureToken = body.signatureToken || pendingCookie;
+
     // 1. Verify the 6-digit OTP
-    const isValid = await verifyOtpCode(normalizedEmail, String(otp).trim());
+    const isValid = await verifyOtpCode(normalizedEmail, String(otp).trim(), signatureToken);
     if (!isValid) {
       return NextResponse.json(
         { error: 'Invalid or expired 6-digit verification code. Please request a new code.' },
