@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { JobNewsItem, CompanyProfile, LiveJobPosting, TargetRole, TARGET_ROLE_LABELS } from '@/lib/types';
 import { INITIAL_JOB_NEWS, INITIAL_COMPANIES, INITIAL_LIVE_JOBS } from '@/lib/jobs-seed';
+import { SectionPaywallGuard } from '@/components/SectionPaywallGuard';
 
 export default function JobsPage() {
   const [activeTab, setActiveTab] = useState<'jobs' | 'news' | 'companies'>('jobs');
@@ -132,7 +133,12 @@ export default function JobsPage() {
   }, [companies, selectedTrack, selectedExperience, freshersWelcomeOnly, selectedHiringStatus, selectedCompanyType, searchQuery]);
 
   return (
-    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-10">
+    <SectionPaywallGuard
+      sectionName="Jobs & News Feed"
+      sectionDescription="Real-time verified technical openings, campus drives, layoff alerts, and company hiring trends."
+      icon="jobs"
+    >
+      <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-10">
       {/* ── HERO BANNER ── */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
@@ -776,6 +782,7 @@ export default function JobsPage() {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </SectionPaywallGuard>
   );
 }

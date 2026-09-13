@@ -34,6 +34,7 @@ import {
   CuratedResource,
   CareerGuide,
 } from '@/lib/learning-data';
+import { SectionPaywallGuard } from '@/components/SectionPaywallGuard';
 
 export default function LearningModulePage() {
   const [activeTab, setActiveTab] = useState<string>('sde');
@@ -103,7 +104,12 @@ export default function LearningModulePage() {
   }, [currentTrack, completedTopics]);
 
   return (
-    <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-8">
+    <SectionPaywallGuard
+      sectionName="Learning Hub & Roadmaps"
+      sectionDescription="Structured engineering curriculum, video playlists, and vetted technical interview resources."
+      icon="learn"
+    >
+      <div className="min-h-screen py-8 md:py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-8">
       {/* Top Hero Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
@@ -602,6 +608,7 @@ export default function LearningModulePage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </SectionPaywallGuard>
   );
 }

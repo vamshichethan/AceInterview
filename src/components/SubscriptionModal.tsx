@@ -225,8 +225,11 @@ export function SubscriptionModal() {
                     </span>
                   </div>
                   <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
-                    Unlock Unlimited AI Interviews
+                    Unlock 30 Days Unlimited Access
                   </h2>
+                  <p className="text-xs text-slate-300 mt-1">
+                    Full unlimited access to <strong>Voice AI Interviews</strong>, <strong>Jobs &amp; News Feed</strong>, and <strong>Learning Hub Roadmaps</strong>.
+                  </p>
                 </div>
               </div>
 
@@ -298,6 +301,10 @@ export function SubscriptionModal() {
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-slate-400">Plan Access:</span>
                           <span className="font-semibold text-emerald-400">30 Days Pro Unlimited</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-slate-400">Coverage:</span>
+                          <span className="text-indigo-300 font-medium">Interviews, Jobs &amp; Learning Hub</span>
                         </div>
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-slate-400">Total Amount:</span>
