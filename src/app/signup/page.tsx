@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -8,7 +8,7 @@ import { Lock, Mail, User as UserIcon, ArrowRight, Sparkles, Loader2, ShieldChec
 
 export default function SignupPage() {
   const router = useRouter();
-  const { sendOtp, verifyOtp } = useAuth();
+  const { user, sendOtp, verifyOtp, loading: authLoading } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +17,17 @@ export default function SignupPage() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // If already authenticated, automatically redirect to workspace
+  useEffect(() => {
+    if (!authLoading && user) {
+      const destination =
+        user.role === 'admin' || user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com'
+          ? '/admin/dashboard'
+          : '/student/setup';
+      router.replace(destination);
+    }
+  }, [user, authLoading, router]);
 
   const handleSendSignupOtp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +80,38 @@ export default function SignupPage() {
       setError(res.error || 'Invalid or expired verification code.');
     }
   };
+
+  if (user) {
+    const destination =
+      user.role === 'admin' || user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com'
+        ? '/admin/dashboard'
+        : '/student/setup';
+
+    return (
+      <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md p-8 rounded-3xl bg-slate-900/90 border border-slate-800 text-center space-y-5 shadow-2xl">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
+            <CheckCircle2 className="w-7 h-7" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white">Already Registered &amp; Signed In</h3>
+            <p className="text-xs text-slate-400 mt-1">
+              You are signed in as <strong className="text-indigo-300">{user.name || user.email}</strong> ({user.email}).
+            </p>
+          </div>
+          <div className="pt-2 flex flex-col gap-2.5">
+            <button
+              type="button"
+              onClick={() => router.replace(destination)}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-teal-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-bold text-xs transition cursor-pointer shadow-lg shadow-indigo-600/20"
+            >
+              Continue to {user.role === 'admin' || user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com' ? 'Placement Dashboard' : 'Interview Hub'} &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">

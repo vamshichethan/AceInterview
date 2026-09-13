@@ -19,7 +19,16 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link
+          href={
+            user
+              ? user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com'
+                ? '/admin/dashboard'
+                : '/student/setup'
+              : '/'
+          }
+          className="flex items-center gap-3 group"
+        >
           <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform bg-white/5 border border-indigo-500/30 flex items-center justify-center p-0.5">
             <img src="/logo.png" alt="AceInterview.ai Logo" className="w-full h-full object-contain rounded-lg" />
           </div>

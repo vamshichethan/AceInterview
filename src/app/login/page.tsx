@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -11,9 +11,20 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || '/student/setup';
 
-  const { login, sendOtp } = useAuth();
+  const { user, login, sendOtp, loading: authLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  // If already authenticated, automatically redirect to workspace
+  useEffect(() => {
+    if (!authLoading && user) {
+      const destination =
+        user.role === 'admin' || user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com'
+          ? '/admin/dashboard'
+          : redirectUrl || '/student/setup';
+      router.replace(destination);
+    }
+  }, [user, authLoading, redirectUrl, router]);
   
   // View mode: 'login' (email + password) | 'forgot_password' (reset via OTP)
   const [mode, setMode] = useState<'login' | 'forgot_password'>('login');
@@ -118,6 +129,38 @@ function LoginForm() {
       setError(err?.message || 'Network error resetting password.');
     }
   };
+
+  if (user) {
+    const destination =
+      user.role === 'admin' || user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com'
+        ? '/admin/dashboard'
+        : redirectUrl || '/student/setup';
+
+    return (
+      <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md p-8 rounded-3xl bg-slate-900/90 border border-slate-800 text-center space-y-5 shadow-2xl">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
+            <CheckCircle2 className="w-7 h-7" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white">Already Signed In</h3>
+            <p className="text-xs text-slate-400 mt-1">
+              You are signed in as <strong className="text-indigo-300">{user.name || user.email}</strong> ({user.email}).
+            </p>
+          </div>
+          <div className="pt-2 flex flex-col gap-2.5">
+            <button
+              type="button"
+              onClick={() => router.replace(destination)}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 via-teal-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-bold text-xs transition cursor-pointer shadow-lg shadow-indigo-600/20"
+            >
+              Continue to {user.role === 'admin' || user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com' ? 'Placement Dashboard' : 'Interview Hub'} &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">

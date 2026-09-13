@@ -1,4 +1,8 @@
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 import {
   Mic,
   BarChart3,
@@ -24,6 +28,9 @@ import {
 } from 'lucide-react';
 
 export default function HomePage() {
+  const { user, isSubscribed, openSubscriptionModal } = useAuth();
+  const isAdmin = Boolean(user && user.email?.toLowerCase().trim() === 'vamshicodes29@gmail.com');
+
   return (
     <div className="flex flex-col items-center justify-center py-10 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full space-y-24">
       {/* ── HERO SECTION ── */}
@@ -53,23 +60,57 @@ export default function HomePage() {
 
         {/* CTAs */}
         <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="/signup?redirect=/student/setup"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 via-teal-600 to-emerald-600 hover:from-indigo-500 hover:via-teal-500 hover:to-emerald-500 transition-all shadow-xl shadow-indigo-600/25 hover:scale-[1.02] text-sm sm:text-base group"
-          >
-            <Mic className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-            <span>Claim 1 Free Interview (Sign Up)</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          {user ? (
+            <>
+              <Link
+                href={isAdmin ? '/admin/dashboard' : '/student/setup'}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 via-teal-600 to-emerald-600 hover:from-indigo-500 hover:via-teal-500 hover:to-emerald-500 transition-all shadow-xl shadow-indigo-600/25 hover:scale-[1.02] text-sm sm:text-base group"
+              >
+                <Mic className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+                <span>{isAdmin ? 'Enter Placement Dashboard' : 'Launch Technical Interview'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
 
-          <Link
-            href="/login?redirect=/student/setup"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold text-slate-200 bg-slate-900/90 border border-slate-800 hover:bg-slate-800 hover:text-white transition-all text-sm sm:text-base"
-          >
-            <span>Candidate Sign In</span>
-            <ChevronRight className="w-4 h-4 text-slate-400" />
-          </Link>
+              <Link
+                href="/student/setup"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold text-slate-200 bg-slate-900/90 border border-slate-800 hover:bg-slate-800 hover:text-white transition-all text-sm sm:text-base"
+              >
+                <span>Candidate Workspace</span>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/signup?redirect=/student/setup"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 via-teal-600 to-emerald-600 hover:from-indigo-500 hover:via-teal-500 hover:to-emerald-500 transition-all shadow-xl shadow-indigo-600/25 hover:scale-[1.02] text-sm sm:text-base group"
+              >
+                <Mic className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+                <span>Claim 1 Free Interview (Sign Up)</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <Link
+                href="/login?redirect=/student/setup"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-semibold text-slate-200 bg-slate-900/90 border border-slate-800 hover:bg-slate-800 hover:text-white transition-all text-sm sm:text-base"
+              >
+                <span>Candidate Sign In</span>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </Link>
+            </>
+          )}
         </div>
+
+        {user && (
+          <div className="pt-2 flex items-center justify-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 text-slate-300 text-xs font-medium shadow-inner">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>
+                Signed in as <strong className="text-white">{user.name || user.email}</strong>
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Value Micro-Pills */}
         <div className="pt-5 flex flex-wrap items-center justify-center gap-6 text-slate-400 text-xs sm:text-sm font-semibold">
@@ -288,12 +329,21 @@ export default function HomePage() {
               </ul>
             </div>
 
-            <Link
-              href="/signup"
-              className="mt-6 w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs text-center transition-colors"
-            >
-              Get Started for Free
-            </Link>
+            {user ? (
+              <Link
+                href="/student/setup"
+                className="mt-6 w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs text-center transition-colors block"
+              >
+                Go to Candidate Hub
+              </Link>
+            ) : (
+              <Link
+                href="/signup"
+                className="mt-6 w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs text-center transition-colors block"
+              >
+                Get Started for Free
+              </Link>
+            )}
           </div>
 
           {/* Plan 2: AceInterview Pro (₹99/mo) */}
@@ -339,12 +389,31 @@ export default function HomePage() {
               </ul>
             </div>
 
-            <Link
-              href="/signup"
-              className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-teal-500 hover:from-indigo-500 hover:to-teal-400 text-white font-bold text-xs text-center transition-all shadow-lg shadow-indigo-600/30"
-            >
-              Subscribe to Pro — ₹99/mo
-            </Link>
+            {user ? (
+              isSubscribed ? (
+                <Link
+                  href="/student/setup"
+                  className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-bold text-xs text-center transition-all shadow-lg shadow-emerald-600/30 block"
+                >
+                  ✓ Pro Unlimited Active — Practice Now
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={openSubscriptionModal}
+                  className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-teal-500 hover:from-indigo-500 hover:to-teal-400 text-white font-bold text-xs text-center transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
+                >
+                  Upgrade to Pro — ₹99/mo
+                </button>
+              )
+            ) : (
+              <Link
+                href="/signup"
+                className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-teal-500 hover:from-indigo-500 hover:to-teal-400 text-white font-bold text-xs text-center transition-all shadow-lg shadow-indigo-600/30 block"
+              >
+                Subscribe to Pro — ₹99/mo
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -362,10 +431,10 @@ export default function HomePage() {
         </p>
         <div className="pt-2">
           <Link
-            href="/student/setup"
+            href={user ? (isAdmin ? "/admin/dashboard" : "/student/setup") : "/student/setup"}
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-600/30 text-sm"
           >
-            <span>Start Free Evaluation</span>
+            <span>{user ? (isAdmin ? "Go to Admin Dashboard" : "Launch Technical Assessment") : "Start Free Evaluation"}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
