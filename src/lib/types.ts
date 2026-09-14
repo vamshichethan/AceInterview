@@ -257,7 +257,11 @@ export interface LiveJobPosting {
     | 'Google Careers'
     | 'Y Combinator'
     | 'Cutshort'
-    | 'Foundit';
+    | 'Foundit'
+    | 'Adzuna'
+    | 'Adzuna Verified'
+    | 'Arbeitnow'
+    | 'Hacker News YC';
   applyUrl: string;
   postedDate: string;
   isNewThisWeek: boolean;

@@ -11,6 +11,13 @@ import {
   getUserByToken,
   isSuperAdminEmail,
 } from '@/lib/mock-db';
+import {
+  fetchAdzunaJobs,
+  fetchArbeitnowJobs,
+  fetchHackerNewsJobs,
+  fetchRealWorldNews,
+} from '@/lib/real-world-apis';
+import { LiveJobPosting, CompanyProfile } from '@/lib/types';
 
 export async function GET(req: Request) {
   try {
@@ -26,27 +33,108 @@ export async function GET(req: Request) {
     let companies = null;
     let jobs = null;
 
-    if (type === 'all' || type === 'news') {
-      news = await getJobNews({
-        track: track,
-        experienceLevel: level,
-        tag: tag,
-      });
-    }
-
-    if (type === 'all' || type === 'companies') {
-      companies = await getCompanies({
-        search: search,
-      });
-    }
-
     if (type === 'all' || type === 'jobs') {
-      jobs = await getLiveJobs({
+      const dbJobs = await getLiveJobs({
         track: track,
         experienceLevel: level,
         platform: platform,
         search: search,
       });
+
+      // Fetch in parallel from live APIs
+      const [adzunaJobs, arbeitnowJobs, hnJobs] = await Promise.all([
+        fetchAdzunaJobs(track, search),
+        fetchArbeitnowJobs(),
+        fetchHackerNewsJobs(),
+      ]);
+
+      // Combine
+      const allLive = [...dbJobs, ...adzunaJobs, ...hnJobs, ...arbeitnowJobs];
+
+      // Filter by track, level, platform, search if specified
+      let filtered = allLive;
+      if (track && track !== 'all') {
+        filtered = filtered.filter((j) => j.targetTrack === track || j.targetTrack === 'sde');
+      }
+      if (level && level !== 'all') {
+        filtered = filtered.filter((j) => j.experienceLevel?.toLowerCase().includes(level.toLowerCase()));
+      }
+      if (platform && platform !== 'all') {
+        filtered = filtered.filter((j) => j.platform?.toLowerCase() === platform.toLowerCase());
+      }
+      if (search) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(
+          (j) =>
+            j.roleTitle?.toLowerCase().includes(q) ||
+            j.companyName?.toLowerCase().includes(q) ||
+            j.location?.toLowerCase().includes(q) ||
+            j.tags?.some((t) => t.toLowerCase().includes(q))
+        );
+      }
+
+      // Deduplicate by URL or Title+Company
+      const seen = new Set<string>();
+      const deduped: LiveJobPosting[] = [];
+      for (const j of filtered) {
+        const key = j.applyUrl || `${j.roleTitle}-${j.companyName}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          deduped.push(j);
+        }
+      }
+      jobs = deduped;
+    }
+
+    if (type === 'all' || type === 'news') {
+      const dbNews = await getJobNews({
+        track: track,
+        experienceLevel: level,
+        tag: tag,
+      });
+      // Fetch live real-world news
+      const liveNews = await fetchRealWorldNews();
+      // Combine: custom db news first, followed by live news
+      const combined = [...dbNews];
+      for (const item of liveNews) {
+        if (!combined.some((n) => n.id === item.id || n.headline === item.headline)) {
+          combined.push(item);
+        }
+      }
+      news = combined;
+    }
+
+    if (type === 'all' || type === 'companies') {
+      const dbCompanies = await getCompanies({
+        search: search,
+      });
+
+      // Extract unique companies from live jobs to keep company directory dynamically updated
+      const activeEmployerMap = new Map<string, CompanyProfile>();
+      dbCompanies.forEach((c) => activeEmployerMap.set(c.name.toLowerCase(), c));
+
+      if (jobs && jobs.length > 0) {
+        jobs.slice(0, 30).forEach((j) => {
+          const key = j.companyName.toLowerCase();
+          if (!activeEmployerMap.has(key) && j.companyName !== 'Tech Company' && j.companyName.length > 2) {
+            activeEmployerMap.set(key, {
+              id: `comp-live-${Math.random().toString(36).slice(2, 8)}`,
+              name: j.companyName,
+              sector: 'Information Technology & Software',
+              size: 'Growth Scaleup',
+              hiringStatus: 'Actively Hiring',
+              freshersWelcome: j.experienceLevel === 'Freshers (0-1 YOE)',
+              targetTracks: [j.targetTrack || 'sde'],
+              careersUrl: j.applyUrl,
+              location: j.location,
+              description: `Actively recruiting for ${j.roleTitle} in ${j.location}. Verified through live API requisition.`,
+              openPositionsCount: 1,
+            });
+          }
+        });
+      }
+
+      companies = Array.from(activeEmployerMap.values());
     }
 
     return NextResponse.json({

@@ -78,7 +78,7 @@ export default function JobsPage() {
       if (selectedExperience === 'freshers' && !job.experienceLevel.includes('0-1')) return false;
       if (selectedExperience === 'experienced' && job.experienceLevel.includes('0-1')) return false;
       // Platform filter
-      if (selectedPlatform !== 'all' && job.platform.toLowerCase() !== selectedPlatform.toLowerCase()) return false;
+      if (selectedPlatform !== 'all' && !job.platform.toLowerCase().includes(selectedPlatform.toLowerCase())) return false;
       // Search
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
@@ -146,9 +146,15 @@ export default function JobsPage() {
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold">
-              <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Live Job Postings &amp; Placement Intelligence</span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold">
+                <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Live Job Postings &amp; Placement Intelligence</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Real-Time API Sync (Adzuna + Hacker News + Tech Networks)</span>
+              </div>
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
               Verified Openings, Off-Campus Drives &amp; Hiring News.
@@ -370,6 +376,9 @@ export default function JobsPage() {
                 className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
               >
                 <option value="all">All Platforms</option>
+                <option value="adzuna">Adzuna Verified</option>
+                <option value="arbeitnow">Arbeitnow</option>
+                <option value="hacker news">Hacker News YC</option>
                 <option value="linkedin">LinkedIn</option>
                 <option value="naukri">Naukri</option>
                 <option value="internshala">Internshala</option>

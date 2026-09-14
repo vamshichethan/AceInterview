@@ -25,6 +25,9 @@ import {
   Zap,
   Filter,
   Check,
+  Star,
+  GitFork,
+  X,
 } from 'lucide-react';
 import {
   LEARNING_TRACKS,
@@ -40,6 +43,47 @@ export default function LearningModulePage() {
   const [activeTab, setActiveTab] = useState<string>('sde');
   const [searchQuery, setSearchQuery] = useState('');
   const [completedTopics, setCompletedTopics] = useState<Record<string, boolean>>({});
+  const [gitHubRepos, setGitHubRepos] = useState<any[]>([]);
+  const [reposLoading, setReposLoading] = useState(false);
+  const [activeVideoModal, setActiveVideoModal] = useState<{ title: string; embedUrl: string } | null>(null);
+
+  // Fetch live GitHub verified repository stats
+  useEffect(() => {
+    const fetchRepos = async () => {
+      setReposLoading(true);
+      try {
+        const res = await fetch('/api/learning/repos');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.repos?.length > 0) {
+            setGitHubRepos(data.repos);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load GitHub repos:', err);
+      } finally {
+        setReposLoading(false);
+      }
+    };
+    fetchRepos();
+  }, []);
+
+  const getYouTubeEmbedUrl = (url: string): string | null => {
+    if (!url) return null;
+    if (url.includes('youtube.com/watch?v=')) {
+      const id = url.split('watch?v=')[1]?.split('&')[0];
+      return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+    }
+    if (url.includes('youtu.be/')) {
+      const id = url.split('youtu.be/')[1]?.split('?')[0];
+      return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+    }
+    if (url.includes('youtube.com/playlist?list=')) {
+      const listId = url.split('list=')[1]?.split('&')[0];
+      return `https://www.youtube-nocookie.com/embed/videoseries?list=${listId}`;
+    }
+    return null;
+  };
 
   // Hydrate completed topics checklist from localStorage
   useEffect(() => {
@@ -343,6 +387,75 @@ export default function LearningModulePage() {
             </div>
           </div>
 
+          {/* LIVE GITHUB TOOLKITS & REPOSITORIES (POWERED BY GITHUB REST API) */}
+          {gitHubRepos.length > 0 && (
+            <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 text-[10px] font-bold uppercase tracking-wider border border-indigo-500/20 mb-1">
+                    <Sparkles className="w-3 h-3 text-indigo-400" />
+                    <span>Real-World Open Source Toolkits</span>
+                  </div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    Verified GitHub Prep Repositories
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Industry-standard interview cheatsheets, system design primers, and algorithmic guides synced live with GitHub.
+                  </p>
+                </div>
+                <span className="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Live GitHub API Sync
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
+                {gitHubRepos
+                  .filter((repo) => repo.track === currentTrack.id || repo.track === 'all' || repo.track === 'sde')
+                  .slice(0, 3)
+                  .map((repo) => (
+                    <a
+                      key={repo.id}
+                      href={repo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-4 rounded-2xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 hover:border-indigo-500/40 transition-all group flex flex-col justify-between"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 truncate">
+                            {repo.badge || 'Open Source Toolkit'}
+                          </span>
+                          <div className="flex items-center gap-1 text-[11px] font-bold text-amber-400 bg-amber-950/40 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                            <span>{(repo.stars / 1000).toFixed(1)}k</span>
+                          </div>
+                        </div>
+
+                        <div className="font-bold text-xs text-white group-hover:text-indigo-300 transition-colors">
+                          {repo.fullName}
+                        </div>
+                        <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                          {repo.description}
+                        </p>
+                      </div>
+
+                      <div className="mt-3 pt-2.5 border-t border-slate-900 flex items-center justify-between text-[11px]">
+                        <span className="text-slate-500 font-mono flex items-center gap-1">
+                          <GitFork className="w-3 h-3 text-slate-500" />
+                          <span>{(repo.forks / 1000).toFixed(1)}k forks</span>
+                        </span>
+                        <span className="text-indigo-400 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                          <span>Star on GitHub</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </a>
+                  ))}
+              </div>
+            </div>
+          )}
+
           {/* Sequential Ordered Roadmap Steps */}
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -455,43 +568,79 @@ export default function LearningModulePage() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                          {step.curatedResources.map((res, rIdx) => (
-                            <a
-                              key={rIdx}
-                              href={res.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-3.5 rounded-2xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800/90 hover:border-indigo-500/40 transition-all group flex flex-col justify-between"
-                            >
-                              <div>
-                                <div className="flex items-center justify-between gap-2 mb-1.5">
-                                  <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">
-                                    {res.platform}
-                                  </span>
-                                  <span
-                                    className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
-                                      res.isFree
-                                        ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
-                                        : 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
-                                    }`}
-                                  >
-                                    {res.isFree ? '100% Free' : 'Paid / Book'}
-                                  </span>
+                          {step.curatedResources.map((res, rIdx) => {
+                            const ytEmbed = getYouTubeEmbedUrl(res.url);
+                            return ytEmbed ? (
+                              <button
+                                key={rIdx}
+                                type="button"
+                                onClick={() => setActiveVideoModal({ title: res.title, embedUrl: ytEmbed })}
+                                className="p-3.5 rounded-2xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800/90 hover:border-rose-500/40 transition-all group flex flex-col justify-between text-left cursor-pointer"
+                              >
+                                <div>
+                                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                                    <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20 flex items-center gap-1">
+                                      <PlayCircle className="w-3 h-3 text-rose-400" />
+                                      <span>{res.platform}</span>
+                                    </span>
+                                    <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                                      Watch Video
+                                    </span>
+                                  </div>
+                                  <h5 className="text-xs font-bold text-slate-200 group-hover:text-rose-300 transition-colors line-clamp-2">
+                                    {res.title}
+                                  </h5>
+                                  <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">
+                                    {res.description}
+                                  </p>
                                 </div>
-                                <h5 className="text-xs font-bold text-slate-200 group-hover:text-indigo-300 transition-colors line-clamp-2">
-                                  {res.title}
-                                </h5>
-                                <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">
-                                  {res.description}
-                                </p>
-                              </div>
 
-                              <div className="mt-3 pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] text-indigo-400 font-semibold">
-                                <span>Open Resource</span>
-                                <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                              </div>
-                            </a>
-                          ))}
+                                <div className="mt-3 pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] text-rose-400 font-semibold">
+                                  <span className="flex items-center gap-1">
+                                    <PlayCircle className="w-3.5 h-3.5" />
+                                    <span>Play Video In-App</span>
+                                  </span>
+                                  <span className="text-xs">&rarr;</span>
+                                </div>
+                              </button>
+                            ) : (
+                              <a
+                                key={rIdx}
+                                href={res.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-3.5 rounded-2xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800/90 hover:border-indigo-500/40 transition-all group flex flex-col justify-between"
+                              >
+                                <div>
+                                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                                    <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">
+                                      {res.platform}
+                                    </span>
+                                    <span
+                                      className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
+                                        res.isFree
+                                          ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
+                                          : 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
+                                      }`}
+                                    >
+                                      {res.isFree ? '100% Free' : 'Paid / Book'}
+                                    </span>
+                                  </div>
+                                  <h5 className="text-xs font-bold text-slate-200 group-hover:text-indigo-300 transition-colors line-clamp-2">
+                                    {res.title}
+                                  </h5>
+                                  <p className="text-[11px] text-slate-400 mt-1 line-clamp-2">
+                                    {res.description}
+                                  </p>
+                                </div>
+
+                                <div className="mt-3 pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] text-indigo-400 font-semibold">
+                                  <span>Open Resource</span>
+                                  <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                </div>
+                              </a>
+                            );
+                          })}
                         </div>
                       </div>
                     </div>
@@ -605,6 +754,62 @@ export default function LearningModulePage() {
               <Sparkles className="w-3.5 h-3.5" />
               <span>Start Assessment</span>
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Interactive In-App Video Modal */}
+      {activeVideoModal && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={() => setActiveVideoModal(null)}
+        >
+          <div
+            className="relative w-full max-w-4xl bg-slate-900 border border-slate-700/80 rounded-3xl overflow-hidden shadow-2xl flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/70">
+              <div className="flex items-center gap-2.5 min-w-0 pr-4">
+                <div className="w-7 h-7 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center flex-shrink-0">
+                  <PlayCircle className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-white truncate">
+                  {activeVideoModal.title}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveVideoModal(null)}
+                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition flex-shrink-0 cursor-pointer"
+                aria-label="Close video player"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Responsive 16:9 Video Container */}
+            <div className="relative w-full aspect-video bg-black">
+              <iframe
+                src={activeVideoModal.embedUrl}
+                title={activeVideoModal.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between px-6 py-3 bg-slate-950/90 border-t border-slate-800/80 text-xs text-slate-400">
+              <span>Streaming in HD distraction-free</span>
+              <button
+                type="button"
+                onClick={() => setActiveVideoModal(null)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium transition cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
