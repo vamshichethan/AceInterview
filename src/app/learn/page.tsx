@@ -495,7 +495,7 @@ export default function LearningModulePage() {
                     Trending Placement &amp; Interview Lectures
                   </h3>
                   <p className="text-xs text-slate-400">
-                    Live curated video lectures streamed directly via YouTube Data API v3. Click any video to watch in-app with zero ads.
+                    Live curated video lectures streamed directly via YouTube Data API v3. Auto-rotates daily across high-yield subtopics (System Design, LeetCode, LLD &amp; Architecture) with zero ads.
                   </p>
                 </div>
                 <div className="flex items-center gap-2.5">
