@@ -421,19 +421,20 @@ export interface LiveYouTubeVideo {
   publishedAt: string;
 }
 
-let cachedYouTubeVideos: { data: LiveYouTubeVideo[]; timestamp: number } | null = null;
+const cachedYouTubeVideos = new Map<string, { data: LiveYouTubeVideo[]; timestamp: number }>();
 
 export async function fetchLiveYouTubeVideos(searchQuery?: string): Promise<LiveYouTubeVideo[]> {
-  if (cachedYouTubeVideos && Date.now() - cachedYouTubeVideos.timestamp < 3600000) {
-    return cachedYouTubeVideos.data;
+  const q = searchQuery || 'system design interview dsa coding preparation';
+  const cached = cachedYouTubeVideos.get(q);
+  if (cached && Date.now() - cached.timestamp < 3600000) {
+    return cached.data;
   }
 
   const ytKey = process.env.YOUTUBE_API_KEY || 'AIzaSyCe2I2_XIuCu1PwSxEjdNp55u83n7kfUak';
   if (!ytKey) return [];
 
   try {
-    const q = searchQuery || 'dsa coding interview preparation system design';
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&type=video&maxResults=6&key=${ytKey}`;
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&type=video&maxResults=9&key=${ytKey}`;
     const res = await fetch(url, { next: { revalidate: 3600 } });
     if (!res.ok) {
       console.warn(`YouTube API returned ${res.status}`);
@@ -449,7 +450,10 @@ export async function fetchLiveYouTubeVideos(searchQuery?: string): Promise<Live
         if (!vid) return null;
         return {
           id: vid,
-          title: (item.snippet?.title || 'Coding Interview Tutorial').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'"),
+          title: (item.snippet?.title || 'Coding Interview Tutorial')
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'"),
           description: item.snippet?.description || 'Curated high-yield video tutorial covering interview patterns.',
           thumbnail: item.snippet?.thumbnails?.high?.url || item.snippet?.thumbnails?.medium?.url || '',
           channelTitle: item.snippet?.channelTitle || 'Tech Channel',
@@ -461,7 +465,7 @@ export async function fetchLiveYouTubeVideos(searchQuery?: string): Promise<Live
       .filter(Boolean);
 
     if (videos.length > 0) {
-      cachedYouTubeVideos = { data: videos, timestamp: Date.now() };
+      cachedYouTubeVideos.set(q, { data: videos, timestamp: Date.now() });
     }
     return videos;
   } catch (err) {

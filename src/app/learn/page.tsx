@@ -28,6 +28,7 @@ import {
   Star,
   GitFork,
   X,
+  RotateCw,
 } from 'lucide-react';
 import {
   LEARNING_TRACKS,
@@ -46,6 +47,8 @@ export default function LearningModulePage() {
   const [gitHubRepos, setGitHubRepos] = useState<any[]>([]);
   const [reposLoading, setReposLoading] = useState(false);
   const [liveVideos, setLiveVideos] = useState<any[]>([]);
+  const [videoPageIndex, setVideoPageIndex] = useState<number>(0);
+  const [videosLoading, setVideosLoading] = useState<boolean>(false);
   const [activeVideoModal, setActiveVideoModal] = useState<{ title: string; embedUrl: string } | null>(null);
 
   // Fetch live GitHub verified repository stats
@@ -66,24 +69,30 @@ export default function LearningModulePage() {
         setReposLoading(false);
       }
     };
+    fetchRepos();
+  }, []);
 
+  // Fetch live YouTube masterclasses dynamically whenever activeTab changes
+  useEffect(() => {
     const fetchVideos = async () => {
+      setVideosLoading(true);
       try {
-        const res = await fetch('/api/learning/videos');
+        const res = await fetch(`/api/learning/videos?track=${activeTab}`);
         if (res.ok) {
           const data = await res.json();
           if (data.videos?.length > 0) {
             setLiveVideos(data.videos);
+            setVideoPageIndex(0);
           }
         }
       } catch (err) {
         console.warn('Failed to load YouTube videos:', err);
+      } finally {
+        setVideosLoading(false);
       }
     };
-
-    fetchRepos();
     fetchVideos();
-  }, []);
+  }, [activeTab]);
 
   const getYouTubeEmbedUrl = (url: string): string | null => {
     if (!url) return null;
@@ -489,14 +498,27 @@ export default function LearningModulePage() {
                     Live curated video lectures streamed directly via YouTube Data API v3. Click any video to watch in-app with zero ads.
                   </p>
                 </div>
-                <span className="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse" />
-                  Live YouTube API
-                </span>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
+                    <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse" />
+                    Live YouTube API
+                  </span>
+                  {liveVideos.length > 3 && (
+                    <button
+                      type="button"
+                      onClick={() => setVideoPageIndex((prev) => (prev + 3 >= liveVideos.length ? 0 : prev + 3))}
+                      className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-rose-300 border border-rose-500/30 flex items-center gap-1.5 transition cursor-pointer active:scale-95 shadow-md"
+                      title="Rotate to next trending video masterclasses"
+                    >
+                      <RotateCw className={`w-3.5 h-3.5 ${videosLoading ? 'animate-spin' : ''}`} />
+                      <span>Next Masterclasses ({Math.floor(videoPageIndex / 3) + 1}/{Math.ceil(liveVideos.length / 3)})</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
-                {liveVideos.slice(0, 3).map((video) => (
+                {liveVideos.slice(videoPageIndex, videoPageIndex + 3).map((video) => (
                   <button
                     key={video.id}
                     type="button"
