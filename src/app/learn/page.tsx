@@ -45,6 +45,7 @@ export default function LearningModulePage() {
   const [completedTopics, setCompletedTopics] = useState<Record<string, boolean>>({});
   const [gitHubRepos, setGitHubRepos] = useState<any[]>([]);
   const [reposLoading, setReposLoading] = useState(false);
+  const [liveVideos, setLiveVideos] = useState<any[]>([]);
   const [activeVideoModal, setActiveVideoModal] = useState<{ title: string; embedUrl: string } | null>(null);
 
   // Fetch live GitHub verified repository stats
@@ -65,7 +66,23 @@ export default function LearningModulePage() {
         setReposLoading(false);
       }
     };
+
+    const fetchVideos = async () => {
+      try {
+        const res = await fetch('/api/learning/videos');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.videos?.length > 0) {
+            setLiveVideos(data.videos);
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to load YouTube videos:', err);
+      }
+    };
+
     fetchRepos();
+    fetchVideos();
   }, []);
 
   const getYouTubeEmbedUrl = (url: string): string | null => {
@@ -452,6 +469,79 @@ export default function LearningModulePage() {
                       </div>
                     </a>
                   ))}
+              </div>
+            </div>
+          )}
+
+          {/* LIVE YOUTUBE VIDEO MASTERCLASSES (POWERED BY YOUTUBE DATA API V3) */}
+          {liveVideos.length > 0 && (
+            <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-300 text-[10px] font-bold uppercase tracking-wider border border-rose-500/20 mb-1">
+                    <PlayCircle className="w-3 h-3 text-rose-400" />
+                    <span>Real-World Video Masterclasses</span>
+                  </div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    Trending Placement &amp; Interview Lectures
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Live curated video lectures streamed directly via YouTube Data API v3. Click any video to watch in-app with zero ads.
+                  </p>
+                </div>
+                <span className="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-rose-400 animate-pulse" />
+                  Live YouTube API
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-1">
+                {liveVideos.slice(0, 3).map((video) => (
+                  <button
+                    key={video.id}
+                    type="button"
+                    onClick={() => setActiveVideoModal({ title: video.title, embedUrl: video.embedUrl })}
+                    className="p-4 rounded-2xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 hover:border-rose-500/40 transition-all group flex flex-col justify-between text-left cursor-pointer"
+                  >
+                    <div className="space-y-2.5">
+                      <div className="relative aspect-video rounded-xl overflow-hidden bg-slate-900 border border-slate-800/80">
+                        {video.thumbnail ? (
+                          <img
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-slate-900 text-slate-600">
+                            <PlayCircle className="w-8 h-8" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="w-10 h-10 rounded-full bg-rose-600/90 text-white flex items-center justify-center shadow-lg">
+                            <PlayCircle className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="font-bold text-xs text-white group-hover:text-rose-300 transition-colors line-clamp-2 leading-snug">
+                        {video.title}
+                      </div>
+                      <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                        {video.description}
+                      </p>
+                    </div>
+
+                    <div className="mt-3 pt-2.5 border-t border-slate-900 flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400 font-medium truncate max-w-[140px]">
+                        {video.channelTitle}
+                      </span>
+                      <span className="text-rose-400 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                        <span>Watch In-App</span>
+                        <PlayCircle className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
           )}

@@ -220,6 +220,50 @@ export async function fetchRealWorldNews(): Promise<JobNewsItem[]> {
 
   const liveNews: JobNewsItem[] = [];
 
+  // 1. Fetch live breaking news from GNews API (India tech hiring & campus drives)
+  const gnewsKey = process.env.GNEWS_API_KEY || '432c3dfe8c67ace60c9abfd3ba1ed128';
+  if (gnewsKey) {
+    try {
+      const gnewsUrl = `https://gnews.io/api/v4/search?q=tech%20hiring%20OR%20campus%20placement%20OR%20software%20jobs&lang=en&country=in&max=8&apikey=${gnewsKey}`;
+      const gres = await fetch(gnewsUrl, { next: { revalidate: 3600 } });
+      if (gres.ok) {
+        const gdata = await gres.json();
+        const articles = gdata.articles || [];
+        articles.forEach((art: any) => {
+          const title = art.title || '';
+          const desc = art.description || '';
+          const lower = `${title} ${desc}`.toLowerCase();
+
+          let tag: 'Hiring' | 'Layoff' | 'Funding' | 'Campus Drive' = 'Hiring';
+          if (lower.includes('campus') || lower.includes('placement') || lower.includes('freshers')) {
+            tag = 'Campus Drive';
+          } else if (lower.includes('layoff') || lower.includes('cut') || lower.includes('fire')) {
+            tag = 'Layoff';
+          } else if (lower.includes('fund') || lower.includes('raise') || lower.includes('valuation') || lower.includes('series')) {
+            tag = 'Funding';
+          }
+
+          liveNews.push({
+            id: `gnews-${art.url ? Buffer.from(art.url).toString('base64').slice(0, 16) : Math.random().toString(36).slice(2, 8)}`,
+            headline: title,
+            companyName: art.source?.name || 'Tech Media',
+            companyLogo: art.image,
+            date: art.publishedAt || new Date().toISOString(),
+            source: art.source?.name || 'Google News',
+            summary: desc || 'Breaking updates on engineering hiring, campus drives, and tech industry job markets.',
+            tag,
+            track: 'all',
+            experienceLevel: 'all',
+            linkUrl: art.url,
+            isNewThisWeek: true,
+          });
+        });
+      }
+    } catch (err) {
+      console.warn('GNews fetch error:', err);
+    }
+  }
+
   try {
     // Fetch top stories from Hacker News and filter for tech hiring, funding, layoffs
     const res = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json', { next: { revalidate: 1800 } });
@@ -362,3 +406,67 @@ export async function fetchGitHubCurriculumRepos() {
     return [];
   }
 }
+
+/**
+ * 6. Fetch Live Video Tutorials & Masterclasses via YouTube Data API v3
+ */
+export interface LiveYouTubeVideo {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  channelTitle: string;
+  videoUrl: string;
+  embedUrl: string;
+  publishedAt: string;
+}
+
+let cachedYouTubeVideos: { data: LiveYouTubeVideo[]; timestamp: number } | null = null;
+
+export async function fetchLiveYouTubeVideos(searchQuery?: string): Promise<LiveYouTubeVideo[]> {
+  if (cachedYouTubeVideos && Date.now() - cachedYouTubeVideos.timestamp < 3600000) {
+    return cachedYouTubeVideos.data;
+  }
+
+  const ytKey = process.env.YOUTUBE_API_KEY || 'AIzaSyCe2I2_XIuCu1PwSxEjdNp55u83n7kfUak';
+  if (!ytKey) return [];
+
+  try {
+    const q = searchQuery || 'dsa coding interview preparation system design';
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&type=video&maxResults=6&key=${ytKey}`;
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) {
+      console.warn(`YouTube API returned ${res.status}`);
+      return [];
+    }
+
+    const data = await res.json();
+    const items = data.items || [];
+
+    const videos: LiveYouTubeVideo[] = items
+      .map((item: any) => {
+        const vid = item.id?.videoId;
+        if (!vid) return null;
+        return {
+          id: vid,
+          title: (item.snippet?.title || 'Coding Interview Tutorial').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'"),
+          description: item.snippet?.description || 'Curated high-yield video tutorial covering interview patterns.',
+          thumbnail: item.snippet?.thumbnails?.high?.url || item.snippet?.thumbnails?.medium?.url || '',
+          channelTitle: item.snippet?.channelTitle || 'Tech Channel',
+          videoUrl: `https://www.youtube.com/watch?v=${vid}`,
+          embedUrl: `https://www.youtube-nocookie.com/embed/${vid}?autoplay=1`,
+          publishedAt: item.snippet?.publishedAt || new Date().toISOString(),
+        };
+      })
+      .filter(Boolean);
+
+    if (videos.length > 0) {
+      cachedYouTubeVideos = { data: videos, timestamp: Date.now() };
+    }
+    return videos;
+  } catch (err) {
+    console.error('Failed to fetch YouTube videos:', err);
+    return [];
+  }
+}
+
