@@ -64,6 +64,8 @@ export interface EvaluationResult {
 }
 
 const MODEL_FALLBACK_CHAIN = [
+  'gemini-3.6-flash',
+  'gemini-flash-latest',
   'gemini-2.5-flash',
   'gemini-2.0-flash',
   'gemini-2.0-flash-lite',

@@ -19,6 +19,11 @@ const RAW_KEYS: string[] = [
   process.env.GEMINI_API_KEY,
   process.env.GEMINI_API_KEY_2,
   process.env.GEMINI_API_KEY_3,
+  process.env.GEMINI_API_KEY_4,
+  process.env.GEMINI_API_KEY_5,
+  ...Object.keys(process.env)
+    .filter((k) => k.startsWith('GEMINI_API_KEY_') && !['GEMINI_API_KEY_2', 'GEMINI_API_KEY_3', 'GEMINI_API_KEY_4', 'GEMINI_API_KEY_5'].includes(k))
+    .map((k) => process.env[k]),
 ].filter((k): k is string => typeof k === 'string' && k.trim().length > 10);
 
 if (RAW_KEYS.length === 0) {
@@ -38,6 +43,8 @@ const ROTATION_TRIGGERS = [
   'billing',
   'api key expired',
   'api_key_invalid',
+  'not found',
+  '404',
 ];
 
 function isRotatableError(err: any): boolean {
