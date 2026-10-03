@@ -4,7 +4,7 @@
 
 ### Next-Generation AI Technical Interviewer & Career Co-Pilot
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-aceinterview--ai.vercel.app-00DC82?style=for-the-badge&logo=vercel&logoColor=white)](https://aceinterview-ai.vercel.app)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvamshichethan%2FAceInterview)
 [![Next.js 15+](https://img.shields.io/badge/Next.js-16.3-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
 [![React 19](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
@@ -13,16 +13,22 @@
 
 **Simulate realistic engineering interviews, practice with dynamic voice avatars, receive granular diagnostics, and land high-paying software jobs.**
 
-[Explore Live Demo](https://aceinterview-ai.vercel.app) · [Report Bug](https://github.com/vamshichethan/AceInterview/issues) · [Request Feature](https://github.com/vamshichethan/AceInterview/issues)
+[GitHub Repository](https://github.com/vamshichethan/AceInterview) · [Report Bug](https://github.com/vamshichethan/AceInterview/issues) · [Request Feature](https://github.com/vamshichethan/AceInterview/issues)
 
 </div>
 
 ---
 
-## 🚀 Live Deployment
+## 🚀 Deployment
 
-The application is deployed and live on Vercel:
-👉 **[https://aceinterview-ai.vercel.app](https://aceinterview-ai.vercel.app)**
+Deploy your own instance of **AceInterview** to Vercel with one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvamshichethan%2FAceInterview)
+
+1. Click the **Deploy** button above or go to **[vercel.com/new](https://vercel.com/new)**.
+2. Select your repository: **`vamshichethan/AceInterview`**.
+3. Add your environment variables (`GEMINI_API_KEY`, etc.).
+4. Click **Deploy** — your live link will be generated!
 
 ---
 
