@@ -270,4 +270,19 @@ export interface LiveJobPosting {
   batchOrEligibility?: string;
 }
 
+export interface CandidateInterviewHistoryItem {
+  interviewId: string;
+  createdAt: string;
+  targetRole: string;
+  persona: 'alex' | 'sophia';
+  projectTitle: string;
+  status: string;
+  technicalScore: number;
+  communicationScore: number;
+  overallScore: number;
+  verdict: string;
+  strengths: string[];
+  improvements: string[];
+}
+
 

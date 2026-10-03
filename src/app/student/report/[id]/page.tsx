@@ -143,18 +143,53 @@ export default function StudentReportPage() {
 
   if (!report) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-12 text-center min-h-[70vh]">
-        <AlertTriangle className="w-12 h-12 text-amber-400 mb-3" />
-        <h3 className="text-lg font-bold text-white">Report Not Found</h3>
-        <p className="text-xs text-slate-400 mt-1 mb-6">
-          Could not locate an evaluation report for this interview session.
-        </p>
-        <Link
-          href="/student/setup"
-          className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold"
-        >
-          Start New Interview
-        </Link>
+      <div className="flex-1 flex flex-col items-center justify-center p-12 text-center min-h-[70vh] space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto animate-pulse">
+          <Sparkles className="w-8 h-8 text-cyan-400" />
+        </div>
+        <div className="space-y-1">
+          <h3 className="text-xl font-bold text-white">Synthesizing Diagnostic Evaluation...</h3>
+          <p className="text-xs text-slate-400 max-w-md mx-auto">
+            Your interview session is saved. Click below to analyze your answers, compute your technical depth, ATS resume score, and curated job matches.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
+          <button
+            type="button"
+            onClick={() => {
+              setLoading(true);
+              fetch(`/api/report/${interviewId}`)
+                .then((res) => res.json())
+                .then((data) => {
+                  if (data?.report) {
+                    setReport(data.report);
+                    if (typeof window !== 'undefined') {
+                      try {
+                        localStorage.setItem(`ace_report_${interviewId}`, JSON.stringify(data.report));
+                      } catch (_) {}
+                    }
+                  } else {
+                    alert(data?.error || 'Could not synthesize evaluation report.');
+                  }
+                })
+                .catch((e) => {
+                  console.error(e);
+                  alert('Evaluation request failed. Please try again.');
+                })
+                .finally(() => setLoading(false));
+            }}
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-cyan-600 to-indigo-600 hover:from-indigo-500 hover:to-cyan-500 text-white text-xs font-bold shadow-xl shadow-indigo-500/25 transition cursor-pointer flex items-center gap-2"
+          >
+            <Sparkles className="w-4 h-4 text-cyan-200" />
+            <span>Generate Comprehensive Report Dossier</span>
+          </button>
+          <Link
+            href="/student/setup"
+            className="px-5 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700 transition"
+          >
+            Back to My Growth & History
+          </Link>
+        </div>
       </div>
     );
   }

@@ -178,11 +178,21 @@ export default function InterviewRoomPage() {
   const isPro = Boolean(isSubscribed || user?.subscription_status === 'active' || user?.role === 'admin');
   const totalDurationSeconds = isPro ? 1800 : 900;
 
-  const [secondsRemaining, setSecondsRemaining] = useState(totalDurationSeconds);
-
-  useEffect(() => {
-    setSecondsRemaining(isPro ? 1800 : 900);
-  }, [isPro]);
+  // Persistent Countdown: calculates remaining seconds from real start timestamp
+  const [secondsRemaining, setSecondsRemaining] = useState<number>(() => {
+    if (typeof window !== 'undefined' && interviewId) {
+      const startKey = `interview_start_${interviewId}`;
+      const stored = localStorage.getItem(startKey);
+      if (stored) {
+        const startTime = parseInt(stored, 10);
+        if (startTime && !isNaN(startTime)) {
+          const elapsed = Math.max(0, Math.floor((Date.now() - startTime) / 1000));
+          return Math.max(0, (isPro ? 1800 : 900) - elapsed);
+        }
+      }
+    }
+    return totalDurationSeconds;
+  });
 
   const transcriptEndRef = useRef<HTMLDivElement>(null);
 
@@ -196,6 +206,9 @@ export default function InterviewRoomPage() {
     isAudioDetected,
     isMuted,
     setIsMuted,
+    startListening,
+    submitVoiceAnswer,
+    cancelListening,
     toggleListening,
     handleStudentUtterance,
     triggerInitialQuestion,
@@ -258,6 +271,10 @@ export default function InterviewRoomPage() {
           if (cached) {
             const parsed = JSON.parse(cached);
             if (isMounted) {
+              if (parsed.status === 'completed') {
+                router.replace(`/student/report/${interviewId}`);
+                return;
+              }
               setInterview(parsed);
               if (parsed.interviewer_persona) setPersona(parsed.interviewer_persona);
               if (parsed.transcript && parsed.transcript.length > 0) {
@@ -278,6 +295,12 @@ export default function InterviewRoomPage() {
         const data = await res.json();
         if (!isMounted) return;
 
+        // If interview was already completed, redirect to report!
+        if (data.interview.status === 'completed') {
+          router.replace(`/student/report/${interviewId}`);
+          return;
+        }
+
         setInterview(data.interview);
         setErrorMessage('');
 
@@ -285,6 +308,16 @@ export default function InterviewRoomPage() {
           try {
             sessionStorage.setItem(`interview_${interviewId}`, JSON.stringify(data.interview));
           } catch (_) {}
+
+          // Anchor persistent start timestamp if not already saved
+          const startKey = `interview_start_${interviewId}`;
+          let startTime = localStorage.getItem(startKey);
+          if (!startTime && data.interview.created_at) {
+            const parsedStart = new Date(data.interview.created_at).getTime();
+            if (!isNaN(parsedStart)) {
+              localStorage.setItem(startKey, parsedStart.toString());
+            }
+          }
         }
 
         if (data.interview.interviewer_persona) {
@@ -318,22 +351,56 @@ export default function InterviewRoomPage() {
       isMounted = false;
       clearTimeout(watchdog);
     };
-  }, [interviewId]);
+  }, [interviewId, router]);
 
-  // Countdown timer effect
+  // Persistent countdown timer based on real wall-clock elapsed time
   useEffect(() => {
-    const timer = setInterval(() => {
-      setSecondsRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    if (!interviewId) return;
 
+    const tick = () => {
+      const startKey = `interview_start_${interviewId}`;
+      let startTime = 0;
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem(startKey);
+        if (stored) startTime = parseInt(stored, 10);
+      }
+      if (!startTime && interview?.created_at) {
+        startTime = new Date(interview.created_at).getTime();
+        if (typeof window !== 'undefined' && !isNaN(startTime)) {
+          localStorage.setItem(startKey, startTime.toString());
+        }
+      }
+
+      if (startTime && !isNaN(startTime)) {
+        const elapsed = Math.max(0, Math.floor((Date.now() - startTime) / 1000));
+        const remaining = Math.max(0, totalDurationSeconds - elapsed);
+        setSecondsRemaining(remaining);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(`interview_remaining_${interviewId}`, remaining.toString());
+        }
+      }
+    };
+
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [interviewId, interview?.created_at, totalDurationSeconds]);
+
+  // Browser navigation / tab-close guard
+  useEffect(() => {
+    if (interview?.status === 'completed' || isEnding) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'You have an interview in progress. Are you sure you want to leave?';
+      return e.returnValue;
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [interview?.status, isEnding]);
 
   // Auto-scroll transcript to bottom
   useEffect(() => {
@@ -373,6 +440,7 @@ export default function InterviewRoomPage() {
           projectTitle: interview?.project_title,
           techStack: interview?.tech_stack,
           durationSeconds: totalDurationSeconds - secondsRemaining,
+          userId: user?.id,
         }),
       });
 
@@ -474,13 +542,15 @@ export default function InterviewRoomPage() {
           <div className="flex items-center gap-1.5">
             <div
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold ${
-                secondsRemaining < 180
+                secondsRemaining === 0
+                  ? 'bg-red-600 text-white border-red-500 animate-pulse'
+                  : secondsRemaining < 180
                   ? 'bg-red-950/60 border-red-500/40 text-red-300 animate-pulse'
                   : 'bg-slate-950/80 border-slate-800 text-cyan-300'
               }`}
             >
               <Clock className="w-3.5 h-3.5" />
-              <span>{formatTimer(secondsRemaining)}</span>
+              <span>{secondsRemaining === 0 ? '00:00 (Time Up)' : formatTimer(secondsRemaining)}</span>
             </div>
             <span
               className={`hidden sm:inline-flex px-2 py-0.5 rounded-md border text-[10px] font-semibold tracking-wide ${
@@ -580,6 +650,25 @@ export default function InterviewRoomPage() {
         </div>
       )}
 
+      {secondsRemaining === 0 && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-red-950/90 via-rose-900/70 to-red-950/90 border border-red-500/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-red-100 text-xs shadow-xl animate-fadeIn">
+          <div className="flex items-center gap-2.5">
+            <Clock className="w-5 h-5 text-red-400 flex-shrink-0 animate-pulse" />
+            <span>
+              <strong>Interview Time Concluded (00:00):</strong> Your time limit has concluded. Please click <strong>End Interview</strong> to evaluate your answers and generate your AI feedback report.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={handleEndInterview}
+            disabled={isEnding || transcript.length === 0}
+            className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-lg transition whitespace-nowrap"
+          >
+            {isEnding ? 'Evaluating...' : 'Submit & View Report →'}
+          </button>
+        </div>
+      )}
+
       {errorMessage && (
         <div className="p-3 bg-red-900/40 border border-red-700/50 rounded-xl text-red-300 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -611,77 +700,117 @@ export default function InterviewRoomPage() {
 
             {/* Voice controls */}
             <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-3">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                <AudioWave state={voiceState} audioLevel={audioLevel} size="sm" />
-
-                <button
-                  onClick={toggleListening}
-                  className={`flex items-center gap-2.5 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all shadow-xl ${
-                    voiceState === 'listening'
-                      ? 'bg-emerald-500 text-slate-950 shadow-emerald-500/40 scale-105'
-                      : voiceState === 'speaking'
-                      ? 'bg-cyan-500 text-slate-950 shadow-cyan-500/40'
-                      : voiceState === 'thinking'
-                      ? 'bg-amber-500 text-slate-950 shadow-amber-500/40 animate-pulse'
-                      : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30'
-                  }`}
-                >
-                  {voiceState === 'listening' ? (
-                    <>
-                      <Mic className="w-5 h-5 animate-pulse" />
-                      <span>Listening... Tap to Stop</span>
-                    </>
-                  ) : voiceState === 'speaking' ? (
-                    <>
-                      <Volume2 className="w-5 h-5 animate-pulse" />
-                      <span>AI Speaking... Tap to Interrupt</span>
-                    </>
-                  ) : voiceState === 'thinking' ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
-                      <span>Processing...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="w-5 h-5" />
-                      <span>Tap to Speak</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {voiceState === 'listening' && (
-                <div className="p-3 bg-emerald-950/40 border border-emerald-500/40 rounded-xl space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="relative flex h-2 w-2">
+              {/* When Candidate is speaking / Recording */}
+              {voiceState === 'listening' ? (
+                <div className="space-y-3">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <span className="relative flex h-3 w-3">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
                       </span>
-                      <span className="text-[11px] font-bold text-emerald-400">
-                        {isAudioDetected ? '🎙️ Mic Hearing Voice' : '🎙️ Microphone Active'}
+                      <span className="text-xs font-bold text-emerald-400 uppercase tracking-wide">
+                        Recording in Progress
                       </span>
+                      <AudioWave state={voiceState} audioLevel={audioLevel} size="sm" />
+                    </div>
+
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <button
+                        type="button"
+                        onClick={cancelListening}
+                        className="px-3.5 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition flex items-center gap-1.5 border border-slate-700 hover:border-slate-600 shadow-md"
+                        title="Discard and do not submit"
+                      >
+                        <X className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Cancel</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={submitVoiceAnswer}
+                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-[0.98] text-slate-950 text-xs sm:text-sm font-bold shadow-lg shadow-emerald-500/30 transition"
+                      >
+                        <Send className="w-4 h-4" />
+                        <span>Submit Answer</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-emerald-950/40 border border-emerald-500/40 rounded-xl space-y-2">
+                    <div className="flex items-center justify-between text-[11px] font-semibold text-emerald-400">
+                      <span>{isAudioDetected ? '🎙️ Microphone receiving your voice' : '🎙️ Microphone active — listening'}</span>
+                      <span className="text-[10px] text-emerald-300/80 font-mono">Will submit only when you press Submit Answer</span>
+                    </div>
+
+                    {currentInterimText ? (
+                      <p className="text-xs text-emerald-200 italic leading-relaxed pt-1">
+                        &ldquo;{currentInterimText}&rdquo;
+                      </p>
+                    ) : (
+                      <p className="text-[11px] text-slate-400 pt-0.5">
+                        Speak your answer clearly. Take all the time you need — nothing is submitted until you click <strong className="text-emerald-300">&ldquo;Submit Answer&rdquo;</strong>.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ) : voiceState === 'speaking' ? (
+                /* When Interviewer is speaking */
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-cyan-950/30 border border-cyan-500/30">
+                    <div className="flex items-center gap-2.5">
+                      <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />
+                      <span className="text-xs font-semibold text-cyan-300">
+                        Interviewer is speaking...
+                      </span>
+                      <AudioWave state={voiceState} audioLevel={audioLevel} size="sm" />
                     </div>
 
                     <button
                       type="button"
                       onClick={toggleListening}
-                      className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-500/30"
+                      className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-semibold transition border border-cyan-500/40"
                     >
-                      <Send className="w-3.5 h-3.5" />
-                      <span>Done Speaking (Submit)</span>
+                      Skip / Interrupt
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-400 text-center">
+                    Listen to the question. Once the interviewer finishes, you can take your time to think before speaking.
+                  </p>
+                </div>
+              ) : voiceState === 'thinking' ? (
+                /* When Processing response */
+                <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-amber-950/30 border border-amber-500/30">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-4 h-4 border-2 border-amber-400/40 border-t-amber-400 rounded-full animate-spin" />
+                    <span className="text-xs font-semibold text-amber-300">
+                      Processing and evaluating your answer...
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-amber-400/70 font-mono">Please wait</span>
+                </div>
+              ) : (
+                /* When Idle / Ready — Interviewer has spoken, candidate can think and press Tap to Speak */
+                <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                      <span className="w-2 h-2 rounded-full bg-slate-500" />
+                      <span>Ready • Take your time to think</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={startListening}
+                      className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl text-xs sm:text-sm font-bold bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-xl shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    >
+                      <Mic className="w-4 h-4" />
+                      <span>Tap to Speak</span>
                     </button>
                   </div>
 
-                  {currentInterimText ? (
-                    <p className="text-xs text-emerald-200 italic leading-relaxed pt-1">
-                      &ldquo;{currentInterimText}&rdquo;
-                    </p>
-                  ) : (
-                    <p className="text-[11px] text-slate-400 pt-0.5">
-                      Speak your answer into your mic. When done, pause or tap &ldquo;Done Speaking&rdquo;.
-                    </p>
-                  )}
+                  <p className="text-[11px] text-slate-500 text-center sm:text-left">
+                    Your mic is muted while you think. When you are ready to answer, press <strong className="text-indigo-400">&ldquo;Tap to Speak&rdquo;</strong>.
+                  </p>
                 </div>
               )}
 

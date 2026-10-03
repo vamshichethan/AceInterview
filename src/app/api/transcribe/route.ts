@@ -44,12 +44,42 @@ export async function POST(req: NextRequest) {
         language: 'en',
         response_format: 'json',
         temperature: 0,
+        prompt:
+          'Technical software engineering interview discussion about data structures, algorithms, Big-O notation, code, time complexity, O of N, system architecture, programming languages, and projects.',
       });
 
       return transcription.text;
     });
 
-    return NextResponse.json({ text: transcript?.trim() || '' });
+    const rawText = transcript?.trim() || '';
+
+    // Filter out notorious Whisper silence/ambient noise hallucinations (e.g. "Thank you", "Thanks for watching")
+    const cleanLower = rawText.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
+    const SILENCE_HALLUCINATIONS = [
+      'thank you',
+      'thank you so much',
+      'thank you very much',
+      'thanks',
+      'thanks for watching',
+      'thank you for watching',
+      'thanks watching',
+      'please subscribe',
+      'subscribe to my channel',
+      'you',
+      'bye',
+      'goodbye',
+      'subtitles by',
+      'amara org',
+      'silence',
+    ];
+
+    const isHallucination = SILENCE_HALLUCINATIONS.some(
+      (h) => cleanLower === h || cleanLower === `${h} watching`
+    );
+
+    const finalText = isHallucination ? '' : rawText;
+
+    return NextResponse.json({ text: finalText });
   } catch (error: any) {
     console.error('[Groq Whisper STT] Error:', error);
     return NextResponse.json(

@@ -471,7 +471,7 @@ export async function getInterview(id: string): Promise<Interview | null> {
 
 export async function updateInterview(
   id: string,
-  updates: Partial<Pick<Interview, 'transcript' | 'duration_seconds' | 'status'>>
+  updates: Partial<Pick<Interview, 'transcript' | 'duration_seconds' | 'status' | 'user_id'>>
 ): Promise<Interview | null> {
   let current = interviewsStore.get(id);
   if (!current) {
@@ -661,13 +661,35 @@ export async function getUserInterviewHistory(
   initSeedData();
   await syncFromCloud();
 
+  const normalizedEmail = email?.toLowerCase().trim();
+  const normalizedName = name?.toLowerCase().trim();
+
+  // 1. Gather all user IDs that correspond to this account
+  const matchingUserIds = new Set<string>();
+  if (userId) matchingUserIds.add(userId);
+
+  if (normalizedEmail) {
+    for (const u of usersStore.values()) {
+      if (u.email?.toLowerCase().trim() === normalizedEmail) {
+        matchingUserIds.add(u.id);
+      }
+    }
+  }
+
+  // 2. Gather all student record IDs matching this user or their name
   const matchingStudentIds = new Set<string>();
   if (userId) matchingStudentIds.add(userId);
+  for (const uid of matchingUserIds) {
+    matchingStudentIds.add(uid);
+  }
 
   for (const s of studentsStore.values()) {
+    const sName = s.name?.toLowerCase().trim();
     if (
       (userId && s.id === userId) ||
-      (name && s.name?.toLowerCase().trim() === name.toLowerCase().trim())
+      matchingUserIds.has(s.id) ||
+      (normalizedName && sName === normalizedName) ||
+      (normalizedEmail && sName?.includes(normalizedEmail.split('@')[0]))
     ) {
       matchingStudentIds.add(s.id);
     }
@@ -675,10 +697,14 @@ export async function getUserInterviewHistory(
 
   const results: CandidateInterviewHistoryItem[] = [];
 
+  // If super admin and no specific records matched, they can inspect all recorded sessions
+  const isAdminUser = isSuperAdminEmail(normalizedEmail);
+
   for (const inv of interviewsStore.values()) {
     const matchesUser =
-      (userId && inv.user_id === userId) ||
-      (inv.student_id && matchingStudentIds.has(inv.student_id));
+      (inv.user_id && matchingUserIds.has(inv.user_id)) ||
+      (inv.student_id && matchingStudentIds.has(inv.student_id)) ||
+      (isAdminUser && !userId && !normalizedEmail);
 
     if (matchesUser) {
       const report = feedbackStore.get(inv.id);

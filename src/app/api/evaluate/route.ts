@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { evaluateInterview } from '@/lib/gemini';
-import { getInterview, updateInterview, createFeedbackReport } from '@/lib/mock-db';
+import { getInterview, updateInterview, createFeedbackReport, getUserByToken } from '@/lib/mock-db';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { interviewId, transcript, projectTitle, techStack, durationSeconds } = body;
+    const { interviewId, transcript, projectTitle, techStack, durationSeconds, userId: bodyUserId } = body;
 
     let targetTitle = projectTitle;
     let targetTech = techStack;
@@ -15,10 +15,21 @@ export async function POST(req: Request) {
 
     let targetRole = 'sde';
     let allProjects: { title: string; techStack: string; description: string }[] = [];
+    let resolvedUserId = bodyUserId;
+
+    // Check session token cookie for user attribution
+    const token = req.cookies.get('vantage_session')?.value;
+    if (token && !resolvedUserId) {
+      const user = await getUserByToken(token);
+      if (user) resolvedUserId = user.id;
+    }
 
     if (interviewId) {
       const interview = await getInterview(interviewId);
       if (interview) {
+        if (!resolvedUserId && interview.user_id) {
+          resolvedUserId = interview.user_id;
+        }
         targetTitle = targetTitle || interview.project_title;
         targetTech = targetTech || interview.tech_stack;
         resumeSummary = interview.resume_summary || '';
@@ -85,6 +96,7 @@ export async function POST(req: Request) {
         status: 'completed',
         duration_seconds: durationSeconds || 600,
         transcript: finalTranscript,
+        ...(resolvedUserId ? { user_id: resolvedUserId } : {}),
       });
     }
 

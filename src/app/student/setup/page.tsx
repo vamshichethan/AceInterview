@@ -118,19 +118,88 @@ export default function StudentSetupPage() {
   const [historyLoading, setHistoryLoading] = useState(false);
 
   const fetchInterviewHistory = async () => {
-    if (!user) return;
     try {
       setHistoryLoading(true);
       const params = new URLSearchParams();
-      if (user.id) params.append('userId', user.id);
-      if (user.email) params.append('email', user.email);
-      if (user.name) params.append('name', user.name);
+      if (user?.id) params.append('userId', user.id);
+      if (user?.email) params.append('email', user.email);
+      if (user?.name) params.append('name', user.name);
 
       const res = await fetch(`/api/student/history?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
-        setHistoryList(data.history || []);
-        setHistoryStats(data.stats || null);
+        let items: any[] = data.history || [];
+        let stats = data.stats || null;
+
+        // Check local storage for any recently completed interviews on this device
+        if (typeof window !== 'undefined') {
+          try {
+            const localInterviews: any[] = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key && key.startsWith('ace_report_')) {
+                const raw = localStorage.getItem(key);
+                if (raw) {
+                  const rep = JSON.parse(raw);
+                  const intId = key.replace('ace_report_', '');
+                  if (rep && !items.some((it) => it.interviewId === intId)) {
+                    const tech = rep.technical_score ?? 0;
+                    const comm = rep.communication_score ?? 0;
+                    const overall = tech && comm ? Math.round(((tech + comm) / 2) * 10) / 10 : (tech || comm || 0);
+                    localInterviews.push({
+                      interviewId: intId,
+                      createdAt: rep.created_at || new Date().toISOString(),
+                      targetRole: 'sde',
+                      persona: 'alex',
+                      projectTitle: 'Technical Assessment',
+                      status: 'completed',
+                      technicalScore: tech,
+                      communicationScore: comm,
+                      overallScore: overall,
+                      verdict: rep.overall_verdict || 'Completed',
+                      strengths: rep.strengths || [],
+                      improvements: rep.improvements || [],
+                    });
+                  }
+                }
+              }
+            }
+
+            if (localInterviews.length > 0) {
+              items = [...items, ...localInterviews].sort(
+                (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+              );
+              // Recalculate stats if we merged local interviews
+              const totalInterviews = items.length;
+              const sumTech = items.reduce((acc, curr) => acc + (curr.technicalScore || 0), 0);
+              const sumComm = items.reduce((acc, curr) => acc + (curr.communicationScore || 0), 0);
+              const sumOverall = items.reduce((acc, curr) => acc + (curr.overallScore || 0), 0);
+              const growthTrend = items
+                .slice()
+                .reverse()
+                .map((item, idx) => ({
+                  session: `Attempt #${idx + 1}`,
+                  overall: item.overallScore,
+                  tech: item.technicalScore,
+                  comm: item.communicationScore,
+                  date: item.createdAt ? item.createdAt.slice(0, 10) : '',
+                  role: (item.targetRole || 'sde').toUpperCase(),
+                }));
+
+              stats = {
+                totalInterviews,
+                avgTechScore: Math.round((sumTech / totalInterviews) * 10) / 10,
+                avgCommScore: Math.round((sumComm / totalInterviews) * 10) / 10,
+                avgOverallScore: Math.round((sumOverall / totalInterviews) * 10) / 10,
+                bestScore: Math.max(...items.map((h) => h.overallScore || 0)),
+                growthTrend,
+              };
+            }
+          } catch (_) {}
+        }
+
+        setHistoryList(items);
+        setHistoryStats(stats);
       }
     } catch (err) {
       console.warn('Failed to load candidate interview history', err);
@@ -140,9 +209,7 @@ export default function StudentSetupPage() {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchInterviewHistory();
-    }
+    fetchInterviewHistory();
   }, [user]);
 
   // Handle Resume File Upload
@@ -1072,13 +1139,25 @@ export default function StudentSetupPage() {
                     </div>
                   </div>
 
-                  <Link
-                    href={`/student/report/${item.interviewId}`}
-                    className="px-3.5 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-                  >
-                    <span>View Report</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    {item.status === 'in-progress' && !item.technicalScore ? (
+                      <Link
+                        href={`/student/interview/${item.interviewId}`}
+                        className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                      >
+                        <span>Resume</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
+                    ) : null}
+
+                    <Link
+                      href={`/student/report/${item.interviewId}`}
+                      className="px-3.5 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                    >
+                      <span>View Report</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

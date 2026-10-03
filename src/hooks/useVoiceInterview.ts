@@ -309,12 +309,6 @@ export function useVoiceInterview({
           window.speechSynthesis.cancel();
         } catch (_) {}
         onDone?.();
-
-        setTimeout(() => {
-          if (!isListeningRef.current && !isThinkingRef.current) {
-            startListeningInternal();
-          }
-        }, 300);
       };
 
       const speakNextChunk = () => {
@@ -323,8 +317,25 @@ export function useVoiceInterview({
           return;
         }
 
-        const chunkText = sentences[currentIndex];
+        const rawChunk = sentences[currentIndex];
         currentIndex++;
+
+        const chunkText = rawChunk
+          .replace(/\bO\s*\(\s*1\s*\)/gi, 'O of 1')
+          .replace(/\bO\s*\(\s*log\s*n\s*\)/gi, 'O of log N')
+          .replace(/\bO\s*\(\s*n\s*log\s*n\s*\)/gi, 'O of N log N')
+          .replace(/\bO\s*\(\s*n\s*\^\s*2\s*\)/gi, 'O of N squared')
+          .replace(/\bO\s*\(\s*n\s*2\s*\)/gi, 'O of N squared')
+          .replace(/\bO\s*\(\s*n\s*\^\s*3\s*\)/gi, 'O of N cubed')
+          .replace(/\bO\s*\(\s*2\s*\^\s*n\s*\)/gi, 'O of 2 to the power N')
+          .replace(/\bO\s*\(\s*v\s*\+\s*e\s*\)/gi, 'O of V plus E')
+          .replace(/\bO\s*\(\s*m\s*\*\s*n\s*\)/gi, 'O of M into N')
+          .replace(/\bO\s*\(\s*n\s*\)/gi, 'O of N')
+          .replace(/\bO\s*\(\s*N\s*\)/g, 'O of N')
+          .replace(/\bO\s*\(\s*([a-zA-Z0-9_+*^ -]+)\s*\)/g, 'O of $1')
+          .replace(/\bBig-O\b/gi, 'Big O')
+          .replace(/\bO\(N\)\b/g, 'O of N')
+          .replace(/\bO\(n\)\b/g, 'O of N');
 
         const isMaleAarav = persona === 'alex';
         const utterance = new SpeechSynthesisUtterance(chunkText);
@@ -459,25 +470,6 @@ export function useVoiceInterview({
         const fullCurrent = (accumulatedSpeechRef.current + ' ' + interim).trim();
         if (fullCurrent) {
           setCurrentInterimText(fullCurrent);
-        }
-
-        // Reset silence timer
-        if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current);
-          silenceTimerRef.current = null;
-        }
-
-        // Auto-commit on 1.8s silence if student has spoken enough words
-        if (fullCurrent.length >= 8) {
-          silenceTimerRef.current = setTimeout(() => {
-            const finalWords = accumulatedSpeechRef.current.trim() || fullCurrent;
-            if (finalWords && isListeningRef.current && !isThinkingRef.current) {
-              stopListening();
-              setCurrentInterimText('');
-              accumulatedSpeechRef.current = '';
-              handleStudentUtteranceInternal(finalWords);
-            }
-          }, 1800);
         }
       };
 
@@ -620,6 +612,9 @@ export function useVoiceInterview({
 
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       try {
+        if (mediaRecorderRef.current.state === 'recording') {
+          mediaRecorderRef.current.requestData();
+        }
         mediaRecorderRef.current.stop();
       } catch (_) {}
     }
@@ -646,14 +641,17 @@ export function useVoiceInterview({
         return;
       }
 
-      // If Web Speech was silent, check if MediaRecorder captured audio!
+      // If Web Speech was silent (common on non-Chrome browsers / friend's laptop),
+      // wait 150ms to ensure MediaRecorder has flushed its final audio chunks to audioChunksRef
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
       if (audioChunksRef.current.length > 0) {
         try {
           const audioBlob = new Blob(audioChunksRef.current, {
             type: mediaRecorderRef.current?.mimeType || 'audio/webm',
           });
 
-          if (audioBlob.size > 1000) {
+          if (audioBlob.size > 800) {
             setVoiceState('thinking');
             isThinkingRef.current = true;
             stopAudioMeter();
@@ -674,7 +672,7 @@ export function useVoiceInterview({
               const whisperText = sttData.text?.trim();
 
               if (whisperText && whisperText.length > 2) {
-                // We got clean text from Groq Whisper — use it!
+                // We got clean, validated text from Groq Whisper — use it!
                 await executeChatCall(whisperText);
                 return;
               }
@@ -698,6 +696,7 @@ export function useVoiceInterview({
       // If neither text nor audio was captured
       setVoiceState('idle');
       isThinkingRef.current = false;
+      onErrorRef.current?.('Could not clearly detect speech from your microphone. Please speak into your mic and tap Submit Answer again.');
     },
     [] // eslint-disable-line react-hooks/exhaustive-deps
   );
@@ -828,24 +827,37 @@ export function useVoiceInterview({
     await startListeningInternal();
   }, [startListeningInternal]);
 
+  const submitVoiceAnswer = useCallback(async () => {
+    if (!isListeningRef.current && voiceState !== 'listening') return;
+    const current = (accumulatedSpeechRef.current + ' ' + currentInterimText).trim();
+    stopListening();
+    setCurrentInterimText('');
+    accumulatedSpeechRef.current = '';
+    await handleStudentUtteranceInternal(current);
+  }, [voiceState, currentInterimText, stopListening, handleStudentUtteranceInternal]);
+
+  const cancelListening = useCallback(() => {
+    stopListening();
+    setCurrentInterimText('');
+    accumulatedSpeechRef.current = '';
+    audioChunksRef.current = [];
+    setVoiceState('idle');
+  }, [stopListening]);
+
   const toggleListening = useCallback(() => {
     if (voiceState === 'listening') {
-      const current = (accumulatedSpeechRef.current + ' ' + currentInterimText).trim();
-      stopListening();
-      setCurrentInterimText('');
-      accumulatedSpeechRef.current = '';
-      handleStudentUtteranceInternal(current);
+      submitVoiceAnswer();
     } else if (voiceState === 'speaking') {
       if (typeof window !== 'undefined' && window.speechSynthesis) {
         window.speechSynthesis.cancel();
         isSpeakingRef.current = false;
       }
       clearSpeechTimers();
-      startListening();
+      setVoiceState('idle');
     } else if (voiceState === 'idle') {
       startListening();
     }
-  }, [voiceState, currentInterimText, startListening, stopListening, handleStudentUtteranceInternal]);
+  }, [voiceState, submitVoiceAnswer, startListening]);
 
   // Trigger initial question when room loads (stable callback)
   const triggerInitialQuestion = useCallback(
@@ -913,12 +925,8 @@ export function useVoiceInterview({
   const notifyInterviewerSpeechEnd = useCallback(() => {
     isSpeakingRef.current = false;
     setVoiceState('idle');
-    setTimeout(() => {
-      if (!isListeningRef.current && !isThinkingRef.current) {
-        startListeningInternal();
-      }
-    }, 350);
-  }, [startListeningInternal]);
+    stopAudioMeter();
+  }, [stopAudioMeter]);
 
   const submitCodeForReview = useCallback(
     async (code: string, language: string, output?: string) => {
@@ -1008,6 +1016,8 @@ export function useVoiceInterview({
     setIsMuted,
     startListening,
     stopListening,
+    submitVoiceAnswer,
+    cancelListening,
     toggleListening,
     speakText,
     handleStudentUtterance,

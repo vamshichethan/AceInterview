@@ -1,7 +1,1357 @@
 {
-  "students": [],
-  "interviews": [],
-  "feedback": [],
+  "students": [
+    [
+      "7e919834-475a-4378-936e-9f4b04242794",
+      {
+        "id": "7e919834-475a-4378-936e-9f4b04242794",
+        "name": "Bukke Lahari",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-13T14:55:11.984Z"
+      }
+    ],
+    [
+      "a3a1829a-fd42-418a-9027-7bd1611c5678",
+      {
+        "id": "a3a1829a-fd42-418a-9027-7bd1611c5678",
+        "name": "Vamshi Chethan AM",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-15T06:05:57.953Z"
+      }
+    ],
+    [
+      "9dbab26d-c8fd-4cdd-9ec7-2d71a6778fd7",
+      {
+        "id": "9dbab26d-c8fd-4cdd-9ec7-2d71a6778fd7",
+        "name": "Vamshi Chethan AM",
+        "branch": "Computer Science & Engineering",
+        "created_at": "2026-09-15T06:32:42.923Z"
+      }
+    ],
+    [
+      "d2501d2b-730f-4612-ace6-de3dea55fe0a",
+      {
+        "id": "d2501d2b-730f-4612-ace6-de3dea55fe0a",
+        "name": "Vamshi (Admin)",
+        "branch": "Computer Science",
+        "created_at": "2026-09-15T08:20:24.115Z"
+      }
+    ],
+    [
+      "2217072d-addf-4277-aea0-590c6dc48273",
+      {
+        "id": "2217072d-addf-4277-aea0-590c6dc48273",
+        "name": "Suchendra A",
+        "branch": "Information Technology",
+        "created_at": "2026-09-15T10:33:04.520Z"
+      }
+    ]
+  ],
+  "interviews": [
+    [
+      "9a5d650b-649b-481c-be83-0cbb676f77dc",
+      {
+        "id": "9a5d650b-649b-481c-be83-0cbb676f77dc",
+        "student_id": "7e919834-475a-4378-936e-9f4b04242794",
+        "user_id": "2b1471e8-e77b-4906-a8ac-6808123d0d06",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "C, C++, Python, JavaScript, HTML, CSS, MySQL, TensorFlow, Keras, OpenCV, YOLOv5, Tailwind CSS, React, Node.js, Next.js, Express, FastAPI, LangChain, Qdrant, Neo4j, Docker, Gemini, MongoDB, Git, GitHub, Linux, Azure, JWT",
+        "project_description": "RepoGPT is a full-stack RAG platform that transforms GitHub repositories into searchable knowledge bases for contextual codebase Q&A with file-level citations. It features a complete repository ingestion pipeline for code chunking and vector indexing in Qdrant, paired with a Neo4j knowledge graph to map code structure and dependencies.",
+        "resume_summary": "Bukke Lahari is a Computer Science Engineering student at NITK Surathkal with research and practical expertise in AI applications, RAG systems, and full-stack web development. She has hands-on experience building complex AI tools using FastAPI, Next.js, LangChain, vector databases, and knowledge graphs, alongside research experience in secure NVM memory architecture.",
+        "resume_filename": "sde_resume.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker\",\"description\":\"A full-stack RAG platform converting GitHub repositories into searchable knowledge bases with file-level citations and Neo4j dependency mapping.\"},{\"title\":\"CodeBuddy AI – AI DSA Mentor Chrome Extension\",\"techStack\":\"React, Chrome MV3, Node.js, Express.js, MongoDB, Gemini API\",\"description\":\"An AI-powered DSA mentor Chrome extension capturing LeetCode problems to provide a 5-level progressive hint engine and personalized learning tracking.\"},{\"title\":\"SQL Murder Mystery Game\",\"techStack\":\"React, Node.js, Express, MySQL, Tailwind CSS, JWT\",\"description\":\"An interactive, gamified learning platform featuring 75 crime-mystery challenges designed to teach advanced MySQL concepts.\"}]",
+        "target_role": "sde",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Hello, Bukke! Welcome to your technical interview today. We will cover a Data Structures and Algorithms problem, core CS fundamentals like OS and DBMS, your resume project architecture, and a quick logical puzzle. Let us start directly with DSA.\n\nHere is the problem: You are given an unsorted array of integers 'nums' and an integer 'k'. Your task is to find the 'k'-th largest element in the array. Note that it is the 'k'-th largest element in the sorted order, not the 'k'-th distinct element.\n\nFor example, if 'nums' is [3,2,1,5,6,4] and 'k' is 2, the expected output is 5. This is because when the array is sorted, it becomes [1,2,3,4,5,6], and the 2nd largest element is 5. Constraints are 'k' will be between 1 and the length of 'nums', and 'nums[i]' will be within a typical integer range.\n\nBefore writing any code, walk me through your algorithmic approach. What data structure will you use, and what is your expected Big-O time and space complexity?",
+            "timestamp": "2026-09-13T14:55:24.100Z"
+          },
+          {
+            "sender": "user",
+            "text": "Are there any duplicates in the array?",
+            "timestamp": "2026-09-13T14:56:52.192Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Yes, duplicates can be present in the array. The problem asks for the 'k'-th largest element considering all elements, including duplicates, in their sorted order.",
+            "timestamp": "2026-09-13T14:56:56.361Z"
+          },
+          {
+            "sender": "user",
+            "text": "Approaches I can sort.",
+            "timestamp": "2026-09-13T14:57:19.305Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Okay, Bukke, sorting is one way to approach this problem. Could you elaborate on how you would use sorting to find the 'k'-th largest element?\n\nWhat would be the time and space complexity if you sort the entire array first?",
+            "timestamp": "2026-09-13T14:57:23.723Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you.",
+            "timestamp": "2026-09-13T14:57:43.451Z"
+          },
+          {
+            "sender": "ai",
+            "text": "You're welcome. So, if you decide to sort the array, how would you then find the 'k'-th largest element? And what would be the Big-O time and space complexity for that approach?",
+            "timestamp": "2026-09-13T14:57:47.108Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you. Thank you. Thank you.",
+            "timestamp": "2026-09-13T14:57:52.940Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Okay, Bukke, no problem. Let us get back to the problem. If you sort the array, say in ascending order, how would you then locate the 'k'-th largest element?\n\nAnd what would be the time complexity of sorting the array, and then finding the element?",
+            "timestamp": "2026-09-13T14:57:56.093Z"
+          },
+          {
+            "sender": "user",
+            "text": "So the tight complexity of sorting the element will be N login. Finding the element will be often because I will be retaining the n -, K -, 1 TH.",
+            "timestamp": "2026-09-13T14:58:29.207Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Very good, Bukke. 'N log N' for sorting and then 'O(1)' to access the element is correct. This is a valid approach.\n\nCan you think of any more optimal approach, perhaps one that does not require sorting the entire array? Consider data structures that are efficient for maintaining order or finding specific elements.",
+            "timestamp": "2026-09-13T14:58:32.882Z"
+          },
+          {
+            "sender": "user",
+            "text": "OK, uh, I can use uh, heaps here. I can use priority queue.",
+            "timestamp": "2026-09-13T14:59:05.447Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Excellent, Bukke, using a heap or a priority queue is a very good idea here. Now, walk me through how you would use a min-heap or a max-heap to find the 'k'-th largest element efficiently.\n\nWhat would be the time and space complexity for your heap-based approach?",
+            "timestamp": "2026-09-13T14:59:10.198Z"
+          },
+          {
+            "sender": "user",
+            "text": "So I'll be using a maxi to find a KTH largest element.",
+            "timestamp": "2026-09-13T14:59:36.680Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Okay, Bukke. You would use a max-heap. Could you explain the steps you would take with a max-heap to find the 'k'-th largest element?\n\nAnd what would be the time and space complexity of this max-heap approach?",
+            "timestamp": "2026-09-13T14:59:40.312Z"
+          },
+          {
+            "sender": "user",
+            "text": "Uh, I'll keep uh a while loop so that it will pop out the elements until we reach K So then we'll have K the largest element, and the time complexity will be still N login and space complexity will be often.",
+            "timestamp": "2026-09-13T15:00:15.706Z"
+          },
+          {
+            "sender": "ai",
+            "text": "You also mentioned \"CodeBuddy AI – AI DSA Mentor Chrome Extension\" on your resume. What was the hardest technical decision you made building that, and would you make the same call today?",
+            "timestamp": "2026-09-13T15:00:25.261Z"
+          },
+          {
+            "sender": "user",
+            "text": "I didn't understand the question What is mean by hard disk technical decision?",
+            "timestamp": "2026-09-13T15:00:45.708Z"
+          },
+          {
+            "sender": "ai",
+            "text": "If your C service received 10x its current traffic overnight, what breaks first, and what would you do architecturally to handle it?",
+            "timestamp": "2026-09-13T15:00:49.843Z"
+          },
+          {
+            "sender": "user",
+            "text": "What? I didn't understand the question.",
+            "timestamp": "2026-09-13T15:01:15.689Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Okay, no problem, Bukke. Let me rephrase that question for you.\n\nLet us talk about your 'RepoGPT' project. Imagine suddenly, ten times more users start using your platform all at once. Which part of your 'RepoGPT' system do you think will become very slow or stop working first?\n\nAnd then, how would you change or improve your system's design to manage all these new users and keep it running smoothly?",
+            "timestamp": "2026-09-13T15:01:21.495Z"
+          },
+          {
+            "sender": "user",
+            "text": "OK umm, when 10X more user starts using my repo GPT platform then uh my retrieval uh of data part will become very slow and also my Quran database cannot store all the users data at a time. So to solve this problem I'll have multiple servers. LGBT and all the servers are managed by. So it will balance the load equally.",
+            "timestamp": "2026-09-13T15:02:24.422Z"
+          },
+          {
+            "sender": "ai",
+            "text": "That is a good point, Bukke. The retrieval part and Qdrant could definitely become bottlenecks. Using multiple servers and a load balancer is a solid first step for horizontal scaling.\n\nWhat about your Neo4j knowledge graph? How would that part of the system handle a 10x increase in user queries or ingestion of new repositories?",
+            "timestamp": "2026-09-13T15:02:28.963Z"
+          },
+          {
+            "sender": "user",
+            "text": "For the Neo 4G knowledge growth database also I'll keep different servers and all those are balanced by the load balancer.",
+            "timestamp": "2026-09-13T15:03:04.874Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Okay, so replicating Neo4j and using a load balancer for it as well. That makes sense for scalability.\n\nWhat about the ingestion pipeline itself? When many users try to ingest repositories at the same time, what challenges might arise, and how would you handle them? Think about the process of chunking code and creating embeddings.",
+            "timestamp": "2026-09-13T15:03:08.798Z"
+          },
+          {
+            "sender": "user",
+            "text": "I'm so one hour or some kings will can go to 1 server and another change will go to another server. This can be.",
+            "timestamp": "2026-09-13T15:03:50.755Z"
+          },
+          {
+            "sender": "ai",
+            "text": "That is a good idea to distribute the chunking and embedding tasks across multiple servers. How would you manage these tasks to ensure they are processed reliably and efficiently, even if one server goes down or gets overloaded?\n\nWould you use any specific tools or design patterns for this distributed processing?",
+            "timestamp": "2026-09-13T15:03:53.860Z"
+          },
+          {
+            "sender": "user",
+            "text": "I will be using micro service architecture. Only, uh, once I have owned to the one job, the job will be distribut.",
+            "timestamp": "2026-09-13T15:04:25.871Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Microservices are definitely a strong choice for distributing tasks. When you say the job will be distributed, how would you ensure that if a chunking or embedding job fails on one microservice, it is retried or picked up by another?\n\nDo you have any specific mechanism in mind for reliable task distribution and fault tolerance in a microservices setup?",
+            "timestamp": "2026-09-13T15:04:30.009Z"
+          },
+          {
+            "sender": "user",
+            "text": "We can use message queue here.",
+            "timestamp": "2026-09-13T15:04:57.587Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Last one — here's a brain teaser: you have 8 balls that look identical. One is slightly heavier. You have a balance scale and only 2 weighings allowed. How do you find the heavier ball?",
+            "timestamp": "2026-09-13T15:05:01.546Z"
+          },
+          {
+            "sender": "user",
+            "text": "OK, uh, for this one.",
+            "timestamp": "2026-09-13T15:05:21.582Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Take your time, Bukke. Think out loud if you wish. This is a classic puzzle.",
+            "timestamp": "2026-09-13T15:05:25.207Z"
+          },
+          {
+            "sender": "user",
+            "text": "I can divide 8 balls into two parts, 4 ball, 14 ball, one uh, first I'll measure the four balls and then again I'll measure the another 4 balls, which is heavier. I will again divide those 4 balls into two balls. I'll measure uh 2 balls and I'll measure another 2 balls. And from this, which is heavier, I'll divide those two balls. So I'll measure again one and one. Then we can know the heavier ball in just six. Uh, attempts of uh. Taking weight.",
+            "timestamp": "2026-09-13T15:06:12.488Z"
+          },
+          {
+            "sender": "ai",
+            "text": "That is a good breakdown, Bukke, and your logic to narrow it down to one ball using three weighings is correct.\n\nHowever, the puzzle has a specific constraint: you are allowed only *two* weighings. Could you think of a way to find the heavier ball within just two weighings?",
+            "timestamp": "2026-09-13T15:06:17.840Z"
+          },
+          {
+            "sender": "user",
+            "text": "Within two wings in the sense I can see the wait only two times.",
+            "timestamp": "2026-09-13T15:06:44.521Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Yes, that is exactly right, Bukke. You can only use the balance scale twice.\n\nThink about how you might divide the 8 balls into groups at the very beginning. Is there a way to divide them into more than two groups to make the most of each weighing?",
+            "timestamp": "2026-09-13T15:06:48.370Z"
+          },
+          {
+            "sender": "user",
+            "text": "Yes. In a divide, uh.",
+            "timestamp": "2026-09-13T15:07:21.051Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Yes, Bukke, how would you divide them? Think about the balance scale: it has two pans, and you can also leave some balls off the scale. How can you use this to your advantage?",
+            "timestamp": "2026-09-13T15:07:26.137Z"
+          },
+          {
+            "sender": "user",
+            "text": "I'll divide the balls as.",
+            "timestamp": "2026-09-13T15:07:45.155Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Go on, Bukke. How would you divide the balls to make the most of your two weighings? What groups would you put on the scale, and what would you do with the remaining balls?",
+            "timestamp": "2026-09-13T15:07:50.102Z"
+          },
+          {
+            "sender": "user",
+            "text": "Not possible to decide the ball in two wings.",
+            "timestamp": "2026-09-13T15:08:55.230Z"
+          },
+          {
+            "sender": "ai",
+            "text": "That wraps up our session. Thanks for walking me through all of that — you'll receive your detailed evaluation report with scores across DSA, system design, project depth, and behavioral shortly. Any questions for me before we close?",
+            "timestamp": "2026-09-13T15:08:58.134Z"
+          },
+          {
+            "sender": "user",
+            "text": "No. No.",
+            "timestamp": "2026-09-13T15:09:24.085Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Okay, Bukke. I appreciate you thinking through the puzzle, and your approach for three weighings was very logical.\n\nWe have covered DSA, CS fundamentals, your project, and the puzzle today. You did a good job going through all the rounds. Since you do not have any further questions for me, we can conclude the interview.\n\nPlease click on 'Finish Interview' at the top to complete the process and receive your complete hiring evaluation dossier. All the best!",
+            "timestamp": "2026-09-13T15:09:29.710Z"
+          }
+        ],
+        "duration_seconds": 886,
+        "status": "completed",
+        "created_at": "2026-09-13T14:55:13.078Z"
+      }
+    ],
+    [
+      "99dce68a-d0db-4583-96e6-8834512c76b7",
+      {
+        "id": "99dce68a-d0db-4583-96e6-8834512c76b7",
+        "student_id": "a3a1829a-fd42-418a-9027-7bd1611c5678",
+        "user_id": "7b52962a-a0ac-4116-9872-9635a68286e9",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "Java, Python, C, C++, JavaScript, TypeScript, SQL, HTML, CSS, Next.js, React, Node.js, Express.js, FastAPI, LangChain, TailwindCSS, Chrome Extension APIs, PostgreSQL, MongoDB, MySQL, Qdrant, Neo4j, Docker, Kubernetes, Kafka, Git, GitHub, GitHub Actions, Vercel, RAG, LLM Engineering, Prompt Engineering, OpenAI API, Gemini API, OCR, PyTorch, Scikit-learn, Pandas, NumPy, Distributed Systems, Microservices, Event-Driven Architecture, Vector Databases, Knowledge Graphs, REST APIs, SSE, CI/CD",
+        "project_description": "RepoGPT is an AI-powered developer assistant that converts GitHub repositories into an interactive knowledge base using Retrieval-Augmented Generation (RAG). It combines Qdrant vector embeddings for semantic retrieval with a Neo4j knowledge graph to map code dependencies, delivering real-time streaming responses via Server-Sent Events (SSE).",
+        "resume_summary": "Vamshi Chethan AM is a Computer Science undergraduate at NIT Karnataka with strong expertise in AI/ML, full-stack development, and distributed systems. He has proven hands-on experience building complex RAG architectures, microservices, and automation pipelines, backed by a strong competitive programming profile as a Codeforces Expert.",
+        "resume_filename": "vamshi.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j\",\"description\":\"An AI developer assistant that converts source code repositories into an interactive knowledge base using RAG, Qdrant vector retrieval, and Neo4j graph mapping.\"},{\"title\":\"MedAI – AI Healthcare Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, OCR, Docker\",\"description\":\"An AI platform that processes medical reports via OCR and RAG to answer queries and summarize reports using Dockerized microservices.\"},{\"title\":\"CodeBuddy AI – AI Coding Mentor Chrome Extension\",\"techStack\":\"React, Chrome Extension APIs, FastAPI, OpenAI, Gemini\",\"description\":\"A browser extension giving progressive coding hints, automated debugging, and algorithmic pattern recognition without providing direct answers.\"}]",
+        "target_role": "ai_ml",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Hello Vamshi, welcome to your technical interview today where we will cover DSA, CS fundamentals, your project architecture, and a logical puzzle. Let us start with a DSA problem: given an array of 2D points representing vector coordinates and an integer 'k', return the 'k' closest points to the origin '(0, 0)' using Euclidean distance. For example, if 'points = [[1,3],[-2,2]]' and 'k = 1', the output is '[[-2,2]]'. Before writing any code, walk me through your algorithmic approach, choice of data structure, and expected Big-O time and space complexity.",
+            "timestamp": "2026-09-15T06:06:15.089Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you.",
+            "timestamp": "2026-09-15T06:07:17.125Z"
+          },
+          {
+            "sender": "ai",
+            "text": "You are welcome! Whenever you are ready, please share your thought process and algorithmic approach for the problem. What data structure will you use, and what is the expected time and space complexity?",
+            "timestamp": "2026-09-15T06:07:22.789Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you.",
+            "timestamp": "2026-09-15T06:07:44.412Z"
+          },
+          {
+            "sender": "ai",
+            "text": "No problem at all! Take a moment to think about how we can find the 'k' closest points efficiently, perhaps using a Max-Heap or QuickSelect approach. Walk me through your logic step by step, and share what the time and space complexity will be.",
+            "timestamp": "2026-09-15T06:07:49.742Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you.",
+            "timestamp": "2026-09-15T06:08:13.405Z"
+          },
+          {
+            "sender": "ai",
+            "text": "No worries, take your time! If you are thinking about the approach, consider how calculating the Euclidean distance for each point and maintaining a Max-Heap of size 'k' might help. What would be the time and space complexity if we use a heap of size 'k'?",
+            "timestamp": "2026-09-15T06:08:19.206Z"
+          }
+        ],
+        "duration_seconds": 146,
+        "status": "completed",
+        "created_at": "2026-09-15T06:05:59.091Z"
+      }
+    ],
+    [
+      "5f114ce5-070b-4910-a0d6-057cdd2d5630",
+      {
+        "id": "5f114ce5-070b-4910-a0d6-057cdd2d5630",
+        "student_id": "9dbab26d-c8fd-4cdd-9ec7-2d71a6778fd7",
+        "user_id": "admin-vamshicodes29-super-admin",
+        "project_title": "RepoGPT – AI Repository Intelligence Platform",
+        "tech_stack": "C, C++, Java, Python, JavaScript, TypeScript, SQL, HTML, CSS, Spring Boot, JPA, Next.js, React, Node.js, Express.js, FastAPI, LangChain, TailwindCSS, PostgreSQL, MongoDB, MySQL, Qdrant, Neo4j, Docker, Kubernetes, Kafka, Git, GitHub Actions, Vercel, Helm, Gemini, Chrome MV3, REST APIs, SSE, CI/CD",
+        "project_description": "RepoGPT is a full-stack RAG platform that converts GitHub repositories into searchable knowledge bases for codebase Q&A. It utilizes Qdrant for semantic vector indexing, Neo4j for structural knowledge graphs, and FastAPI with Next.js to provide SSE-streamed AI answers and automated architecture diagrams.",
+        "resume_summary": "Vamshi Chethan AM is a Computer Science undergraduate at NITK Surathkal with expertise in full-stack development, distributed systems, LLM engineering, and event-driven architectures. He has interned at Citi India where he built orchestration frameworks using Python and Kubernetes, and has created complex projects including an electronic trading engine and a RAG platform. Additionally, he is a Codeforces Expert (rating 1707) with over 1,234 problems solved on LeetCode.",
+        "resume_filename": "231CS162_-_Resume_2356769c7-6ae4-4242-a85d-28a9f4509e06.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"RepoGPT – AI Repository Intelligence Platform\",\"techStack\":\"Next.js, FastAPI, LangChain, Gemini, Qdrant, Neo4j, Docker\",\"description\":\"A full-stack RAG system transforming GitHub repos into searchable knowledge bases using Qdrant vector search and Neo4j dependency graphs for codebase Q&A.\"},{\"title\":\"MarketX – Institutional Electronic Trading Platform\",\"techStack\":\"Java, Spring Boot, PostgreSQL, JPA, Kafka, Docker\",\"description\":\"An electronic trading platform with an in-memory limit order book, custom matching engine, and Kafka-based event-driven communication for risk services.\"},{\"title\":\"CodeBuddy AI – AI DSA Mentor Chrome Extension\",\"techStack\":\"React, Chrome MV3, Node.js, Express.js, MongoDB\",\"description\":\"An AI Chrome extension delivering progressive 5-level hints, automated code debugging, and personalized progress tracking for LeetCode practice.\"},{\"title\":\"Nimbus Post-Release Workflow Automation Engine (Citi India)\",\"techStack\":\"Python, REST APIs, Kafka, Kubernetes, Helm, Docker, CI/CD\",\"description\":\"A JSON-driven orchestration engine using the Registry Pattern for fault-tolerant execution, retries, and automated post-release deployment workflows.\"}]",
+        "target_role": "fullstack",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Hello Vamshi, welcome to your technical interview today! We will cover a DSA problem, core CS fundamentals, your project architecture, and a quick analytical puzzle. Let us start with DSA: given an array of API request intervals '[start, end]', return the minimum number of servers required to process all requests concurrently, where for input '[[0, 30], [5, 10], [15, 20]]' the output is '2'. Before writing any code, walk me through your algorithmic approach. What data structure will you use, and what is your expected Big-O time and space complexity?",
+            "timestamp": "2026-09-15T06:33:01.996Z"
+          },
+          {
+            "sender": "user",
+            "text": "Can you explain the question again Can you explain the question again",
+            "timestamp": "2026-09-15T06:34:09.442Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Sure! You are given a list of time intervals representing API requests, like '[start_time, end_time]', and you need to find the maximum number of overlapping requests at any single moment. For example, if one request runs from '0' to '30' and another from '5' to '10', both are active together, requiring at least '2' servers. How would you approach solving this, and what data structure and time complexity do you have in mind?",
+            "timestamp": "2026-09-15T06:34:15.888Z"
+          },
+          {
+            "sender": "user",
+            "text": "Let's start with a puzzle",
+            "timestamp": "2026-09-15T06:34:38.740Z"
+          },
+          {
+            "sender": "ai",
+            "text": "I appreciate your enthusiasm, Vamshi, but we need to follow our standard interview structure today. We will definitely do the puzzle in Round 4, but let us start with this DSA problem first. How would you approach tracking these overlapping time intervals?",
+            "timestamp": "2026-09-15T06:34:38.740Z"
+          }
+        ],
+        "duration_seconds": 0,
+        "status": "completed",
+        "created_at": "2026-09-15T06:32:43.907Z"
+      }
+    ],
+    [
+      "12bc5056-4af5-4290-b780-63bc56446c70",
+      {
+        "id": "12bc5056-4af5-4290-b780-63bc56446c70",
+        "student_id": "d2501d2b-730f-4612-ace6-de3dea55fe0a",
+        "user_id": "admin-vamshicodes29-super-admin",
+        "project_title": "Full Stack Platform Assessment",
+        "tech_stack": "Java, Spring Boot, React, MySQL",
+        "project_description": "aa",
+        "resume_summary": "",
+        "resume_filename": "resume.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"nan\",\"techStack\":\"nan\",\"description\":\"aa\"}]",
+        "target_role": "sde",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Hello! Welcome to your technical interview today. We will cover a Data Structures and Algorithms problem, core CS fundamentals like OS and DBMS, your resume project architecture, and a quick logical puzzle. Let us start directly with DSA.\n\nHere is your problem: Given an array of integers 'nums' and an integer 'target', find the total number of continuous subarrays whose sum equals 'target'. For example, if 'nums' is [1, 1, 1] and 'target' is 2, the output should be 2 because the subarrays at index ranges [0, 1] and [1, 2] both sum to 2. Array length can be up to 20,000 elements.\n\nBefore writing any code, walk me through your algorithmic approach. What data structure will you use, and what is your expected Big-O time and space complexity?",
+            "timestamp": "2026-09-15T08:20:36.823Z"
+          },
+          {
+            "sender": "user",
+            "text": "you",
+            "timestamp": "2026-09-15T08:21:41.141Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Take your time and think out loud. How would you find continuous subarrays that add up to the 'target' value? Let me know what data structure comes to your mind first.",
+            "timestamp": "2026-09-15T08:21:46.244Z"
+          },
+          {
+            "sender": "user",
+            "text": "take your time and think out loud how would you find continuous subarrays that add up to the",
+            "timestamp": "2026-09-15T08:21:54.149Z"
+          },
+          {
+            "sender": "ai",
+            "text": "No worries, let us break it down together. If we maintain a running prefix sum, can we use a Hash Map to store how many times each sum has appeared so far? Tell me how storing prefix sum frequencies could help us find the subarray sum in 'O(N)' time.",
+            "timestamp": "2026-09-15T08:22:00.375Z"
+          },
+          {
+            "sender": "user",
+            "text": "No worries, let us break it down together. If we maintain a running prefix sum, can we use a hash map to store how many times each sum has appeared so far? Storing prefix sum frequencies could help us find the subarray sum in oxygen mononitride time.",
+            "timestamp": "2026-09-15T08:22:21.346Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Haha, yes, 'O(N)' time, not oxygen mononitride! So, if we store the prefix sum as the key and its frequency as the value in a Hash Map, how would you check for the target sum at each step? Walk me through that logic, along with the expected time and space complexity.",
+            "timestamp": "2026-09-15T08:22:25.975Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you.",
+            "timestamp": "2026-09-15T08:22:56.700Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Very good. Now let us move on to some core Computer Science fundamentals for your role. Could you explain the key differences between a process and a thread in an Operating System? Walk me through how memory is shared and how context switching differs between them.",
+            "timestamp": "2026-09-15T08:23:06.632Z"
+          },
+          {
+            "sender": "user",
+            "text": "Thank you.",
+            "timestamp": "2026-09-15T08:23:31.386Z"
+          },
+          {
+            "sender": "ai",
+            "text": "You are welcome! When you are ready, please share your thoughts on processes versus threads. Explain how they share memory and why context switching between threads is generally faster.",
+            "timestamp": "2026-09-15T08:23:31.386Z"
+          }
+        ],
+        "duration_seconds": 0,
+        "status": "completed",
+        "created_at": "2026-09-15T08:20:25.169Z"
+      }
+    ],
+    [
+      "8c63417d-5675-4d24-a890-ff73c8808dc5",
+      {
+        "id": "8c63417d-5675-4d24-a890-ff73c8808dc5",
+        "student_id": "2217072d-addf-4277-aea0-590c6dc48273",
+        "user_id": "04f8ef40-95d4-42a8-945d-bd815c68bd37",
+        "project_title": "Aegis AI -- Android Scam Detection Application",
+        "tech_stack": "Java, Android Studio, Machine Learning",
+        "project_description": "An Android cybersecurity application designed to detect malicious APKs and fake investment apps using AI-driven risk evaluation.",
+        "resume_summary": "Suchendra A is an Information Science Engineering undergraduate with hands-on experience in full-stack web development, machine learning, and mobile security applications. He is an AI/ML Trainee at Samsung Innovation Campus and holds an impressive CGPA of 9.12.",
+        "resume_filename": "Suchendra_CV.pdf",
+        "interviewer_persona": "alex",
+        "all_projects": "[{\"title\":\"GhostChat -- Real-Time Chat Application\",\"techStack\":\"React.js, Node.js, Express.js, MongoDB, JWT\",\"description\":\"A real-time web application featuring instant user messaging, secure JWT-based authentication, and responsive UI components.\"},{\"title\":\"Aegis AI -- Android Scam Detection Application\",\"techStack\":\"Java, Android Studio, Machine Learning\",\"description\":\"An Android cybersecurity application designed to detect malicious APKs and fake investment apps using AI-driven risk evaluation.\"},{\"title\":\"F1-MapFeed -- Formula One Telemetry Visualization Platform\",\"techStack\":\"Python, FastF1, Pandas, Flask, Matplotlib\",\"description\":\"A telemetry analysis platform processing historical F1 race datasets to produce interactive performance visualizations and driver insights.\"}]",
+        "target_role": "fullstack",
+        "transcript": [
+          {
+            "sender": "ai",
+            "text": "Hello Suchendra, welcome to your technical interview today! We will cover a Data Structures and Algorithms problem, core CS fundamentals, your resume project architecture, and a quick logical puzzle.\n\nLet us start directly with DSA. Given an array of integers 'riskScores' representing security risk values of scanned app packages and an integer 'target', write a function to find the total number of continuous subarrays whose sum equals 'target'. For example, if 'riskScores' is [1, 1, 1] and 'target' is 2, the expected output is 2 because both subarrays from index 0 to 1 and index 1 to 2 sum up to 2. The array length can be up to 10^5 and values can be negative, zero, or positive.\n\nBefore writing any code, walk me through your algorithmic approach. What data structure will you use, and what is your expected Big-O time and space complexity?",
+            "timestamp": "2026-09-15T10:33:21.839Z"
+          },
+          {
+            "sender": "user",
+            "text": "married hearing",
+            "timestamp": "2026-09-15T10:34:35.690Z"
+          },
+          {
+            "sender": "ai",
+            "text": "I am sorry, I did not catch that clearly. Could you please check your microphone or type out your thought process for the subarray sum problem? Walk me through how you plan to find continuous subarrays equal to 'target', along with the time and space complexity.",
+            "timestamp": "2026-09-15T10:35:29.588Z"
+          },
+          {
+            "sender": "user",
+            "text": "along with the time and space complexity using sliding window",
+            "timestamp": "2026-09-15T10:35:49.961Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Keep in mind that the array elements can be negative, zero, or positive. A standard sliding window will not work here because the window sum will not change monotonically when you contract or expand it. Think about using a prefix sum combined with a Hash Map to keep track of cumulative sums. How would you adjust your logic and complexity with that approach?",
+            "timestamp": "2026-09-15T10:35:57.697Z"
+          },
+          {
+            "sender": "user",
+            "text": "using sliding window",
+            "timestamp": "2026-09-15T10:36:17.208Z"
+          },
+          {
+            "sender": "ai",
+            "text": "With negative numbers present in 'riskScores', expanding or shrinking the window does not guarantee the sum increases or decreases, so a sliding window will fail. If we maintain a running prefix sum and store its frequency in a Hash Map, we can check if 'prefixSum - target' exists in 'O(1)' time. What would be the overall time and space complexity if you use this prefix sum and Hash Map approach?",
+            "timestamp": "2026-09-15T10:36:17.208Z"
+          },
+          {
+            "sender": "user",
+            "text": "number of",
+            "timestamp": "2026-09-15T10:37:29.396Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Take your time, Suchendra. With the prefix sum and Hash Map approach, what would be the Big-O time and space complexity for processing the array? Once you tell me, you can go ahead and write the code.",
+            "timestamp": "2026-09-15T10:37:34.865Z"
+          },
+          {
+            "sender": "user",
+            "text": "not interested",
+            "timestamp": "2026-09-15T10:37:53.260Z"
+          },
+          {
+            "sender": "ai",
+            "text": "I understand, Suchendra. If you would prefer to skip this problem and jump straight into CS Fundamentals or your Aegis AI project architecture, we can do that. Or let me know if you would like to wrap up the interview here instead.",
+            "timestamp": "2026-09-15T10:37:59.253Z"
+          },
+          {
+            "sender": "user",
+            "text": "What did you say?",
+            "timestamp": "2026-09-15T10:38:27.568Z"
+          },
+          {
+            "sender": "ai",
+            "text": "I mentioned that if you do not want to continue with this DSA question, we can skip it and move straight to CS Fundamentals or your Aegis AI project architecture. Let me know how you would like to proceed with the interview.",
+            "timestamp": "2026-09-15T10:38:32.943Z"
+          },
+          {
+            "sender": "user",
+            "text": "let's continue this yourself",
+            "timestamp": "2026-09-15T10:38:44.090Z"
+          },
+          {
+            "sender": "ai",
+            "text": "No problem at all, let us move on to the CS Fundamentals round. Since your background includes Java and full-stack development, let us discuss Database Indexing and ACID properties. Can you explain how B-Tree indexes speed up read operations in SQL databases, and what trade-off occurs during write operations?",
+            "timestamp": "2026-09-15T10:38:58.312Z"
+          },
+          {
+            "sender": "user",
+            "text": "let's let's continue with the DSL DSA",
+            "timestamp": "2026-09-15T10:39:09.031Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Sure, let us get back to the DSA problem! As we discussed, using a running prefix sum along with a Hash Map allows us to look up 'prefixSum - target' efficiently. Walk me through how you will update the map as you iterate through the array, and tell me the expected time and space complexity.",
+            "timestamp": "2026-09-15T10:39:34.266Z"
+          },
+          {
+            "sender": "user",
+            "text": "wait I am thinking",
+            "timestamp": "2026-09-15T10:40:01.262Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Take your time, Suchendra. Feel free to think out loud—how does checking if 'prefixSum - target' exists in the Hash Map help us find the required continuous subarrays?",
+            "timestamp": "2026-09-15T10:40:28.032Z"
+          },
+          {
+            "sender": "user",
+            "text": "question",
+            "timestamp": "2026-09-15T10:40:43.810Z"
+          },
+          {
+            "sender": "ai",
+            "text": "The problem is: Given an array 'riskScores' containing positive, negative, or zero integers, and an integer 'target', return the total number of continuous subarrays whose sum equals 'target'. For example, if 'riskScores' is [1, 1, 1] and 'target' is 2, the output is 2. Walk me through how you will implement this using a prefix sum and a Hash Map.",
+            "timestamp": "2026-09-15T10:40:49.313Z"
+          },
+          {
+            "sender": "user",
+            "text": "Shapath Shapath",
+            "timestamp": "2026-09-15T10:41:20.170Z"
+          },
+          {
+            "sender": "ai",
+            "text": "I could not understand that response. Please focus on the problem at hand—are you ready to explain the prefix sum logic, or would you like to start writing the code directly in your choice of language?",
+            "timestamp": "2026-09-15T10:41:44.214Z"
+          },
+          {
+            "sender": "user",
+            "text": "tap to speak",
+            "timestamp": "2026-09-15T10:42:01.371Z"
+          },
+          {
+            "sender": "ai",
+            "text": "You can simply type your answer directly here in the text box. Take your time to write down your approach or the Java code for the subarray sum problem. Whenever you are ready, go ahead and submit your answer.",
+            "timestamp": "2026-09-15T10:42:17.155Z"
+          },
+          {
+            "sender": "user",
+            "text": "wait I will you start Deputy and I will answer you",
+            "timestamp": "2026-09-15T10:42:42.129Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Sure, I am ready when you are! As you loop through the array 'riskScores', how will you calculate the running prefix sum and check the Hash Map for 'prefixSum - target'? Also, what will be the overall time complexity of this solution?",
+            "timestamp": "2026-09-15T10:42:42.129Z"
+          },
+          {
+            "sender": "user",
+            "text": "printer you know Pintu ko Papa",
+            "timestamp": "2026-09-15T10:45:37.714Z"
+          },
+          {
+            "sender": "ai",
+            "text": "Let us stay focused on the technical interview, Suchendra. If you are ready to solve this DSA question, please type your approach or code for the subarray sum problem now. Otherwise, tell me and we can move directly to CS Fundamentals.",
+            "timestamp": "2026-09-15T10:45:37.714Z"
+          }
+        ],
+        "duration_seconds": 7,
+        "status": "completed",
+        "created_at": "2026-09-15T10:33:05.582Z"
+      }
+    ]
+  ],
+  "feedback": [
+    [
+      "9a5d650b-649b-481c-be83-0cbb676f77dc",
+      {
+        "id": "5efb2352-d643-4a13-a2ea-80470d5ffc57",
+        "confidence_score": 3,
+        "overall_verdict": "No Hire",
+        "interview_id": "9a5d650b-649b-481c-be83-0cbb676f77dc",
+        "technical_score": 4,
+        "communication_score": 5,
+        "interview_skills_breakdown": {
+          "technical_depth": 4,
+          "problem_solving": 5,
+          "system_architecture": 4,
+          "communication_clarity": 5,
+          "vocal_confidence": 3
+        },
+        "interview_improvements": [
+          "When asked about concurrency and write conflicts in C, C++, Python, JavaScript, HTML, CSS, MySQL, TensorFlow, Keras, OpenCV, YOLOv5, Tailwind CSS, React, Node.js, Next.js, Express, FastAPI, LangChain, Qdrant, Neo4j, Docker, Gemini, MongoDB, Git, GitHub, Linux, Azure, JWT, state specific locking mechanisms (e.g. optimistic locking via version columns) rather than general assertions.",
+          "Be more direct in explaining failure recovery: outline exact health checks, retry timeouts, and circuit breaker patterns.",
+          "Structure answers proactively using the STAR method (Situation, Task, Action, Result) when describing past project challenges."
+        ],
+        "resume_score": 80,
+        "resume_verdict": "ATS Verified — Baseline Established",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 7,
+          "tech_stack_relevance": 9,
+          "project_presentation": 8
+        },
+        "resume_improvements": [
+          "Quantify achievements using the Google XYZ formula: Rewrite 'RepoGPT – AI Repository Intelligence Platform' bullets to highlight tangible performance (e.g., 'Engineered C microservice handling 15k requests/day, cutting response times by 32%').",
+          "Incorporate missing high-yield keywords for SDE: explicitly include Docker, CI/CD pipelines, automated testing (Jest/PyTest), and cloud deployment.",
+          "Group technical competencies into clear ATS-parsed subcategories: Languages, Frameworks, Databases, and Cloud/DevOps.",
+          "Detail architectural complexity: clarify data flow, caching layers (e.g. Redis), and security practices (e.g. JWT with rotation)."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Software Development Engineer (SDE)",
+            "match_percentage": 95,
+            "seniority": "Entry-Level / Associate (0-2 YOE)",
+            "why_fit": "Strong alignment with C, hands-on service development, and practical database schema architecture demonstrated in RepoGPT – AI Repository Intelligence Platform.",
+            "ideal_companies": [
+              "Top Tech Product Firms",
+              "High-Growth Fintech Scaleups",
+              "Global SaaS Leaders"
+            ]
+          },
+          {
+            "role_title": "Full Stack Engineer",
+            "match_percentage": 89,
+            "seniority": "Junior to Mid Software Engineer",
+            "why_fit": "Versatile project portfolio with 3 distinct projects, covering API communication and modular architecture.",
+            "ideal_companies": [
+              "Venture-Backed Startups",
+              "Enterprise Cloud Providers",
+              "Developer Tooling Companies"
+            ]
+          },
+          {
+            "role_title": "Cloud & API Platform Specialist",
+            "match_percentage": 83,
+            "seniority": "Associate Software Engineer",
+            "why_fit": "Solid foundational comprehension of microservice boundaries, authentication patterns, and scalable data persistence.",
+            "ideal_companies": [
+              "E-Commerce Platforms",
+              "Digital Health Systems",
+              "Fintech Infrastructure"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "Google Jobs",
+            "role_title": "Software Development Engineer (C++) — Live Aggregate Index",
+            "apply_url": "https://www.google.com/search?q=Software%20Development%20Engineer%20C%2B%2B%20jobs%20India&ibp=htl;jobs",
+            "badge_text": "Live Google Index",
+            "match_tag": "98% Resume Match",
+            "description": "Live Google Jobs aggregator querying thousands of company careers portals, Lever, and Greenhouse simultaneously for C++ developers in India & remote."
+          },
+          {
+            "platform": "LinkedIn",
+            "role_title": "Software Development Engineer (C++ & Python)",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Software%20Development%20Engineer%20C%2B%2B&location=India&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "96% Resume Match",
+            "description": "Active public LinkedIn requisitions posted within the last 7 days matching your verified skills in C++ and Python."
+          },
+          {
+            "platform": "Naukri",
+            "role_title": "Software Development Engineer Openings on Naukri India",
+            "apply_url": "https://www.naukri.com/software-engineer-jobs?k=C%2B%2B",
+            "badge_text": "Verified Indian Postings",
+            "match_tag": "95% Resume Match",
+            "description": "Direct campus and lateral engineering requisitions across Indian tech unicorns, MNCs, and product firms requiring C++."
+          },
+          {
+            "platform": "Foundit",
+            "role_title": "Software Development Engineer Opportunities — C++",
+            "apply_url": "https://www.foundit.in/srp/results?query=Software%20Development%20Engineer%20C%2B%2B",
+            "badge_text": "Immediate Hires",
+            "match_tag": "94% Resume Match",
+            "description": "Active engineering openings with verified recruiter contacts on Foundit India (formerly Monster) for C++ and Python."
+          },
+          {
+            "platform": "Internshala",
+            "role_title": "Entry-Level / Fresher Software Development Engineer (C++)",
+            "apply_url": "https://internshala.com/jobs/software-development-jobs/",
+            "badge_text": "0-2 YOE Placement",
+            "match_tag": "95% Resume Match",
+            "description": "Tailored college placement and entry-level engineering openings specifically hiring 0-2 YOE freshers with hands-on C++ projects."
+          },
+          {
+            "platform": "Cutshort",
+            "role_title": "C++ Engineer at High-Growth Startups",
+            "apply_url": "https://cutshort.io/jobs?search=C%2B%2B",
+            "badge_text": "Direct to Founders",
+            "match_tag": "92% Resume Match",
+            "description": "Fast-growing Indian tech startups and scaleups actively hiring engineers with hands-on C++ project experience with direct founder chat."
+          }
+        ],
+        "strengths": [
+          "Articulated the core service boundaries and data flow of RepoGPT – AI Repository Intelligence Platform.",
+          "Demonstrated familiarity with C and software patterns."
+        ],
+        "weaknesses": [
+          "Struggled to articulate edge case handling and boundary constraints under deep probing.",
+          "Did not specify explicit Big-O mathematical derivation for time and space complexity upfront.",
+          "Lacked concrete database locking strategies (e.g. optimistic locking / SELECT FOR UPDATE) when asked about concurrency."
+        ],
+        "improvements": [
+          "Could not articulate edge case handling and failure recovery in granular detail.",
+          "Answers lacked specific implementation details under deep probing — stayed too high-level."
+        ],
+        "practice_plan": [
+          "Deep dive into C internals: query optimization, connection pooling, and memory profiling.",
+          "Practice the STAR method for describing specific implementation bottlenecks and bug fixes.",
+          "Study distributed systems fundamentals: CAP theorem, eventual consistency, and SAGA patterns.",
+          "Review JWT lifecycle, token revocation strategies, and OAuth 2.0 flows."
+        ],
+        "topic_tags": [
+          "Database Indexing",
+          "Concurrency",
+          "API Security",
+          "System Architecture",
+          "ATS Optimization"
+        ],
+        "created_at": "2026-09-13T15:10:03.664Z"
+      }
+    ],
+    [
+      "99dce68a-d0db-4583-96e6-8834512c76b7",
+      {
+        "id": "7fbbef73-37ce-4fed-bbff-9dd6eb1093b5",
+        "confidence_score": 1,
+        "overall_verdict": "No Hire",
+        "interview_id": "99dce68a-d0db-4583-96e6-8834512c76b7",
+        "technical_score": 1,
+        "communication_score": 1,
+        "interview_skills_breakdown": {
+          "technical_depth": 1,
+          "problem_solving": 1,
+          "system_architecture": 1,
+          "communication_clarity": 1,
+          "vocal_confidence": 1
+        },
+        "interview_improvements": [
+          "Candidate did not answer technical questions asked by the interviewer (skipped questions or responded with \"I don't know\" / filler).",
+          "When presented with a coding problem, outline your algorithmic thought process out loud to the interviewer rather than passing.",
+          "State your expected time and space complexity (Big-O) before attempting implementation.",
+          "Use the live code editor to implement solutions and run test cases to demonstrate programming fluency."
+        ],
+        "resume_score": 75,
+        "resume_verdict": "Resume Profile Uploaded — Interview Hiring Bar Unmet (1/10)",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 7,
+          "tech_stack_relevance": 8,
+          "project_presentation": 7
+        },
+        "resume_improvements": [
+          "Apply Google XYZ formula on resume projects: 'Accomplished [X], as measured by [Y], by doing [Z]'. Example: 'Engineered backend API for RepoGPT – AI Repository Intelligence Platform, reducing latency by 30%'.",
+          "Add explicit production competencies (Docker, GitHub Actions, unit testing) to pass corporate ATS screening.",
+          "Quantify scale: include database row counts, active user volumes, or query throughput metrics."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Machine Learning Engineer",
+            "match_percentage": 95,
+            "seniority": "Entry-Level / Associate (0-2 YOE)",
+            "why_fit": "Strong alignment with Java, hands-on service development, and practical database schema architecture demonstrated in RepoGPT – AI Repository Intelligence Platform.",
+            "ideal_companies": [
+              "Top Tech Product Firms",
+              "High-Growth Fintech Scaleups",
+              "Global SaaS Leaders"
+            ]
+          },
+          {
+            "role_title": "Applied AI Systems Developer",
+            "match_percentage": 89,
+            "seniority": "Junior to Mid Software Engineer",
+            "why_fit": "Versatile project portfolio with 3 distinct projects, covering API communication and modular architecture.",
+            "ideal_companies": [
+              "Venture-Backed Startups",
+              "Enterprise Cloud Providers",
+              "Developer Tooling Companies"
+            ]
+          },
+          {
+            "role_title": "Cloud & API Platform Specialist",
+            "match_percentage": 83,
+            "seniority": "Associate Software Engineer",
+            "why_fit": "Solid foundational comprehension of microservice boundaries, authentication patterns, and scalable data persistence.",
+            "ideal_companies": [
+              "E-Commerce Platforms",
+              "Digital Health Systems",
+              "Fintech Infrastructure"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "Google Jobs",
+            "role_title": "Machine Learning Engineer (Java) — Live Aggregate Index",
+            "apply_url": "https://www.google.com/search?q=Machine%20Learning%20Engineer%20Java%20jobs%20India&ibp=htl;jobs",
+            "badge_text": "Live Google Index",
+            "match_tag": "98% Resume Match",
+            "description": "Live Google Jobs aggregator querying thousands of company careers portals, Lever, and Greenhouse simultaneously for Java developers in India & remote."
+          },
+          {
+            "platform": "LinkedIn",
+            "role_title": "Machine Learning Engineer (Java & Python)",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Machine%20Learning%20Engineer%20Java&location=India&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "96% Resume Match",
+            "description": "Active public LinkedIn requisitions posted within the last 7 days matching your verified skills in Java and Python."
+          },
+          {
+            "platform": "Naukri",
+            "role_title": "Machine Learning Engineer Openings on Naukri India",
+            "apply_url": "https://www.naukri.com/software-engineer-jobs?k=Java",
+            "badge_text": "Verified Indian Postings",
+            "match_tag": "95% Resume Match",
+            "description": "Direct campus and lateral engineering requisitions across Indian tech unicorns, MNCs, and product firms requiring Java."
+          },
+          {
+            "platform": "Foundit",
+            "role_title": "Machine Learning Engineer Opportunities — Java",
+            "apply_url": "https://www.foundit.in/srp/results?query=Machine%20Learning%20Engineer%20Java",
+            "badge_text": "Immediate Hires",
+            "match_tag": "94% Resume Match",
+            "description": "Active engineering openings with verified recruiter contacts on Foundit India (formerly Monster) for Java and Python."
+          },
+          {
+            "platform": "Internshala",
+            "role_title": "Entry-Level / Fresher Machine Learning Engineer (Java)",
+            "apply_url": "https://internshala.com/jobs/software-development-jobs/",
+            "badge_text": "0-2 YOE Placement",
+            "match_tag": "95% Resume Match",
+            "description": "Tailored college placement and entry-level engineering openings specifically hiring 0-2 YOE freshers with hands-on Java projects."
+          },
+          {
+            "platform": "Cutshort",
+            "role_title": "Java Engineer at High-Growth Startups",
+            "apply_url": "https://cutshort.io/jobs?search=Java",
+            "badge_text": "Direct to Founders",
+            "match_tag": "92% Resume Match",
+            "description": "Fast-growing Indian tech startups and scaleups actively hiring engineers with hands-on Java project experience with direct founder chat."
+          }
+        ],
+        "strengths": [
+          "Candidate profile registered for AI_ML track.",
+          "Project portfolio in scope: RepoGPT – AI Repository Intelligence Platform (Java, Python, C, C++, JavaScript, TypeScript, SQL, HTML, CSS, Next.js, React, Node.js, Express.js, FastAPI, LangChain, TailwindCSS, Chrome Extension APIs, PostgreSQL, MongoDB, MySQL, Qdrant, Neo4j, Docker, Kubernetes, Kafka, Git, GitHub, GitHub Actions, Vercel, RAG, LLM Engineering, Prompt Engineering, OpenAI API, Gemini API, OCR, PyTorch, Scikit-learn, Pandas, NumPy, Distributed Systems, Microservices, Event-Driven Architecture, Vector Databases, Knowledge Graphs, REST APIs, SSE, CI/CD)."
+        ],
+        "weaknesses": [
+          "Unanswered technical interview: candidate failed to provide substantive answers to technical questions.",
+          "Multiple prompts skipped or answered with \"I don't know\" / non-answers without attempting problem-solving.",
+          "No working code implementation or test execution was submitted in the live code editor."
+        ],
+        "improvements": [
+          "Candidate must verbally answer technical questions and explain algorithmic steps rather than skipping.",
+          "Must implement and test code in the live editor to demonstrate basic programming proficiency."
+        ],
+        "practice_plan": [
+          "Practice mock interview speaking out loud with standard technical questions.",
+          "Study core DSA patterns: Two Pointers, Sliding Window, Fast/Slow Pointers, Binary Search.",
+          "Practice live coding on scratchpad under time pressure.",
+          "Review Big-O time and space complexity derivation."
+        ],
+        "topic_tags": [
+          "Verbal Communication",
+          "Problem Solving",
+          "Data Structures",
+          "DSA Protocol"
+        ],
+        "created_at": "2026-09-15T06:08:28.221Z"
+      }
+    ],
+    [
+      "8c63417d-5675-4d24-a890-ff73c8808dc5",
+      {
+        "id": "0132b6eb-db67-49e9-8d78-08074974c549",
+        "confidence_score": 1,
+        "overall_verdict": "No Hire",
+        "interview_id": "8c63417d-5675-4d24-a890-ff73c8808dc5",
+        "technical_score": 1,
+        "communication_score": 1,
+        "interview_skills_breakdown": {
+          "technical_depth": 1,
+          "problem_solving": 1,
+          "system_architecture": 1,
+          "communication_clarity": 1,
+          "vocal_confidence": 1
+        },
+        "interview_improvements": [
+          "When asked technical questions, walk the interviewer through your thought process rather than saying \"I don't know\" or skipping.",
+          "Switch to the live code editor and implement solutions rather than leaving the coding exercise unattempted.",
+          "State Big-O time and space complexity upfront before explaining your logic."
+        ],
+        "resume_score": 78,
+        "resume_verdict": "Solid Baseline — Needs Quantification",
+        "resume_rating_breakdown": {
+          "ats_readability": 8,
+          "impact_metrics": 6,
+          "tech_stack_relevance": 9,
+          "project_presentation": 8
+        },
+        "resume_improvements": [
+          "Quantify impact across projects using the XYZ framework (e.g., 'Achieved X latency reduction by implementing Y technology, resulting in Z improvement').",
+          "Add explicit performance benchmarks for Aegis AI model evaluation (e.g., accuracy, precision, recall scores on scam APK dataset).",
+          "Highlight backend system architecture and database schema details for GhostChat and F1-MapFeed."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Full Stack Developer",
+            "match_percentage": 75,
+            "seniority": "Associate / Entry-Level (0-2 YOE)",
+            "why_fit": "Solid technical stack background on resume spanning React.js, Node.js, Express, MongoDB, Python, and Java despite failing the technical interview.",
+            "ideal_companies": [
+              "TCS",
+              "Infosys",
+              "Wipro"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "Google Jobs",
+            "role_title": "Full Stack Developer (Java) — Live Aggregate Index",
+            "apply_url": "https://www.google.com/search?q=Full%20Stack%20Developer%20Java%20jobs%20India&ibp=htl;jobs",
+            "badge_text": "Live Google Index",
+            "match_tag": "98% Resume Match",
+            "description": "Live Google Jobs aggregator querying thousands of company careers portals, Lever, and Greenhouse simultaneously for Java developers in India & remote."
+          },
+          {
+            "platform": "LinkedIn",
+            "role_title": "Full Stack Developer (Java & AndroidStudio)",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Full%20Stack%20Developer%20Java&location=India&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "96% Resume Match",
+            "description": "Active public LinkedIn requisitions posted within the last 7 days matching your verified skills in Java and AndroidStudio."
+          },
+          {
+            "platform": "Naukri",
+            "role_title": "Full Stack Developer Openings on Naukri India",
+            "apply_url": "https://www.naukri.com/full-stack-developer-jobs?k=Java",
+            "badge_text": "Verified Indian Postings",
+            "match_tag": "95% Resume Match",
+            "description": "Direct campus and lateral engineering requisitions across Indian tech unicorns, MNCs, and product firms requiring Java."
+          },
+          {
+            "platform": "Foundit",
+            "role_title": "Full Stack Developer Opportunities — Java",
+            "apply_url": "https://www.foundit.in/srp/results?query=Full%20Stack%20Developer%20Java",
+            "badge_text": "Immediate Hires",
+            "match_tag": "94% Resume Match",
+            "description": "Active engineering openings with verified recruiter contacts on Foundit India (formerly Monster) for Java and AndroidStudio."
+          },
+          {
+            "platform": "Internshala",
+            "role_title": "Entry-Level / Fresher Full Stack Developer (Java)",
+            "apply_url": "https://internshala.com/jobs/web-development-jobs/",
+            "badge_text": "0-2 YOE Placement",
+            "match_tag": "95% Resume Match",
+            "description": "Tailored college placement and entry-level engineering openings specifically hiring 0-2 YOE freshers with hands-on Java projects."
+          },
+          {
+            "platform": "Cutshort",
+            "role_title": "Java Engineer at High-Growth Startups",
+            "apply_url": "https://cutshort.io/jobs?search=Java",
+            "badge_text": "Direct to Founders",
+            "match_tag": "92% Resume Match",
+            "description": "Fast-growing Indian tech startups and scaleups actively hiring engineers with hands-on Java project experience with direct founder chat."
+          }
+        ],
+        "strengths": [
+          "Strong academic performance with a 9.12 CGPA in Information Science Engineering.",
+          "Relevant resume projects covering full-stack web, Android, and data analysis stacks.",
+          "AI/ML experience gained via Samsung Innovation Campus training."
+        ],
+        "weaknesses": [
+          "Candidate did not answer the technical questions asked by the interviewer (skipped questions or indicated \"I don't know\").",
+          "Did not articulate algorithmic thought process, time/space complexity, or data structures.",
+          "No working code implementation or test execution was provided in the live editor.",
+          "Complete breakdown in communication and professional conduct during the interview session.",
+          "Inability to grasp basic Data Structures and Algorithms concepts such as Prefix Sum and Hash Maps.",
+          "Zero code submission or problem-solving execution during live technical assessment."
+        ],
+        "improvements": [
+          "Practice core DSA patterns on LeetCode (Prefix Sums, Hash Maps, Two Pointers) and understand why sliding window fails with negative numbers.",
+          "Ensure microphone/audio setup is functional and practice professional interviewing standards and communication."
+        ],
+        "practice_plan": [
+          "Solve 30 Array and Hash Map problems on LeetCode focusing on subarray sum variations.",
+          "Conduct mock technical interviews to build verbal articulation and communication clarity.",
+          "Practice coding solutions out loud while live streaming code to an IDE.",
+          "Review core CS fundamentals including Database Indexing, B-Trees, and ACID properties."
+        ],
+        "topic_tags": [
+          "Data Structures & Algorithms",
+          "Arrays",
+          "Prefix Sum",
+          "Hash Maps"
+        ],
+        "created_at": "2026-09-15T10:43:50.320Z"
+      }
+    ],
+    [
+      "5f114ce5-070b-4910-a0d6-057cdd2d5630",
+      {
+        "id": "rep-5f114ce5-070b-4910-a0d6-057cdd2d5630",
+        "interview_id": "5f114ce5-070b-4910-a0d6-057cdd2d5630",
+        "technical_score": 7,
+        "communication_score": 7,
+        "confidence_score": 7,
+        "overall_verdict": "Hire",
+        "interview_skills_breakdown": {
+          "technical_depth": 7,
+          "problem_solving": 7,
+          "system_architecture": 8,
+          "communication_clarity": 7,
+          "vocal_confidence": 7
+        },
+        "interview_improvements": [
+          "State your time and space complexity upfront before detailing the interval tracking algorithm.",
+          "Discuss edge cases such as zero requests and identical start/end timestamps."
+        ],
+        "resume_score": 88,
+        "resume_verdict": "Tier 1 Product Ready — Strong Systems Architecture Portfolio",
+        "resume_rating_breakdown": {
+          "ats_readability": 9,
+          "impact_metrics": 8,
+          "tech_stack_relevance": 9,
+          "project_presentation": 9
+        },
+        "resume_improvements": [
+          "Highlight specific throughput benchmarks achieved with FastAPI and Qdrant in RepoGPT.",
+          "Quantify Citi India orchestration framework latency reductions."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Software Development Engineer (SDE)",
+            "match_percentage": 95,
+            "seniority": "Entry-Level / Associate (0-2 YOE)",
+            "why_fit": "Strong alignment with C, hands-on service development, and practical database schema architecture demonstrated in RepoGPT – AI Repository Intelligence Platform.",
+            "ideal_companies": [
+              "Top Tech Product Firms",
+              "High-Growth Fintech Scaleups",
+              "Global SaaS Leaders"
+            ]
+          },
+          {
+            "role_title": "Full Stack Engineer",
+            "match_percentage": 89,
+            "seniority": "Junior to Mid Software Engineer",
+            "why_fit": "Versatile project portfolio with 3 distinct projects, covering API communication and modular architecture.",
+            "ideal_companies": [
+              "Venture-Backed Startups",
+              "Enterprise Cloud Providers",
+              "Developer Tooling Companies"
+            ]
+          },
+          {
+            "role_title": "Cloud & API Platform Specialist",
+            "match_percentage": 83,
+            "seniority": "Associate Software Engineer",
+            "why_fit": "Solid foundational comprehension of microservice boundaries, authentication patterns, and scalable data persistence.",
+            "ideal_companies": [
+              "E-Commerce Platforms",
+              "Digital Health Systems",
+              "Fintech Infrastructure"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "Google Jobs",
+            "role_title": "Software Development Engineer (C++) — Live Aggregate Index",
+            "apply_url": "https://www.google.com/search?q=Software%20Development%20Engineer%20C%2B%2B%20jobs%20India&ibp=htl;jobs",
+            "badge_text": "Live Google Index",
+            "match_tag": "98% Resume Match",
+            "description": "Live Google Jobs aggregator querying thousands of company careers portals, Lever, and Greenhouse simultaneously for C++ developers in India & remote."
+          },
+          {
+            "platform": "LinkedIn",
+            "role_title": "Software Development Engineer (C++ & Python)",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Software%20Development%20Engineer%20C%2B%2B&location=India&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "96% Resume Match",
+            "description": "Active public LinkedIn requisitions posted within the last 7 days matching your verified skills in C++ and Python."
+          },
+          {
+            "platform": "Naukri",
+            "role_title": "Software Development Engineer Openings on Naukri India",
+            "apply_url": "https://www.naukri.com/software-engineer-jobs?k=C%2B%2B",
+            "badge_text": "Verified Indian Postings",
+            "match_tag": "95% Resume Match",
+            "description": "Direct campus and lateral engineering requisitions across Indian tech unicorns, MNCs, and product firms requiring C++."
+          },
+          {
+            "platform": "Foundit",
+            "role_title": "Software Development Engineer Opportunities — C++",
+            "apply_url": "https://www.foundit.in/srp/results?query=Software%20Development%20Engineer%20C%2B%2B",
+            "badge_text": "Immediate Hires",
+            "match_tag": "94% Resume Match",
+            "description": "Active engineering openings with verified recruiter contacts on Foundit India (formerly Monster) for C++ and Python."
+          },
+          {
+            "platform": "Internshala",
+            "role_title": "Entry-Level / Fresher Software Development Engineer (C++)",
+            "apply_url": "https://internshala.com/jobs/software-development-jobs/",
+            "badge_text": "0-2 YOE Placement",
+            "match_tag": "95% Resume Match",
+            "description": "Tailored college placement and entry-level engineering openings specifically hiring 0-2 YOE freshers with hands-on C++ projects."
+          },
+          {
+            "platform": "Cutshort",
+            "role_title": "C++ Engineer at High-Growth Startups",
+            "apply_url": "https://cutshort.io/jobs?search=C%2B%2B",
+            "badge_text": "Direct to Founders",
+            "match_tag": "92% Resume Match",
+            "description": "Fast-growing Indian tech startups and scaleups actively hiring engineers with hands-on C++ project experience with direct founder chat."
+          }
+        ],
+        "strengths": [
+          "Demonstrated practical understanding of vector search and knowledge graph architectures.",
+          "Good familiarity with microservices, FastAPI, and Next.js full-stack systems."
+        ],
+        "weaknesses": [
+          "Initially requested to re-order interview stages before proceeding with DSA.",
+          "Could provide more concrete memory bounds for high-concurrency request intervals."
+        ],
+        "improvements": [
+          "Practice interval-merging and sweep-line algorithms for concurrent server scheduling.",
+          "Walk the interviewer step-by-step through the optimal min-heap approach."
+        ],
+        "practice_plan": [
+          "LeetCode 253: Meeting Rooms II (Min-Heap / Sweep Line)",
+          "Distributed tracing with Jaeger / OpenTelemetry",
+          "Neo4j Cypher query optimization"
+        ],
+        "topic_tags": [
+          "Algorithms",
+          "System Architecture",
+          "Concurrency",
+          "RAG Systems"
+        ],
+        "created_at": "2026-09-15T06:32:43.907Z"
+      }
+    ],
+    [
+      "12bc5056-4af5-4290-b780-63bc56446c70",
+      {
+        "id": "rep-12bc5056-4af5-4290-b780-63bc56446c70",
+        "interview_id": "12bc5056-4af5-4290-b780-63bc56446c70",
+        "technical_score": 8,
+        "communication_score": 8,
+        "confidence_score": 8,
+        "overall_verdict": "Hire",
+        "interview_skills_breakdown": {
+          "technical_depth": 8,
+          "problem_solving": 8,
+          "system_architecture": 7,
+          "communication_clarity": 8,
+          "vocal_confidence": 8
+        },
+        "interview_improvements": [
+          "Articulate the mathematical prefix sum hash table mechanism without hesitation.",
+          "Explain OS thread context switching register restoration vs process page table swapping."
+        ],
+        "resume_score": 85,
+        "resume_verdict": "ATS Optimized — Core Systems & DSA Proficient",
+        "resume_rating_breakdown": {
+          "ats_readability": 9,
+          "impact_metrics": 8,
+          "tech_stack_relevance": 9,
+          "project_presentation": 8
+        },
+        "resume_improvements": [
+          "Add explicit unit test coverage and CI/CD automated badges to project portfolio.",
+          "Detail multi-threading and concurrency synchronization primitives used."
+        ],
+        "best_fit_roles": [
+          {
+            "role_title": "Software Development Engineer (SDE)",
+            "match_percentage": 95,
+            "seniority": "Entry-Level / Associate (0-2 YOE)",
+            "why_fit": "Strong alignment with C, hands-on service development, and practical database schema architecture demonstrated in RepoGPT – AI Repository Intelligence Platform.",
+            "ideal_companies": [
+              "Top Tech Product Firms",
+              "High-Growth Fintech Scaleups",
+              "Global SaaS Leaders"
+            ]
+          },
+          {
+            "role_title": "Full Stack Engineer",
+            "match_percentage": 89,
+            "seniority": "Junior to Mid Software Engineer",
+            "why_fit": "Versatile project portfolio with 3 distinct projects, covering API communication and modular architecture.",
+            "ideal_companies": [
+              "Venture-Backed Startups",
+              "Enterprise Cloud Providers",
+              "Developer Tooling Companies"
+            ]
+          },
+          {
+            "role_title": "Cloud & API Platform Specialist",
+            "match_percentage": 83,
+            "seniority": "Associate Software Engineer",
+            "why_fit": "Solid foundational comprehension of microservice boundaries, authentication patterns, and scalable data persistence.",
+            "ideal_companies": [
+              "E-Commerce Platforms",
+              "Digital Health Systems",
+              "Fintech Infrastructure"
+            ]
+          }
+        ],
+        "suitable_job_links": [
+          {
+            "platform": "Google Jobs",
+            "role_title": "Software Development Engineer (C++) — Live Aggregate Index",
+            "apply_url": "https://www.google.com/search?q=Software%20Development%20Engineer%20C%2B%2B%20jobs%20India&ibp=htl;jobs",
+            "badge_text": "Live Google Index",
+            "match_tag": "98% Resume Match",
+            "description": "Live Google Jobs aggregator querying thousands of company careers portals, Lever, and Greenhouse simultaneously for C++ developers in India & remote."
+          },
+          {
+            "platform": "LinkedIn",
+            "role_title": "Software Development Engineer (C++ & Python)",
+            "apply_url": "https://www.linkedin.com/jobs/search/?keywords=Software%20Development%20Engineer%20C%2B%2B&location=India&f_TPR=r604800",
+            "badge_text": "Past 7 Days (Live)",
+            "match_tag": "96% Resume Match",
+            "description": "Active public LinkedIn requisitions posted within the last 7 days matching your verified skills in C++ and Python."
+          },
+          {
+            "platform": "Naukri",
+            "role_title": "Software Development Engineer Openings on Naukri India",
+            "apply_url": "https://www.naukri.com/software-engineer-jobs?k=C%2B%2B",
+            "badge_text": "Verified Indian Postings",
+            "match_tag": "95% Resume Match",
+            "description": "Direct campus and lateral engineering requisitions across Indian tech unicorns, MNCs, and product firms requiring C++."
+          },
+          {
+            "platform": "Foundit",
+            "role_title": "Software Development Engineer Opportunities — C++",
+            "apply_url": "https://www.foundit.in/srp/results?query=Software%20Development%20Engineer%20C%2B%2B",
+            "badge_text": "Immediate Hires",
+            "match_tag": "94% Resume Match",
+            "description": "Active engineering openings with verified recruiter contacts on Foundit India (formerly Monster) for C++ and Python."
+          },
+          {
+            "platform": "Internshala",
+            "role_title": "Entry-Level / Fresher Software Development Engineer (C++)",
+            "apply_url": "https://internshala.com/jobs/software-development-jobs/",
+            "badge_text": "0-2 YOE Placement",
+            "match_tag": "95% Resume Match",
+            "description": "Tailored college placement and entry-level engineering openings specifically hiring 0-2 YOE freshers with hands-on C++ projects."
+          },
+          {
+            "platform": "Cutshort",
+            "role_title": "C++ Engineer at High-Growth Startups",
+            "apply_url": "https://cutshort.io/jobs?search=C%2B%2B",
+            "badge_text": "Direct to Founders",
+            "match_tag": "92% Resume Match",
+            "description": "Fast-growing Indian tech startups and scaleups actively hiring engineers with hands-on C++ project experience with direct founder chat."
+          }
+        ],
+        "strengths": [
+          "Correctly recognized O(N) prefix sum frequency approach for continuous subarray sum.",
+          "Solid verbal explanation of OS process vs thread memory space."
+        ],
+        "weaknesses": [
+          "Needed an initial hint before selecting hash map for prefix sum lookup.",
+          "Could explain kernel mode vs user mode transition costs during context switches."
+        ],
+        "improvements": [
+          "Practice two-pass vs one-pass prefix sum hash table implementation.",
+          "Review virtual memory paging, TLB flush on process switch."
+        ],
+        "practice_plan": [
+          "LeetCode 560: Subarray Sum Equals K (Hash Map)",
+          "Operating Systems: Paging, Segmentation, and Context Switching overhead",
+          "Java Concurrency: ReentrantLock vs Synchronized"
+        ],
+        "topic_tags": [
+          "Prefix Sum",
+          "Hash Table",
+          "Operating Systems",
+          "Concurrency"
+        ],
+        "created_at": "2026-09-15T08:20:25.169Z"
+      }
+    ]
+  ],
   "users": [
     [
       "admin-vamshicodes29-super-admin",
@@ -12,14 +1362,262 @@
         "password": "vamshicodes@123",
         "role": "admin",
         "subscription_status": "active",
-        "subscription_expires_at": "2036-09-10T05:24:25.652Z",
-        "interviews_conducted_count": 0,
+        "subscription_expires_at": "2036-09-12T08:19:45.179Z",
+        "interviews_conducted_count": 2,
         "can_access_dashboard": true,
         "created_at": "2026-09-12T07:31:07.893Z"
       }
+    ],
+    [
+      "123b8de0-94aa-4bbf-8073-4ae905e8e05b",
+      {
+        "id": "123b8de0-94aa-4bbf-8073-4ae905e8e05b",
+        "name": "chethan",
+        "email": "ranchovamshi@gmail.com",
+        "password": "password",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 0,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-13T06:24:12.669Z"
+      }
+    ],
+    [
+      "0ebf900d-af12-4b20-97b5-e3a470dc5a04",
+      {
+        "id": "0ebf900d-af12-4b20-97b5-e3a470dc5a04",
+        "name": "Lahari Naik",
+        "email": "vala162217@gmail.com",
+        "password": "vala@2911",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 0,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-13T10:14:43.290Z"
+      }
+    ],
+    [
+      "2b1471e8-e77b-4906-a8ac-6808123d0d06",
+      {
+        "id": "2b1471e8-e77b-4906-a8ac-6808123d0d06",
+        "name": "lahari",
+        "email": "laharinaik13@gmail.com",
+        "password": "vala@2911",
+        "role": "user",
+        "subscription_status": "expired",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-13T14:54:27.650Z",
+        "subscription_expires_at": "2026-10-13T16:24:10.036Z"
+      }
+    ],
+    [
+      "1f2384c8-6de4-4b14-a27f-ec4bacae7b72",
+      {
+        "id": "1f2384c8-6de4-4b14-a27f-ec4bacae7b72",
+        "name": "Dinesh",
+        "email": "kp846132@gmail.com",
+        "password": "Dinikp@23",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 0,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-13T17:04:21.152Z"
+      }
+    ],
+    [
+      "7b52962a-a0ac-4116-9872-9635a68286e9",
+      {
+        "id": "7b52962a-a0ac-4116-9872-9635a68286e9",
+        "name": "Bhanu",
+        "email": "bhanuprasadks2006@gmail.com",
+        "password": "gardencity@23",
+        "role": "user",
+        "subscription_status": "free_trial",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-15T05:48:36.963Z"
+      }
+    ],
+    [
+      "04f8ef40-95d4-42a8-945d-bd815c68bd37",
+      {
+        "id": "04f8ef40-95d4-42a8-945d-bd815c68bd37",
+        "name": "suchi",
+        "email": "suchendra018@gmail.com",
+        "password": "123456",
+        "role": "user",
+        "subscription_status": "expired",
+        "interviews_conducted_count": 1,
+        "can_access_dashboard": false,
+        "created_at": "2026-09-15T10:32:09.636Z",
+        "subscription_expires_at": "2026-10-15T10:49:09.804Z"
+      }
     ]
   ],
-  "sessions": [],
+  "sessions": [
+    [
+      "vantage_token_8bc12f01-27a3-4dee-8c0d-effe2a1186bb",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791871068988
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MTg3MTYyOTg0MH0.nOFgPDR-vccWfvKZfK16m68oteafcgJkKAKmHVuOFcg",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791871629840
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJmMzc0OGQwMy1jYjk0LTQxMjAtODhkMS0yYjkzYjQyNWVmMWYiLCJlbWFpbCI6InRlc3RjYW5kaWRhdGVfMTc4OTI3OTY0OTAxN0BleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwaXJlc0F0IjoxNzkxODcxNjU3NjY4fQ.dqAu4zQ2kzrZz7Dr1mxOceVevrCn1KbfMw4E5iiLXRs",
+      {
+        "userId": "f3748d03-cb94-4120-88d1-2b93b425ef1f",
+        "expiresAt": 1791871657668
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJmMzc0OGQwMy1jYjk0LTQxMjAtODhkMS0yYjkzYjQyNWVmMWYiLCJlbWFpbCI6InRlc3RjYW5kaWRhdGVfMTc4OTI3OTY0OTAxN0BleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwaXJlc0F0IjoxNzkxODcxNjYxMTcwfQ.xxkQO46EI9JQx8zmVyOpZVT_af7IFZQ692m_fmS9yuU",
+      {
+        "userId": "f3748d03-cb94-4120-88d1-2b93b425ef1f",
+        "expiresAt": 1791871661170
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MTg3MjQzMjEyN30.Ye5a9qD8zBeQ2b8WhiUFzu7tj3keFCgLtR4MDuzgK9A",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791872432128
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIxMjNiOGRlMC05NGFhLTRiYmYtODA3My00YWU5MDVlOGUwNWIiLCJlbWFpbCI6InJhbmNob3ZhbXNoaUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImV4cGlyZXNBdCI6MTc5MTg3MjY1NDkzN30.y48HKoewgCVQx4br6OcmeC6vUECIx9nhm6ABJx5FUTc",
+      {
+        "userId": "123b8de0-94aa-4bbf-8073-4ae905e8e05b",
+        "expiresAt": 1791872654937
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MTg3MjcxNjMzN30.kENPJV7pny3zcmelgVoUKCjkiED5p2uSBt9OqQAiP0Y",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791872716337
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MTg3NDMwNjczNX0.FN_FYxrXbh3jrDpe9l1W2ynsEUpEn_TH5CK0pFHH9V0",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791874306735
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIwZWJmOTAwZC1hZjEyLTRiMjAtOTdiNS1lM2E0NzBkYzVhMDQiLCJlbWFpbCI6InZhbGExNjIyMTdAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJleHBpcmVzQXQiOjE3OTE4ODY0ODY1MDF9.hV6zeIFVTRHk5e2yQCmcZc9kqR_VkpyHy7OB9K_WX3Y",
+      {
+        "userId": "0ebf900d-af12-4b20-97b5-e3a470dc5a04",
+        "expiresAt": 1791886486501
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIyYjE0NzFlOC1lNzdiLTQ5MDYtYThhYy02ODA4MTIzZDBkMDYiLCJlbWFpbCI6ImxhaGFyaW5haWsxM0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImV4cGlyZXNBdCI6MTc5MTkwMzI2OTk2OX0.MnpwXLq6-_FH06S3eCskljBvBqIf4sf4EolyG4JM0eM",
+      {
+        "userId": "2b1471e8-e77b-4906-a8ac-6808123d0d06",
+        "expiresAt": 1791903269969
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIwZWJmOTAwZC1hZjEyLTRiMjAtOTdiNS1lM2E0NzBkYzVhMDQiLCJlbWFpbCI6InZhbGExNjIyMTdAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJleHBpcmVzQXQiOjE3OTE5MDg3NDQ0Nzl9.I-H5e6TTsAk7Swbr5hnjL9LD2Z0SAgmIMW2eLSvvQXE",
+      {
+        "userId": "0ebf900d-af12-4b20-97b5-e3a470dc5a04",
+        "expiresAt": 1791908744479
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MTkwODc3MDYzMX0.KnoII2kByR-r8b8K7UvHAw6-SOkikVlMUpB0iNkXLec",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791908770631
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIxMjNiOGRlMC05NGFhLTRiYmYtODA3My00YWU5MDVlOGUwNWIiLCJlbWFpbCI6InJhbmNob3ZhbXNoaUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImV4cGlyZXNBdCI6MTc5MTkwODc5ODY3NX0.5j_iUi9ftx_C9fcG1BMpMGpvz8eBXMpx42SPMKrjFeU",
+      {
+        "userId": "123b8de0-94aa-4bbf-8073-4ae905e8e05b",
+        "expiresAt": 1791908798675
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MTkwODg5ODA3N30.fBoVc6HHtRzTG1M63X9owQZi_LGRpHJg6ZrDdyGr5sY",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791908898077
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIyYjE0NzFlOC1lNzdiLTQ5MDYtYThhYy02ODA4MTIzZDBkMDYiLCJlbWFpbCI6ImxhaGFyaW5haWsxM0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImV4cGlyZXNBdCI6MTc5MTkwOTE2MzI0Nn0.OD57A1ZGokZNV87gg_v-ky4-e1MiN8V4SrCZU1eGuBE",
+      {
+        "userId": "2b1471e8-e77b-4906-a8ac-6808123d0d06",
+        "expiresAt": 1791909163246
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIxZjIzODRjOC02ZGU0LTRiMTQtYTI3Zi1lYzRiYWNhZTdiNzIiLCJlbWFpbCI6ImtwODQ2MTMyQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwaXJlc0F0IjoxNzkxOTExMDY0NTU1fQ.KiXf3zMwv0as8QLe9NTDfmaP7Gmbtqr9o31ZE1-sUBM",
+      {
+        "userId": "1f2384c8-6de4-4b14-a27f-ec4bacae7b72",
+        "expiresAt": 1791911064555
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIxMjNiOGRlMC05NGFhLTRiYmYtODA3My00YWU5MDVlOGUwNWIiLCJlbWFpbCI6InJhbmNob3ZhbXNoaUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImV4cGlyZXNBdCI6MTc5MTk1NTg5NzYyNn0.ow996a19NbUvBJ2iN8AAqtJSwXw3GDf3M6GfwJJjTZc",
+      {
+        "userId": "123b8de0-94aa-4bbf-8073-4ae905e8e05b",
+        "expiresAt": 1791955897626
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MTk2MDU5MzI3M30.RCApkIsBDMwkrMN-thtxE0R8Urz5PDnbenmdc5EMRcw",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1791960593273
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiI3YjUyOTYyYS1hMGFjLTQxMTYtOTg3Mi05NjM1YTY4Mjg2ZTkiLCJlbWFpbCI6ImJoYW51cHJhc2Fka3MyMDA2QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwaXJlc0F0IjoxNzkyMDQzMzE5MjEzfQ.mH2xy2vlMQ-DoEk8lBD5mZrbfiqDFtkhX80mLveb_fc",
+      {
+        "userId": "7b52962a-a0ac-4116-9872-9635a68286e9",
+        "expiresAt": 1792043319213
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIxZjIzODRjOC02ZGU0LTRiMTQtYTI3Zi1lYzRiYWNhZTdiNzIiLCJlbWFpbCI6ImtwODQ2MTMyQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwaXJlc0F0IjoxNzkyMDQ1MzU3MjM5fQ.uplJxK86z4bPVJ7A4Frnk_v9fDSOlJMwoN1yEMBYdiI",
+      {
+        "userId": "1f2384c8-6de4-4b14-a27f-ec4bacae7b72",
+        "expiresAt": 1792045357239
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MjA0NTkwNTQ4NX0.GoTFK1deHJT_QOWqmlJLFF44ENqUe0bMgN0FnXARotY",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1792045905485
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiJhZG1pbi12YW1zaGljb2RlczI5LXN1cGVyLWFkbWluIiwiZW1haWwiOiJ2YW1zaGljb2RlczI5QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImV4cGlyZXNBdCI6MTc5MjA1MjM4NTE3OX0.mHQkI8XcXTHse2g2uQssN5qgJN2PRjRlQj2hJ0_knac",
+      {
+        "userId": "admin-vamshicodes29-super-admin",
+        "expiresAt": 1792052385179
+      }
+    ],
+    [
+      "vantage_token_eyJ1c2VySWQiOiIwNGY4ZWY0MC05NWQ0LTQyYTgtOTQ1ZC1iZDgxNWM2OGJkMzciLCJlbWFpbCI6InN1Y2hlbmRyYTAxOEBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImV4cGlyZXNBdCI6MTc5MjA2MDMzMjcwNX0.8AC-tHohQodqdmjoeWitsh6o4ZG5OZrf4zoUK7p2210",
+      {
+        "userId": "04f8ef40-95d4-42a8-945d-bd815c68bd37",
+        "expiresAt": 1792060332705
+      }
+    ]
+  ],
   "payments": [],
   "jobNews": [
     [
@@ -719,5 +2317,5 @@
       }
     ]
   ],
-  "savedAt": "2026-09-13T05:24:25.656Z"
+  "savedAt": "2026-09-15T11:03:46.908Z"
 }
